@@ -29,6 +29,9 @@ func (f BeamDim3) GetCoordinateTransformation(buffer *linearAlgebra.Matrix) (err
 		}
 	}
 
+	//TODO: add algoritm
+	panic("Add algoritm")
+
 	return nil
 }
 

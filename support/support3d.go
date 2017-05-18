@@ -6,7 +6,7 @@ type Dim3 struct {
 	Mx, My, Mz bool // false - free, true - fixed
 }
 
-// FixedDim3 - fixed support
+// FixedDim3 - fixed support in 3D interpratation
 func FixedDim3() (s Dim3) {
 	return Dim3{true, true, true, true, true, true}
 }
