@@ -6,6 +6,7 @@ FEA for steel structural engineer on golang
 
 *Step 1*
 
+- [X] 2d point
 - [X] 2b beam structure
 - [X] 2d support
 - [ ] 2d truss finite element
