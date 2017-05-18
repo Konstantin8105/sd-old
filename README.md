@@ -4,7 +4,7 @@ FEA for steel structural engineer on golang
 
 **TODO`s**:
 
-*Step 1*
+*Step 1 - Calculate truss model in 2D*
 
 - [X] 2d point
 - [X] 2b beam structure
