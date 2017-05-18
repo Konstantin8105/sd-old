@@ -17,60 +17,41 @@ FEA for steel structural engineer on golang
 
 *Step 2*
 
-[ ] 2d beam finite element
-
-[ ] 2d gravity load
-
-[ ] Calculate global deformation
-
-[ ] Calculate internal deformation
-
-[ ] Calculate internal force
-
-[ ] Calculate natural frequency
+- [ ] 2d beam finite element
+- [ ] 2d gravity load
+- [ ] Calculate global deformation
+- [ ] Calculate internal deformation
+- [ ] Calculate internal force
+- [ ] Calculate natural frequency
 
 *Step 3*
 
-[ ] Pins for 2d beam finite element
-
-[ ] 2d uniform load
-
-[ ] 2d trapezoidally uniform load
-
-[ ] Calculate global deformation
-
-[ ] Calculate internal deformation
-
-[ ] Calculate internal force
-
-[ ] Calculate natural frequency
+- [ ] Pins for 2d beam finite element
+- [ ] 2d uniform load
+- [ ] 2d trapezoidally uniform load
+- [ ] Calculate global deformation
+- [ ] Calculate internal deformation
+- [ ] Calculate internal force
+- [ ] Calculate natural frequency
 
 *Step 3.10*
 
-[ ] Create IO format file
+- [ ] Create IO format file
 
 *Step 4*
 
-[ ] Design of GUI for 2D elements
+- [ ] Design of GUI for 2D elements
 
 *Step 5*
 
-[ ] 3d truss finite element
-
-[ ] 3d node load
-
+- [ ] 3d truss finite element
+- [ ] 3d node load
 
 
-[ ] Database of shapes
-
-[ ] Gap finite element
-
-[ ] Tension finite element
-
-[ ] Compress finite element
-
-[ ] Sparse matrix solver
-
-[ ] Time dependence
-
-[ ] Nonlinear property of material. Temperature, corrosion.
+- [ ] Database of shapes
+- [ ] Gap finite element
+- [ ] Tension finite element
+- [ ] Compress finite element
+- [ ] Sparse matrix solver
+- [ ] Time dependence
+- [ ] Nonlinear property of material. Temperature, corrosion.
