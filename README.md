@@ -6,19 +6,14 @@ FEA for steel structural engineer on golang
 
 *Step 1*
 
-[ ] 2d truss finite element
-
-[ ] 2d node load
-
-[ ] Solve system of linear equation
-
-[ ] Calculate global deformation
-
-[ ] Calculate internal deformation
-
-[ ] Calculate internal force
-
-[ ] Calculate natural frequency
+- [ ] 2d truss finite element
+- [ ] 2d node load
+- [ ] Solve system of linear equation
+- [ ] Calculate global deformation
+- [ ] Calculate internal deformation
+- [ ] Calculate internal force
+- [ ] Calculate natural frequency
+- [ ] Buckling
 
 *Step 2*
 
@@ -65,9 +60,17 @@ FEA for steel structural engineer on golang
 [ ] 3d node load
 
 
+
+[ ] Database of shapes
+
 [ ] Gap finite element
 
 [ ] Tension finite element
 
 [ ] Compress finite element
 
+[ ] Sparse matrix solver
+
+[ ] Time dependence
+
+[ ] Nonlinear property of material. Temperature, corrosion.
