@@ -3,7 +3,8 @@ package model
 import (
 	"fmt"
 
-	matrix "github.com/Konstantin8105/GoFea/Matrix"
+	"github.com/Konstantin8105/GoFea/finiteElement"
+	"github.com/Konstantin8105/GoFea/linearAlgebra"
 )
 
 // Solve - solving finite element
@@ -14,10 +15,10 @@ func (m *Model) Solve() (err error) {
 	//TODO: avoid mgic number 6 and 12
 
 	// global matrix of stiffiner
-	buffer := matrix.NewSquareMatrix(12)
-	bufferTr := matrix.NewSquareMatrix(12)
-	globalK := matrix.NewSquareMatrix(len(m.coordinates) * 6)
-	var fe FiniteElement3Dbeam
+	buffer := linearAlgebra.NewSquareMatrix(12)
+	bufferTr := linearAlgebra.NewSquareMatrix(12)
+	globalK := linearAlgebra.NewSquareMatrix(len(m.coordinates) * 6)
+	var fe finiteElement.BeamDim3
 	for _, beam := range m.beams {
 
 		material, err := m.GetMaterial(beam.Index)
@@ -32,16 +33,16 @@ func (m *Model) Solve() (err error) {
 		if err != nil {
 			return fmt.Errorf("Cannot calculate lenght for beam #%v. Error = %v", beam.Index, err)
 		}
-		fe = FiniteElement3Dbeam{
-			material:    material,
-			shape:       shape,
-			coordinates: coord,
+		fe = finiteElement.BeamDim3{
+			Material: material,
+			Shape:    shape,
+			Points:   coord,
 		}
-		err = fe.getStiffinerK(&buffer)
+		err = fe.GetStiffinerK(&buffer)
 		if err != nil {
 			return err
 		}
-		err = fe.getCoordinateTransformation(&bufferTr)
+		err = fe.GetCoordinateTransformation(&bufferTr)
 		if err != nil {
 			return err
 		}

@@ -1,22 +1,12 @@
-package matrix
+package linearAlgebra
 
 import "fmt"
 
-// Type - type of matrix
-type Type int
-
-// Types of matrix
-const (
-	Square Type = iota
-	Rectangle
-)
-
 // Matrix - matrix data structure
 type Matrix struct {
-	size       int
-	capacity   int
-	values     [][]float64
-	matrixType Type
+	size     int
+	capacity int
+	values   [][]float64
 }
 
 // NewSquareMatrix - constructor for square matrix
@@ -24,11 +14,6 @@ func NewSquareMatrix(size int) (m Matrix) {
 	m = *new(Matrix)
 	m.SetSize(size)
 	return
-}
-
-// Type - get type of matrix
-func (m *Matrix) Type() Type {
-	return m.matrixType
 }
 
 // SetSize - change the matrix size
@@ -60,11 +45,6 @@ func (m *Matrix) Get(i int, j int) float64 {
 	}
 	return m.values[i][j]
 }
-
-// Capacity - matrix capacity
-//func (m *Matrix) Capacity() int {
-//	return m.capacity
-//}
 
 func (m Matrix) String() (s string) {
 	for i := 0; i < m.size; i++ {

@@ -1,8 +1,8 @@
-package model
+package finiteElement
 
-import matrix "github.com/Konstantin8105/GoFea/Matrix"
+import "github.com/Konstantin8105/GoFea/linearAlgebra"
 
 type finiteElementer interface {
-	getStiffinerK(buffer *matrix.Matrix) error
-	getCoordinateTransformation(buffer *matrix.Matrix) error
+	GetStiffinerK(buffer *linearAlgebra.Matrix) error
+	GetCoordinateTransformation(buffer *linearAlgebra.Matrix) error
 }

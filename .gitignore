@@ -29,3 +29,5 @@ _testmain.go
 *.go.swp
 *.go.un~
 *.go~
+*.md.swp
+

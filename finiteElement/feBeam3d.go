@@ -1,29 +1,26 @@
-package model
+package finiteElement
 
 import (
-	"fmt"
 	"math"
 
-	coordinate "github.com/Konstantin8105/GoFea/Coordinate"
-	material "github.com/Konstantin8105/GoFea/Material"
-	matrix "github.com/Konstantin8105/GoFea/Matrix"
-	shape "github.com/Konstantin8105/GoFea/Shape"
+	"github.com/Konstantin8105/GoFea/linearAlgebra"
+	"github.com/Konstantin8105/GoFea/material"
+	"github.com/Konstantin8105/GoFea/point"
+	"github.com/Konstantin8105/GoFea/shape"
 )
 
-// FiniteElement3Dbeam - beam on 3D interpratation
-type FiniteElement3Dbeam struct {
-	material    material.Material
-	shape       shape.Shape
-	coordinates [2]coordinate.Coordinate
+// BeamDim3 - beam on 3D interpratation
+type BeamDim3 struct {
+	Material material.Linear
+	Shape    shape.Shape
+	Points   [2]point.Dim3
 }
 
-func (f FiniteElement3Dbeam) getCoordinateTransformation(buffer *matrix.Matrix) (err error) {
+// GetCoordinateTransformation - record into buffer a matrix of transform from local to global system coordinate
+func (f BeamDim3) GetCoordinateTransformation(buffer *linearAlgebra.Matrix) (err error) {
 	const (
 		size = 12
 	)
-	if buffer.Type() != matrix.Square {
-		return fmt.Errorf("Cannot insert to not square buffer")
-	}
 	buffer.SetSize(size)
 
 	for i := 0; i < size; i++ {
@@ -35,14 +32,11 @@ func (f FiniteElement3Dbeam) getCoordinateTransformation(buffer *matrix.Matrix) 
 	return nil
 }
 
-// StiffinerK - matrix of stiffiner
-func (f FiniteElement3Dbeam) getStiffinerK(buffer *matrix.Matrix) (err error) {
+// GetStiffinerK - matrix of stiffiner
+func (f BeamDim3) GetStiffinerK(buffer *linearAlgebra.Matrix) (err error) {
 	const (
 		size = 12
 	)
-	if buffer.Type() != matrix.Square {
-		return fmt.Errorf("Cannot insert to not square buffer")
-	}
 	buffer.SetSize(size)
 
 	for i := 0; i < size; i++ {
@@ -51,62 +45,62 @@ func (f FiniteElement3Dbeam) getStiffinerK(buffer *matrix.Matrix) (err error) {
 		}
 	}
 
-	lenght := math.Sqrt(math.Pow(f.coordinates[0].X-f.coordinates[1].X, 2.0) + math.Pow(f.coordinates[0].Y-f.coordinates[1].Y, 2.0) + math.Pow(f.coordinates[0].Z-f.coordinates[1].Z, 2.0))
+	lenght := math.Sqrt(math.Pow(f.Points[0].X-f.Points[1].X, 2.0) + math.Pow(f.Points[0].Y-f.Points[1].Y, 2.0) + math.Pow(f.Points[0].Z-f.Points[1].Z, 2.0))
 
 	// add only in lower triangle of matrix
 	{
-		EFL := f.material.E * f.shape.A / lenght
+		EFL := f.Material.E * f.Shape.A / lenght
 		buffer.Set(0, 0, EFL)
 		buffer.Set(6, 0, -EFL)
 		buffer.Set(6, 6, EFL)
 	}
 	{
-		EJzL := 12.0 * f.material.E * f.shape.Izz / (lenght * lenght * lenght)
+		EJzL := 12.0 * f.Material.E * f.Shape.Izz / (lenght * lenght * lenght)
 		buffer.Set(1, 1, EJzL)
 		buffer.Set(7, 1, -EJzL)
 		buffer.Set(7, 7, EJzL)
 	}
 	{
-		EJyL := 12.0 * f.material.E * f.shape.Iyy / (lenght * lenght * lenght)
+		EJyL := 12.0 * f.Material.E * f.Shape.Iyy / (lenght * lenght * lenght)
 		buffer.Set(2, 2, EJyL)
 		buffer.Set(8, 2, -EJyL)
 		buffer.Set(8, 8, EJyL)
 	}
 	{
-		GJxL := f.material.G * f.shape.Jxx / lenght
+		GJxL := f.Material.G * f.Shape.Jxx / lenght
 		buffer.Set(3, 3, GJxL)
 		buffer.Set(9, 3, -GJxL)
 		buffer.Set(9, 9, GJxL)
 	}
 	{
-		EJyL := 4.0 * f.material.E * f.shape.Iyy / lenght
+		EJyL := 4.0 * f.Material.E * f.Shape.Iyy / lenght
 		buffer.Set(4, 4, EJyL)
 		buffer.Set(10, 10, EJyL)
 	}
 	{
-		EJzL := 4.0 * f.material.E * f.shape.Izz / lenght
+		EJzL := 4.0 * f.Material.E * f.Shape.Izz / lenght
 		buffer.Set(5, 5, EJzL)
 		buffer.Set(11, 11, EJzL)
 	}
 	{
-		EJyL := 6.0 * f.material.E * f.shape.Iyy / (lenght * lenght)
+		EJyL := 6.0 * f.Material.E * f.Shape.Iyy / (lenght * lenght)
 		buffer.Set(4, 2, -EJyL)
 		buffer.Set(10, 2, -EJyL)
 		buffer.Set(10, 8, EJyL)
 		buffer.Set(8, 4, EJyL)
 	}
 	{
-		EJzL := 6.0 * f.material.E * f.shape.Izz / (lenght * lenght)
+		EJzL := 6.0 * f.Material.E * f.Shape.Izz / (lenght * lenght)
 		buffer.Set(5, 1, EJzL)
 		buffer.Set(11, 1, EJzL)
 		buffer.Set(11, 7, -EJzL)
 		buffer.Set(7, 5, -EJzL)
 	}
 	{
-		buffer.Set(10, 4, 2.0*f.material.E*f.shape.Iyy/lenght)
+		buffer.Set(10, 4, 2.0*f.Material.E*f.Shape.Iyy/lenght)
 	}
 	{
-		buffer.Set(11, 5, 2.0*f.material.E*f.shape.Izz/lenght)
+		buffer.Set(11, 5, 2.0*f.Material.E*f.Shape.Izz/lenght)
 	}
 
 	// repeat to upper triangle of matrix

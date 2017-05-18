@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"math"
 
-	coordinate "github.com/Konstantin8105/GoFea/Coordinate"
-	element "github.com/Konstantin8105/GoFea/Element"
-	material "github.com/Konstantin8105/GoFea/Material"
-	shape "github.com/Konstantin8105/GoFea/Shape"
+	"github.com/Konstantin8105/GoFea/element"
+	"github.com/Konstantin8105/GoFea/material"
+	"github.com/Konstantin8105/GoFea/point"
+	"github.com/Konstantin8105/GoFea/shape"
 )
 
 // GetShape - searching shape for beam
@@ -23,7 +23,7 @@ func (m *Model) GetShape(index element.BeamIndex) (s shape.Shape, err error) {
 }
 
 // GetMaterial - searching material for beam
-func (m *Model) GetMaterial(index element.BeamIndex) (mat material.Material, err error) {
+func (m *Model) GetMaterial(index element.BeamIndex) (mat material.Linear, err error) {
 	for _, material := range m.materials {
 		for _, inx := range material.beamIndex {
 			if index == inx {
@@ -37,8 +37,8 @@ func (m *Model) GetMaterial(index element.BeamIndex) (mat material.Material, err
 }
 
 // GetCoordinate - return coordinate of beam
-func (m *Model) GetCoordinate(index element.BeamIndex) (c [2]coordinate.Coordinate, err error) {
-	var inx [2]coordinate.PointIndex
+func (m *Model) GetCoordinate(index element.BeamIndex) (c [2]point.Dim3, err error) {
+	var inx [2]point.Index
 	var found bool
 	for _, beam := range m.beams {
 		if beam.Index == index {
@@ -51,7 +51,7 @@ func (m *Model) GetCoordinate(index element.BeamIndex) (c [2]coordinate.Coordina
 		return c, fmt.Errorf("Cannot found beam with index #%v", index)
 	}
 
-	var coord [2]coordinate.Coordinate
+	var coord [2]point.Dim3
 	for i := 0; i < 2; i++ {
 		found = false
 		for _, c := range m.coordinates {

@@ -1,8 +1,8 @@
 package force
 
-// NodeForce - force on node
+// NodeDim3 - force on node
 // Unit - N
-type NodeForce struct {
+type NodeDim3 struct {
 	Fx, Fy, Fz float64
 	Mx, My, Mz float64
 }

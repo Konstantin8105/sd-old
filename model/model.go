@@ -1,17 +1,17 @@
 package model
 
 import (
-	coordinate "github.com/Konstantin8105/GoFea/Coordinate"
-	element "github.com/Konstantin8105/GoFea/Element"
-	force "github.com/Konstantin8105/GoFea/Force"
-	material "github.com/Konstantin8105/GoFea/Material"
-	shape "github.com/Konstantin8105/GoFea/Shape"
-	support "github.com/Konstantin8105/GoFea/Support"
+	"github.com/Konstantin8105/GoFea/element"
+	"github.com/Konstantin8105/GoFea/force"
+	"github.com/Konstantin8105/GoFea/material"
+	"github.com/Konstantin8105/GoFea/point"
+	"github.com/Konstantin8105/GoFea/shape"
+	"github.com/Konstantin8105/GoFea/support"
 )
 
 type supportStruct struct {
-	support         support.Support
-	coordinateIndex []coordinate.PointIndex
+	support         support.Dim3
+	coordinateIndex []point.Index
 }
 
 type shapeStruct struct {
@@ -20,18 +20,18 @@ type shapeStruct struct {
 }
 
 type materialStruct struct {
-	material  material.Material
+	material  material.Linear
 	beamIndex []element.BeamIndex
 }
 
 type gravityForceStruct struct {
-	gravityForce force.GravityForce
+	gravityForce force.GravityDim3
 	beamIndex    []element.BeamIndex
 }
 
 type nodeForceStruct struct {
-	nodeForce       force.NodeForce
-	coordinateIndex []coordinate.PointIndex
+	nodeForce       force.NodeDim3
+	coordinateIndex []point.Index
 }
 
 type forceCase struct {
@@ -41,7 +41,7 @@ type forceCase struct {
 
 // Model - base struct of data for model
 type Model struct {
-	coordinates []coordinate.Coordinate
+	coordinates []point.Dim3
 	beams       []element.Beam
 	supports    []supportStruct
 	shapes      []shapeStruct
@@ -50,7 +50,7 @@ type Model struct {
 }
 
 // AddCoodinates - add coordinate to model
-func (m *Model) AddCoodinates(coordinates ...coordinate.Coordinate) {
+func (m *Model) AddCoodinates(coordinates ...point.Dim3) {
 	m.coordinates = append(m.coordinates, coordinates...)
 }
 
@@ -68,7 +68,7 @@ func (m *Model) AddShape(shape shape.Shape, beams ...element.BeamIndex) {
 }
 
 // AddMaterial - add meaterial for beam
-func (m *Model) AddMaterial(material material.Material, beams ...element.BeamIndex) {
+func (m *Model) AddMaterial(material material.Linear, beams ...element.BeamIndex) {
 	m.materials = append(m.materials, materialStruct{
 		material:  material,
 		beamIndex: beams,
@@ -76,7 +76,7 @@ func (m *Model) AddMaterial(material material.Material, beams ...element.BeamInd
 }
 
 // AddSupport - add support for points
-func (m *Model) AddSupport(support support.Support, coordinateIndex ...coordinate.PointIndex) {
+func (m *Model) AddSupport(support support.Dim3, coordinateIndex ...point.Index) {
 	m.supports = append(m.supports, supportStruct{
 		support:         support,
 		coordinateIndex: coordinateIndex,
@@ -84,7 +84,7 @@ func (m *Model) AddSupport(support support.Support, coordinateIndex ...coordinat
 }
 
 // AddGravityForce - add gravity force
-func (m *Model) AddGravityForce(g force.GravityForce, beams ...element.BeamIndex) {
+func (m *Model) AddGravityForce(g force.GravityDim3, beams ...element.BeamIndex) {
 	m.forceCases.gravityForces = append(m.forceCases.gravityForces, gravityForceStruct{
 		gravityForce: g,
 		beamIndex:    beams,
@@ -92,7 +92,7 @@ func (m *Model) AddGravityForce(g force.GravityForce, beams ...element.BeamIndex
 }
 
 // AddNodeForce - add node force
-func (m *Model) AddNodeForce(n force.NodeForce, points ...coordinate.PointIndex) {
+func (m *Model) AddNodeForce(n force.NodeDim3, points ...point.Index) {
 	m.forceCases.nodeForces = append(m.forceCases.nodeForces, nodeForceStruct{
 		nodeForce:       n,
 		coordinateIndex: points,
