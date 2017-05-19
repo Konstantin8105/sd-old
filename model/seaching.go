@@ -2,7 +2,6 @@ package model
 
 import (
 	"fmt"
-	"math"
 
 	"github.com/Konstantin8105/GoFea/element"
 	"github.com/Konstantin8105/GoFea/material"
@@ -68,6 +67,7 @@ func (m *Model) GetCoordinate(index element.BeamIndex) (c [2]point.Dim3, err err
 	return coord, nil
 }
 
+/*
 //GetLenght - calculate lenght of beam
 func (m *Model) GetLenght(index element.BeamIndex) (lenght float64, err error) {
 	coord, err := m.GetCoordinate(index)
@@ -76,3 +76,4 @@ func (m *Model) GetLenght(index element.BeamIndex) (lenght float64, err error) {
 	}
 	return math.Sqrt(math.Pow(coord[0].X-coord[1].X, 2.0) + math.Pow(coord[0].Y-coord[1].Y, 2.0) + math.Pow(coord[0].Z-coord[1].Z, 2.0)), nil
 }
+*/

@@ -1,8 +1,6 @@
 package finiteElement
 
 import (
-	"math"
-
 	"github.com/Konstantin8105/GoFea/linearAlgebra"
 	"github.com/Konstantin8105/GoFea/material"
 	"github.com/Konstantin8105/GoFea/point"
@@ -23,16 +21,9 @@ func (f BeamDim3) GetCoordinateTransformation(buffer *linearAlgebra.Matrix) (err
 	)
 	buffer.SetSize(size)
 
-	for i := 0; i < size; i++ {
-		for j := 0; j < size; j++ {
-			buffer.Set(i, j, 0.0)
-		}
-	}
-
 	//TODO: add algoritm
 	panic("Add algoritm")
 
-	return nil
 }
 
 // GetStiffinerK - matrix of stiffiner
@@ -42,13 +33,7 @@ func (f BeamDim3) GetStiffinerK(buffer *linearAlgebra.Matrix) (err error) {
 	)
 	buffer.SetSize(size)
 
-	for i := 0; i < size; i++ {
-		for j := 0; j < size; j++ {
-			buffer.Set(i, j, 0.0)
-		}
-	}
-
-	lenght := math.Sqrt(math.Pow(f.Points[0].X-f.Points[1].X, 2.0) + math.Pow(f.Points[0].Y-f.Points[1].Y, 2.0) + math.Pow(f.Points[0].Z-f.Points[1].Z, 2.0))
+	lenght := point.LenghtDim3(f.Points)
 
 	// add only in lower triangle of matrix
 	{

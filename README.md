@@ -9,7 +9,7 @@ FEA for steel structural engineer on golang
 - [X] 2d point
 - [X] 2b beam structure
 - [X] 2d support
-- [ ] 2d truss finite element
+- [X] 2d truss finite element
 - [X] 2d node load
 - [ ] Solve system of linear equation
 - [ ] Calculate global deformation
