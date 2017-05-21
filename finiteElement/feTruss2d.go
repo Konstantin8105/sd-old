@@ -60,3 +60,63 @@ func (f *TrussDim2) GetDoF(degrees *dof.DoF) (axes []dof.AxeNumber) {
 	}
 	return
 }
+
+// GetStiffinerGlobalK - global matrix of siffiner
+func (f *TrussDim2) GetStiffinerGlobalK(degree *dof.DoF) (linearAlgebra.Matrix, []dof.AxeNumber) {
+	klocal := linearAlgebra.NewSquareMatrix(12)
+	f.GetStiffinerK(&klocal)
+
+	Tr := linearAlgebra.NewSquareMatrix(12)
+	f.GetCoordinateTransformation(&Tr)
+
+	buffer := linearAlgebra.NewSquareMatrix(12)
+	kor := klocal.MultiplyTtKT(Tr, &buffer)
+
+	axes := f.GetDoF(degree)
+
+AGAIN:
+	for i := 0; i < len(axes); i++ {
+		found := false
+		for j := 0; j < len(axes); j++ {
+			if kor.Get(i, j) != 0.0 {
+				found = true
+				break
+			}
+		}
+		if !found {
+			// remove row and column from global stiffiner
+			knew := linearAlgebra.NewSquareMatrix(kor.GetSize() - 1)
+			size := kor.GetSize()
+			inxI := 0
+			for g := 0; g < size; g++ {
+				if g == i {
+					continue
+				}
+				inxJ := 0
+				for h := 0; h < size; h++ {
+					if h == i {
+						continue
+					}
+					knew.Set(inxI, inxJ, kor.Get(g, h))
+					inxJ++
+				}
+				inxI++
+			}
+			// remove column from axes
+			inxI = 0
+			a := make([]dof.AxeNumber, len(axes)-1, len(axes)-1)
+			for g := 0; g < size; g++ {
+				if g == i {
+					continue
+				}
+				a[inxI] = axes[g]
+				inxI++
+			}
+			// repeat found zero`s rows and column
+			kor = knew
+			axes = a
+			goto AGAIN
+		}
+	}
+	return kor, axes
+}

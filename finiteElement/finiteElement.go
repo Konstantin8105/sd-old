@@ -5,7 +5,7 @@ import (
 	"github.com/Konstantin8105/GoFea/linearAlgebra"
 )
 
-type finiteElementer interface {
+type FiniteElementer interface {
 	GetStiffinerK(buffer *linearAlgebra.Matrix)
 	GetCoordinateTransformation(buffer *linearAlgebra.Matrix)
 	GetDoF(degrees *dof.DoF) []dof.AxeNumber

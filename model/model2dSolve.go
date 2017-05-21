@@ -6,104 +6,130 @@ import (
 	"github.com/Konstantin8105/GoFea/dof"
 	"github.com/Konstantin8105/GoFea/finiteElement"
 	"github.com/Konstantin8105/GoFea/linearAlgebra"
+	"github.com/Konstantin8105/GoFea/utils"
 )
 
 // Solve - solving finite element
 func (m *Dim2) Solve() (err error) {
 
-	//TODO: add sort of beam without lost index
-	//TODO: avoid absolute free points
-	//TODO: avoid mgic number 6 and 12
+	type stepSolving int
+	const (
+		prepareDegreeOfFreedom stepSolving = iota
+		createGlobalStiffinerK
+	)
+	steps := []stepSolving{prepareDegreeOfFreedom, createGlobalStiffinerK}
 
-	// global matrix of stiffiner
-	buffer := linearAlgebra.NewSquareMatrix(12)
-	bufferTr := linearAlgebra.NewSquareMatrix(12)
-	bufferM := linearAlgebra.NewSquareMatrix(12)
-	dof := dof.NewBeam(m.beams, dof.Dim2d)
-	//globalK := linearAlgebra.NewSquareMatrix(len(m.points) * 6)
-	for _, beam := range m.beams {
+	var degreeGlobal []dof.AxeNumber
+	var stiffinerKGlobal linearAlgebra.Matrix
+	var mapIndex dof.MapIndex
 
-		material, err := m.getMaterial(beam.Index)
-		if err != nil {
-			return fmt.Errorf("Cannot found material for beam #%v. Error = %v", beam.Index, err)
+	for _, step := range steps {
+		dofSystem := dof.NewBeam(m.beams, dof.Dim2d)
+
+		if step == createGlobalStiffinerK {
+			stiffinerKGlobal = linearAlgebra.NewSquareMatrix(len(degreeGlobal))
+			mapIndex = dof.NewMapIndex(&degreeGlobal)
 		}
-		shape, err := m.getShape(beam.Index)
-		if err != nil {
-			return fmt.Errorf("Cannot found shape for beam #%v. Error = %v", beam.Index, err)
-		}
-		coord, err := m.getCoordinate(beam.Index)
-		if err != nil {
-			return fmt.Errorf("Cannot calculate lenght for beam #%v. Error = %v", beam.Index, err)
-		}
-		if m.isTruss(beam.Index) {
-			tr := finiteElement.TrussDim2{
-				Material: material,
-				Shape:    shape,
-				Points:   coord,
-			}
-			err = tr.GetStiffinerK(&buffer)
+
+		var klocal linearAlgebra.Matrix
+		var degreeLocal []dof.AxeNumber
+		for _, beam := range m.beams {
+			material, err := m.getMaterial(beam.Index)
 			if err != nil {
-				return err
+				return fmt.Errorf("Cannot found material for beam #%v. Error = %v", beam.Index, err)
 			}
-
-			//fmt.Println("K", beam.Index, " =\n", buffer)
-
-			err = tr.GetCoordinateTransformation(&bufferTr)
+			shape, err := m.getShape(beam.Index)
 			if err != nil {
-				return err
+				return fmt.Errorf("Cannot found shape for beam #%v. Error = %v", beam.Index, err)
 			}
+			coord, err := m.getCoordinate(beam.Index)
+			if err != nil {
+				return fmt.Errorf("Cannot calculate lenght for beam #%v. Error = %v", beam.Index, err)
+			}
+			if m.isTruss(beam.Index) {
+				tr := finiteElement.TrussDim2{
+					Material: material,
+					Shape:    shape,
+					Points:   coord,
+				}
+				klocal, degreeLocal = tr.GetStiffinerGlobalK(&dofSystem)
+			} /* else {
+				fe := finiteElement.BeamDim2{
+					Material: material,
+					Shape:    shape,
+					Points:   coord,
+				}
+				err = fe.GetStiffinerK(&buffer)
+				if err != nil {
+					return err
+				}
+			}*/
+			if step == prepareDegreeOfFreedom {
+				degreeGlobal = append(degreeGlobal, degreeLocal...)
+			}
+			if step == createGlobalStiffinerK {
+				fmt.Println("===================")
+				fmt.Println("D      = ", degreeLocal)
+				fmt.Println("klocal = ", klocal)
+				// Add local stiffiner matrix to global matrix
+				for i := 0; i < len(degreeLocal); i++ {
+					g, err := mapIndex.GetByAxe(degreeLocal[i])
+					if err != nil {
+						continue
+					}
+					for j := 0; j < len(degreeLocal); j++ {
+						h, err := mapIndex.GetByAxe(degreeLocal[j])
+						if err != nil {
+							continue
+						}
+						stiffinerKGlobal.Set(g, h, stiffinerKGlobal.Get(g, h)+klocal.Get(i, j))
+					}
+				}
+				// Create array degree for support
+				var supportDegree []dof.AxeNumber
+				for _, sup := range m.supports {
+					for _, inx := range sup.pointIndexes {
+						d := dofSystem.GetDoF(inx)
+						var result []dof.AxeNumber
+						if sup.support.Dx == true {
+							result = append(result, d[0])
+						}
+						if sup.support.Dy == true {
+							result = append(result, d[1])
+						}
+						if sup.support.M == true {
+							result = append(result, d[2])
+						}
+						supportDegree = append(supportDegree, result...)
+					}
+				}
+				// supportDegree - created array degree for support
+				for i := 0; i < len(supportDegree); i++ {
+					g, err := mapIndex.GetByAxe(supportDegree[i])
+					if err != nil {
+						continue
+					}
+					for j := 0; j < len(degreeGlobal); j++ {
+						h, err := mapIndex.GetByAxe(degreeGlobal[j])
+						if err != nil {
+							continue
+						}
+						stiffinerKGlobal.Set(g, h, 0.0)
+						stiffinerKGlobal.Set(h, g, 0.0)
+					}
+					stiffinerKGlobal.Set(g, g, 1.0)
+				}
 
-			//fmt.Println("T", beam.Index, " =\n", bufferTr)
-
-			Kor := buffer.MultiplyTtKT(bufferTr, &bufferM)
-
-			fmt.Println("Kor", beam.Index, " =\n", Kor)
-
-			tr.GetDoF(&dof)
-
-			fmt.Println("DoF = ", tr.Axe)
-
+			}
 		}
-		/* else {
-			fe := finiteElement.BeamDim2{
-				Material: material,
-				Shape:    shape,
-				Points:   coord,
-			}
-			err = fe.GetStiffinerK(&buffer)
-			if err != nil {
-				return err
-			}
-		}*/
-
-		/*
-
-			fmt.Println(buffer)
-			inx0 := (int(coord[0].Index) - 1) * 6
-			for i := 0; i < 6; i++ {
-				for j := 0; j < 6; j++ {
-					globalK.Set(inx0+i, inx0+j, globalK.Get(inx0+i, inx0+j)+buffer.Get(i, j))
-				}
-			}
-			inx1 := (int(coord[1].Index) - 1) * 6
-			for i := 0; i < 6; i++ {
-				for j := 0; j < 6; j++ {
-					globalK.Set(inx1+i, inx1+j, globalK.Get(inx1+i, inx1+j)+buffer.Get(i+6, j+6))
-				}
-			}
-			for i := 0; i < 6; i++ {
-				for j := 0; j < 6; j++ {
-					globalK.Set(inx0+i, inx1+j, globalK.Get(inx0+i, inx1+j)+buffer.Get(i+6, j))
-				}
-			}
-			for i := 0; i < 6; i++ {
-				for j := 0; j < 6; j++ {
-					globalK.Set(inx1+i, inx0+j, globalK.Get(inx1+i, inx0+j)+buffer.Get(i, j+6))
-				}
-			}
-		*/
+		if step == prepareDegreeOfFreedom {
+			is := dof.ConvertToInt(degreeGlobal)
+			utils.UniqueInt(&is)
+			degreeGlobal = dof.ConvertToAxe(is)
+		}
 	}
+	fmt.Println("degreeGlobal = ", degreeGlobal)
+	fmt.Printf("K global = \n%s\n", stiffinerKGlobal)
 
-	//fmt.Println("Global = ", globalK)
 	return nil
 }

@@ -2,6 +2,7 @@ package utils
 
 import "sort"
 
+// UniqueInt - create unique int`s in array
 func UniqueInt(array *[]int) {
 	// sorting array of point index
 	sort.Sort(sort.IntSlice(*array))

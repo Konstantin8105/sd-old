@@ -11,6 +11,8 @@ FEA for steel structural engineer on golang
 - [X] 2d support
 - [X] 2d truss finite element
 - [X] 2d node load
+- [X] Create global stiffiner matrix
+- [ ] Create load vector
 - [ ] Solve system of linear equation
 - [ ] Calculate global deformation
 - [ ] Calculate internal deformation
@@ -22,6 +24,7 @@ FEA for steel structural engineer on golang
 
 - [ ] 2d beam finite element
 - [ ] 2d gravity load
+- [ ] 2d displacement load
 - [ ] Calculate global deformation
 - [ ] Calculate internal deformation
 - [ ] Calculate internal force

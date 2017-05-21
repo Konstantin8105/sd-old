@@ -27,6 +27,17 @@ func NewSquareMatrix(size int) (m Matrix) {
 	return
 }
 
+// GetSize - return size of square matrix
+func (m *Matrix) GetSize() int {
+	if m.typeM != Square {
+		panic("Not correct type of matrix")
+	}
+	if m.sizeI != m.sizeJ {
+		panic("Not correct size")
+	}
+	return m.sizeI
+}
+
 func NewRectangleMatrix(si, sj int) (m Matrix) {
 	m = *new(Matrix)
 	m.typeM = Rectangle

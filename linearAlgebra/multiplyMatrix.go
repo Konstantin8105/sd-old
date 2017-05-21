@@ -29,5 +29,9 @@ func (m *Matrix) MultiplyTtKT(t Matrix, buffer *Matrix) Matrix {
 			result.Set(i, j, sum)
 		}
 	}
+
+	if result.sizeI == result.sizeJ {
+		result.typeM = Square
+	}
 	return result
 }
