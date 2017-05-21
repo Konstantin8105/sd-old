@@ -1,4 +1,4 @@
 package point
 
-// Index - alias
+// Index - index of point
 type Index int

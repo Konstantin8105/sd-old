@@ -30,20 +30,20 @@ func ExampleFrame3DD() {
 
 	beams := []element.Beam{
 		element.Beam{
-			Index:       1,
-			PointIndexs: [2]point.Index{2, 1},
+			Index:        1,
+			PointIndexes: [2]point.Index{2, 1},
 		},
 		element.Beam{
-			Index:       2,
-			PointIndexs: [2]point.Index{1, 3},
+			Index:        2,
+			PointIndexes: [2]point.Index{1, 3},
 		},
 		element.Beam{
-			Index:       3,
-			PointIndexs: [2]point.Index{1, 4},
+			Index:        3,
+			PointIndexes: [2]point.Index{1, 4},
 		},
 		element.Beam{
-			Index:       4,
-			PointIndexs: [2]point.Index{5, 1},
+			Index:        4,
+			PointIndexes: [2]point.Index{5, 1},
 		},
 	}
 

@@ -8,7 +8,7 @@ type Type int
 // Types of matrix
 const (
 	Square Type = iota
-	Rectange
+	Rectangle
 )
 
 // Matrix - matrix data structure
@@ -24,6 +24,13 @@ func NewSquareMatrix(size int) (m Matrix) {
 	m = *new(Matrix)
 	m.typeM = Square
 	m.SetSize(size)
+	return
+}
+
+func NewRectangleMatrix(si, sj int) (m Matrix) {
+	m = *new(Matrix)
+	m.typeM = Rectangle
+	m.SetRectangleSize(si, sj)
 	return
 }
 
@@ -55,7 +62,7 @@ func (m *Matrix) SetRectangleSize(si, sj int) {
 	} else {
 		m.SetSize(sj)
 	}
-	m.typeM = Rectange
+	m.typeM = Rectangle
 	m.sizeI = si
 	m.sizeJ = sj
 }
@@ -86,8 +93,3 @@ func (m Matrix) String() (s string) {
 	}
 	return s
 }
-
-// GetSize - return size of matrix
-//func (m Matrix) GetSize() int {
-//	return m.size
-//}

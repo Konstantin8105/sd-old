@@ -1,11 +1,12 @@
 package support
 
+// Dim2 - support in 2d
 type Dim2 struct {
-	Dx, Dy bool // false - free, true - fixed
-	M      bool // false - free, true - fixed
+	Dx, Dy Type
+	M      Type
 }
 
 // FixedDim2 - fixed support in 2D interpratation
 func FixedDim2() (s Dim2) {
-	return Dim2{true, true, true}
+	return Dim2{Fix, Fix, Fix}
 }

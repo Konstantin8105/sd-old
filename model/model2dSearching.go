@@ -9,10 +9,10 @@ import (
 	"github.com/Konstantin8105/GoFea/shape"
 )
 
-// GetShape - searching shape for beam
-func (m *Model) GetShape(index element.BeamIndex) (s shape.Shape, err error) {
+// getShape - searching shape for beam
+func (m *Dim2) getShape(index element.BeamIndex) (s shape.Shape, err error) {
 	for _, shapes := range m.shapes {
-		for _, inx := range shapes.beamIndex {
+		for _, inx := range shapes.beamIndexes {
 			if inx == index {
 				return shapes.shape, nil
 			}
@@ -21,10 +21,10 @@ func (m *Model) GetShape(index element.BeamIndex) (s shape.Shape, err error) {
 	return s, fmt.Errorf("Cannot found shape for beam #%v", index)
 }
 
-// GetMaterial - searching material for beam
-func (m *Model) GetMaterial(index element.BeamIndex) (mat material.Linear, err error) {
+// getMaterial - searching material for beam
+func (m *Dim2) getMaterial(index element.BeamIndex) (mat material.Linear, err error) {
 	for _, material := range m.materials {
-		for _, inx := range material.beamIndex {
+		for _, inx := range material.beamIndexes {
 			if index == inx {
 				mat = material.material
 				err = nil
@@ -35,8 +35,8 @@ func (m *Model) GetMaterial(index element.BeamIndex) (mat material.Linear, err e
 	return mat, fmt.Errorf("Cannot found material for beam #%v", index)
 }
 
-// GetCoordinate - return coordinate of beam
-func (m *Model) GetCoordinate(index element.BeamIndex) (c [2]point.Dim3, err error) {
+// getCoordinate - return coordinate of beam
+func (m *Dim2) getCoordinate(index element.BeamIndex) (c [2]point.Dim2, err error) {
 	var inx [2]point.Index
 	var found bool
 	for _, beam := range m.beams {
@@ -50,10 +50,10 @@ func (m *Model) GetCoordinate(index element.BeamIndex) (c [2]point.Dim3, err err
 		return c, fmt.Errorf("Cannot found beam with index #%v", index)
 	}
 
-	var coord [2]point.Dim3
+	var coord [2]point.Dim2
 	for i := 0; i < 2; i++ {
 		found = false
-		for _, c := range m.coordinates {
+		for _, c := range m.points {
 			if inx[i] == c.Index {
 				found = true
 				coord[i] = c
@@ -67,13 +67,14 @@ func (m *Model) GetCoordinate(index element.BeamIndex) (c [2]point.Dim3, err err
 	return coord, nil
 }
 
-/*
-//GetLenght - calculate lenght of beam
-func (m *Model) GetLenght(index element.BeamIndex) (lenght float64, err error) {
-	coord, err := m.GetCoordinate(index)
-	if err != nil {
-		return 0.0, err
+// isTruss - return true if beam is truss
+func (m *Dim2) isTruss(index element.BeamIndex) bool {
+	for _, group := range m.truss {
+		for _, inx := range group.beamIndexes {
+			if inx == index {
+				return true
+			}
+		}
 	}
-	return math.Sqrt(math.Pow(coord[0].X-coord[1].X, 2.0) + math.Pow(coord[0].Y-coord[1].Y, 2.0) + math.Pow(coord[0].Z-coord[1].Z, 2.0)), nil
+	return false
 }
-*/

@@ -1,6 +1,7 @@
 package finiteElement
 
 import (
+	"github.com/Konstantin8105/GoFea/dof"
 	"github.com/Konstantin8105/GoFea/linearAlgebra"
 	"github.com/Konstantin8105/GoFea/material"
 	"github.com/Konstantin8105/GoFea/point"
@@ -15,7 +16,7 @@ type TrussDim2 struct {
 }
 
 // GetCoordinateTransformation - record into buffer a matrix of transform from local to global system coordinate
-func (f *TrussDim2) GetCoordinateTransformation(buffer *linearAlgebra.Matrix) error {
+func (f *TrussDim2) GetCoordinateTransformation(buffer *linearAlgebra.Matrix) {
 	buffer.SetRectangleSize(2, 4)
 
 	lenght := point.LenghtDim2(f.Points)
@@ -27,13 +28,11 @@ func (f *TrussDim2) GetCoordinateTransformation(buffer *linearAlgebra.Matrix) er
 	buffer.Set(0, 1, lambdaXY)
 	buffer.Set(1, 2, lambdaXX)
 	buffer.Set(1, 3, lambdaXY)
-
-	return nil
 }
 
 // GetStiffinerK - matrix of stiffiner
-func (f *TrussDim2) GetStiffinerK(buffer *linearAlgebra.Matrix) error {
-	buffer.SetSize(4)
+func (f *TrussDim2) GetStiffinerK(buffer *linearAlgebra.Matrix) {
+	buffer.SetSize(2)
 
 	lenght := point.LenghtDim2(f.Points)
 
@@ -43,6 +42,21 @@ func (f *TrussDim2) GetStiffinerK(buffer *linearAlgebra.Matrix) error {
 	buffer.Set(1, 0, -EFL)
 	buffer.Set(0, 1, -EFL)
 	buffer.Set(1, 1, EFL)
+}
 
-	return nil
+// GetDoF - return numbers for degree of freedom
+func (f *TrussDim2) GetDoF(degrees *dof.DoF) (axes []dof.AxeNumber) {
+	var Axe [2][]dof.AxeNumber
+	Axe[0] = degrees.GetDoF(f.Points[0].Index)
+	Axe[1] = degrees.GetDoF(f.Points[1].Index)
+
+	inx := 0
+	axes = make([]dof.AxeNumber, 4, 4)
+	for i := 0; i < 2; i++ {
+		for j := 0; j < 2; j++ {
+			axes[inx] = Axe[i][j]
+			inx++
+		}
+	}
+	return
 }
