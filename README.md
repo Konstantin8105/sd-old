@@ -12,7 +12,7 @@ FEA for steel structural engineer on golang
 - [X] 2d truss finite element
 - [X] 2d node load
 - [X] Create global stiffiner matrix
-- [ ] Create load vector
+- [X] Create load vector
 - [ ] Solve system of linear equation
 - [ ] Calculate global deformation
 - [ ] Calculate internal deformation
@@ -47,6 +47,12 @@ FEA for steel structural engineer on golang
 *Step 4*
 
 - [ ] Design of GUI for 2D elements
+
+threejs
+https://threejs.org/
+http://davidscottlyons.com/threejs/presentations/frontporch14/#slide-0
+https://threejs.org/editor/
+https://github.com/mrdoob/three.js/tree/master/editor
 
 *Step 5*
 

@@ -19,6 +19,9 @@ func (m *Matrix) MultiplyTtKT(t Matrix, buffer *Matrix) Matrix {
 		}
 	}
 
+	// TODO : memory optimization
+	// TODO : concorency optimization
+
 	result := NewRectangleMatrix(buffer.sizeI, t.sizeJ)
 	for i := 0; i < result.sizeI; i++ {
 		for j := 0; j < result.sizeJ; j++ {

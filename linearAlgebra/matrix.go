@@ -21,7 +21,7 @@ type Matrix struct {
 
 // NewSquareMatrix - constructor for square matrix
 func NewSquareMatrix(size int) (m Matrix) {
-	m = *new(Matrix)
+	//m = *new(Matrix) // ?? no need
 	m.typeM = Square
 	m.SetSize(size)
 	return
@@ -38,6 +38,7 @@ func (m *Matrix) GetSize() int {
 	return m.sizeI
 }
 
+// NewRectangleMatrix - create new rectangle matrix
 func NewRectangleMatrix(si, sj int) (m Matrix) {
 	m = *new(Matrix)
 	m.typeM = Rectangle
@@ -98,7 +99,10 @@ func (m Matrix) String() (s string) {
 	for i := 0; i < m.sizeI; i++ {
 		s += fmt.Sprintf("[")
 		for j := 0; j < m.sizeJ; j++ {
-			s += fmt.Sprintf("%+.2E,", m.values[i][j])
+			s += fmt.Sprintf("%+.2E", m.values[i][j])
+			if j != m.sizeJ-1 {
+				s += fmt.Sprintf(",")
+			}
 		}
 		s += fmt.Sprintf("]\n")
 	}
