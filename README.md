@@ -25,6 +25,7 @@ FEA for steel structural engineer on golang
 - [ ] 2d beam finite element
 - [ ] 2d gravity load
 - [ ] 2d displacement load
+- [ ] Rections in support
 - [ ] Calculate global deformation
 - [ ] Calculate internal deformation
 - [ ] Calculate internal force
