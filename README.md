@@ -13,10 +13,10 @@ FEA for steel structural engineer on golang
 - [X] 2d node load
 - [X] Create global stiffiner matrix
 - [X] Create load vector
-- [ ] Solve system of linear equation
-- [ ] Calculate global deformation
-- [ ] Calculate internal deformation
-- [ ] Calculate internal force
+- [X] Solve system of linear equation
+- [X] Calculate global deformation
+- [X] Calculate internal deformation
+- [X] Calculate internal force
 - [ ] Calculate natural frequency
 - [ ] Buckling
 

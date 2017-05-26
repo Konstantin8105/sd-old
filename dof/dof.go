@@ -1,6 +1,7 @@
 package dof
 
 import (
+	"fmt"
 	"sort"
 
 	"github.com/Konstantin8105/GoFea/element"
@@ -79,4 +80,31 @@ func ConvertToAxe(ins []int) []AxeNumber {
 		result[i] = AxeNumber(ins[i])
 	}
 	return result
+}
+
+// RemoveIndexes - remove indexex for axeNumber slice
+// without reallocation matrix
+func RemoveIndexes(a *[]AxeNumber, indexes ...int) {
+	if len(indexes) == 0 {
+		return
+	}
+	// sorting indexes for optimization of algoritm
+	sort.Ints(indexes)
+	// global checking indexes
+	if indexes[len(indexes)-1] >= len(*a) {
+		panic(fmt.Errorf("indexes is outside of matrix. Indexes = %v", indexes))
+	}
+	// modify values
+	positionIndex := 0
+	newPositionInSlice := 0
+	for i := 0; i < len(*a); i++ {
+		if positionIndex != len(indexes) && i == indexes[positionIndex] {
+			positionIndex++
+			continue
+		}
+		(*a)[newPositionInSlice] = (*a)[i]
+		newPositionInSlice++
+	}
+
+	(*a) = (*a)[0 : len(*a)-len(indexes)]
 }

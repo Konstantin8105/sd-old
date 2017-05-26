@@ -116,11 +116,11 @@ func truss() {
 
 	// Node force
 	model.AddNodeForce(1, force.NodeDim2{
-		Fx: -7000.0,
+		Fx: -70000.0,
 	}, []point.Index{2}...)
 
 	model.AddNodeForce(1, force.NodeDim2{
-		Fx: 4200.0,
+		Fx: 42000.0,
 	}, []point.Index{4}...)
 
 	fmt.Println(model.Solve())

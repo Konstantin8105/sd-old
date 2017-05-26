@@ -1,10 +1,10 @@
 package finiteElement
 
 import (
-	"github.com/Konstantin8105/GoFea/linearAlgebra"
 	"github.com/Konstantin8105/GoFea/material"
 	"github.com/Konstantin8105/GoFea/point"
 	"github.com/Konstantin8105/GoFea/shape"
+	"github.com/Konstantin8105/GoLinAlg/linAlg"
 )
 
 // BeamDim3 - beam on 3D interpratation
@@ -15,11 +15,11 @@ type BeamDim3 struct {
 }
 
 // GetCoordinateTransformation - record into buffer a matrix of transform from local to global system coordinate
-func (f BeamDim3) GetCoordinateTransformation(buffer *linearAlgebra.Matrix) (err error) {
+func (f BeamDim3) GetCoordinateTransformation(buffer *linAlg.Matrix64) (err error) {
 	const (
 		size = 12
 	)
-	buffer.SetSize(size)
+	buffer.SetNewSize(size, size)
 
 	//TODO: add algoritm
 	panic("Add algoritm")
@@ -27,11 +27,11 @@ func (f BeamDim3) GetCoordinateTransformation(buffer *linearAlgebra.Matrix) (err
 }
 
 // GetStiffinerK - matrix of stiffiner
-func (f BeamDim3) GetStiffinerK(buffer *linearAlgebra.Matrix) (err error) {
+func (f BeamDim3) GetStiffinerK(buffer *linAlg.Matrix64) (err error) {
 	const (
 		size = 12
 	)
-	buffer.SetSize(size)
+	buffer.SetNewSize(size, size)
 
 	lenght := point.LenghtDim3(f.Points)
 
