@@ -25,7 +25,7 @@ FEA for steel structural engineer on golang
 - [ ] 2d beam finite element
 - [ ] 2d gravity load
 - [ ] 2d displacement load
-- [ ] Rections in support
+- [ ] Reactions in support
 - [ ] Calculate global deformation
 - [ ] Calculate internal deformation
 - [ ] Calculate internal force
@@ -43,7 +43,8 @@ FEA for steel structural engineer on golang
 
 *Step 3.10*
 
-- [ ] Create IO format file
+- [ ] Create IO input  file format
+- [ ] Create IO output file format
 
 *Step 4*
 
@@ -54,6 +55,8 @@ https://threejs.org/
 http://davidscottlyons.com/threejs/presentations/frontporch14/#slide-0
 https://threejs.org/editor/
 https://github.com/mrdoob/three.js/tree/master/editor
+
+maybe - polymer from google
 
 *Step 5*
 
