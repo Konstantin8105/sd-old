@@ -17,7 +17,7 @@ FEA for steel structural engineer on golang
 - [X] Calculate global deformation
 - [X] Calculate internal deformation
 - [X] Calculate internal force
-- [ ] Calculate natural frequency
+- [X] Calculate natural frequency
 - [ ] Buckling
 
 *Step 2*
