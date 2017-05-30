@@ -11,8 +11,6 @@ import (
 	"github.com/Konstantin8105/GoLinAlg/linAlg/solver"
 )
 
-//type fromLocalToGlobal func(degree *dof.DoF, info finiteElement.Information) (linAlg.Matrix64, []dof.AxeNumber)
-
 // Solve - solving finite element
 func (m *Dim2) Solve() (err error) {
 
@@ -45,28 +43,7 @@ func (m *Dim2) Solve() (err error) {
 		// Generate global mass matrix
 		massGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetStiffinerMassMr)
 
-		/*
-			stiffinerKGlobal := linAlg.NewMatrix64bySize(len(degreeGlobal), len(degreeGlobal))
-			for _, beam := range m.beams {
-				fe := m.getBeamFiniteElement(beam.Index)
-				klocal, degreeLocal := (*fe).GetStiffinerGlobalK(&dofSystem, finiteElement.WithOutZeroStiffiner)
-				// Add local stiffiner matrix to global matrix
-				for i := 0; i < len(degreeLocal); i++ {
-					g, err := mapIndex.GetByAxe(degreeLocal[i])
-					if err != nil {
-						continue
-					}
-					for j := 0; j < len(degreeLocal); j++ {
-						h, err := mapIndex.GetByAxe(degreeLocal[j])
-						if err != nil {
-							continue
-						}
-						stiffinerKGlobal.Set(g, h, stiffinerKGlobal.Get(g, h)+klocal.Get(i, j))
-					}
-				}
-			}*/
-
-		// create load vector
+		// Create load vector
 		loads := linAlg.NewMatrix64bySize(len(degreeGlobal), 1)
 		for _, node := range m.forceCases[caseNumber].nodeForces {
 			for _, inx := range node.pointIndexes {
@@ -139,6 +116,7 @@ func (m *Dim2) Solve() (err error) {
 		// TODO: one global stiffiner matrix for all cases
 		lu := solver.NewLUsolver(stiffinerKGlobal)
 		x := lu.Solve(loads)
+		// TODO: rename global vector of displacement
 
 		fmt.Printf("Global displacement = \n%s\n", x)
 		fmt.Println("degreeGlobal = ", degreeGlobal)
