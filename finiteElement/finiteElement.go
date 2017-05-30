@@ -5,9 +5,13 @@ import (
 	"github.com/Konstantin8105/GoLinAlg/linAlg"
 )
 
+var _ FiniteElementer = (*TrussDim2)(nil)
+
 // FiniteElementer - base interface for finite element
 type FiniteElementer interface {
-	GetStiffinerK(buffer *linAlg.Matrix64)
-	GetCoordinateTransformation(buffer *linAlg.Matrix64)
-	GetDoF(degrees *dof.DoF) []dof.AxeNumber
+	GetCoordinateTransformation(tr *linAlg.Matrix64)
+	GetStiffinerK(kr *linAlg.Matrix64)
+	GetMassMr(mr *linAlg.Matrix64)
+	GetDoF(degrees *dof.DoF) (axes []dof.AxeNumber)
+	//GetStiffinerGlobalK(degree *dof.DoF, info Information) (linAlg.Matrix64, []dof.AxeNumber)
 }

@@ -11,6 +11,8 @@ import (
 	"github.com/Konstantin8105/GoLinAlg/linAlg/solver"
 )
 
+//type fromLocalToGlobal func(degree *dof.DoF, info finiteElement.Information) (linAlg.Matrix64, []dof.AxeNumber)
+
 // Solve - solving finite element
 func (m *Dim2) Solve() (err error) {
 
@@ -24,7 +26,8 @@ func (m *Dim2) Solve() (err error) {
 		var degreeGlobal []dof.AxeNumber
 		dofSystem := dof.NewBeam(m.beams, dof.Dim2d)
 		for _, beam := range m.beams {
-			_, degreeLocal := m.globalStiffinerForBeam(beam.Index, &dofSystem, finiteElement.WithoutZeroStiffiner)
+			fe := m.getBeamFiniteElement(beam.Index)
+			_, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &dofSystem, finiteElement.WithoutZeroStiffiner)
 			degreeGlobal = append(degreeGlobal, degreeLocal...)
 		}
 		{
@@ -33,26 +36,35 @@ func (m *Dim2) Solve() (err error) {
 			degreeGlobal = dof.ConvertToAxe(is)
 		}
 
-		// Generate global stiffiner matrix
-		stiffinerKGlobal := linAlg.NewMatrix64bySize(len(degreeGlobal), len(degreeGlobal))
+		// Create convertor index to axe
 		mapIndex := dof.NewMapIndex(&degreeGlobal)
-		for _, beam := range m.beams {
-			klocal, degreeLocal := m.globalStiffinerForBeam(beam.Index, &dofSystem, finiteElement.WithoutZeroStiffiner)
-			// Add local stiffiner matrix to global matrix
-			for i := 0; i < len(degreeLocal); i++ {
-				g, err := mapIndex.GetByAxe(degreeLocal[i])
-				if err != nil {
-					continue
-				}
-				for j := 0; j < len(degreeLocal); j++ {
-					h, err := mapIndex.GetByAxe(degreeLocal[j])
+
+		// Generate global stiffiner matrix
+		stiffinerKGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetStiffinerGlobalK)
+
+		// Generate global mass matrix
+		massGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetStiffinerMassMr)
+
+		/*
+			stiffinerKGlobal := linAlg.NewMatrix64bySize(len(degreeGlobal), len(degreeGlobal))
+			for _, beam := range m.beams {
+				fe := m.getBeamFiniteElement(beam.Index)
+				klocal, degreeLocal := (*fe).GetStiffinerGlobalK(&dofSystem, finiteElement.WithOutZeroStiffiner)
+				// Add local stiffiner matrix to global matrix
+				for i := 0; i < len(degreeLocal); i++ {
+					g, err := mapIndex.GetByAxe(degreeLocal[i])
 					if err != nil {
 						continue
 					}
-					stiffinerKGlobal.Set(g, h, stiffinerKGlobal.Get(g, h)+klocal.Get(i, j))
+					for j := 0; j < len(degreeLocal); j++ {
+						h, err := mapIndex.GetByAxe(degreeLocal[j])
+						if err != nil {
+							continue
+						}
+						stiffinerKGlobal.Set(g, h, stiffinerKGlobal.Get(g, h)+klocal.Get(i, j))
+					}
 				}
-			}
-		}
+			}*/
 
 		// create load vector
 		loads := linAlg.NewMatrix64bySize(len(degreeGlobal), 1)
@@ -123,13 +135,16 @@ func (m *Dim2) Solve() (err error) {
 
 		// Solving system of linear equations for finding
 		// the displacement in points in global system
+		// TODO: if you have nonlinear elements, then we can use
+		// TODO: one global stiffiner matrix for all cases
 		lu := solver.NewLUsolver(stiffinerKGlobal)
 		x := lu.Solve(loads)
 
 		fmt.Printf("Global displacement = \n%s\n", x)
 		fmt.Println("degreeGlobal = ", degreeGlobal)
 		for _, beam := range m.beams {
-			klocal, degreeLocal := m.globalStiffinerForBeam(beam.Index, &dofSystem, finiteElement.FullInformation)
+			fe := m.getBeamFiniteElement(beam.Index)
+			klocal, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &dofSystem, finiteElement.FullInformation)
 			fmt.Println("=============")
 			fmt.Println("klocalGlobal = ", klocal)
 			fmt.Println("degreeLocal = ", degreeLocal)
@@ -149,26 +164,8 @@ func (m *Dim2) Solve() (err error) {
 			}
 			fmt.Println("globalDisplacement = ", globalDisplacement)
 
-			inx := beam.Index
-			material, err := m.getMaterial(inx)
-			if err != nil {
-				panic(fmt.Errorf("Cannot found material for beam #%v. Error = %v", inx, err))
-			}
-			shape, err := m.getShape(inx)
-			if err != nil {
-				panic(fmt.Errorf("Cannot found shape for beam #%v. Error = %v", inx, err))
-			}
-			coord, err := m.getCoordinate(inx)
-			if err != nil {
-				panic(fmt.Errorf("Cannot calculate lenght for beam #%v. Error = %v", inx, err))
-			}
-			tr := finiteElement.TrussDim2{
-				Material: material,
-				Shape:    shape,
-				Points:   coord,
-			}
 			t := linAlg.NewMatrix64bySize(10, 10)
-			tr.GetCoordinateTransformation(&t)
+			fe.GetCoordinateTransformation(&t)
 			fmt.Println("tr.glo --", t)
 
 			// Zo = T_t * Z
@@ -184,7 +181,7 @@ func (m *Dim2) Solve() (err error) {
 			fmt.Println("localDisplacement = ", localDisplacement)
 
 			kk := linAlg.NewMatrix64bySize(10, 10)
-			tr.GetStiffinerK(&kk)
+			fe.GetStiffinerK(&kk)
 			fmt.Println("klocalll -->", kk)
 
 			var localForce []float64
@@ -197,15 +194,13 @@ func (m *Dim2) Solve() (err error) {
 			}
 
 			fmt.Println("localForce = ", localForce)
-
 		}
 	}
 
 	return nil
 }
 
-func (m *Dim2) globalStiffinerForBeam(inx element.BeamIndex, dofSystem *dof.DoF, info finiteElement.Information) (localK linAlg.Matrix64, degrees []dof.AxeNumber) {
-
+func (m *Dim2) getBeamFiniteElement(inx element.BeamIndex) (fe finiteElement.FiniteElementer) {
 	material, err := m.getMaterial(inx)
 	if err != nil {
 		panic(fmt.Errorf("Cannot found material for beam #%v. Error = %v", inx, err))
@@ -219,12 +214,12 @@ func (m *Dim2) globalStiffinerForBeam(inx element.BeamIndex, dofSystem *dof.DoF,
 		panic(fmt.Errorf("Cannot calculate lenght for beam #%v. Error = %v", inx, err))
 	}
 	if m.isTruss(inx) {
-		tr := finiteElement.TrussDim2{
+		f := finiteElement.TrussDim2{
 			Material: material,
 			Shape:    shape,
 			Points:   coord,
 		}
-		return tr.GetStiffinerGlobalK(dofSystem, info)
+		return &f
 	} /* else {
 		fe := finiteElement.BeamDim2{
 			Material: material,
@@ -236,5 +231,29 @@ func (m *Dim2) globalStiffinerForBeam(inx element.BeamIndex, dofSystem *dof.DoF,
 			return err
 		}
 	}*/
-	return localK, degrees
+	return nil
+}
+
+func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dofSystem *dof.DoF, mapIndex *dof.MapIndex, f func(finiteElement.FiniteElementer, *dof.DoF, finiteElement.Information) (linAlg.Matrix64, []dof.AxeNumber)) linAlg.Matrix64 {
+
+	globalResult := linAlg.NewMatrix64bySize(len(*degreeGlobal), len(*degreeGlobal))
+	for _, beam := range m.beams {
+		fe := m.getBeamFiniteElement(beam.Index)
+		klocal, degreeLocal := f(fe, dofSystem, finiteElement.WithoutZeroStiffiner)
+		// Add local stiffiner matrix to global matrix
+		for i := 0; i < len(degreeLocal); i++ {
+			g, err := mapIndex.GetByAxe(degreeLocal[i])
+			if err != nil {
+				continue
+			}
+			for j := 0; j < len(degreeLocal); j++ {
+				h, err := mapIndex.GetByAxe(degreeLocal[j])
+				if err != nil {
+					continue
+				}
+				globalResult.Set(g, h, globalResult.Get(g, h)+klocal.Get(i, j))
+			}
+		}
+	}
+	return globalResult
 }
