@@ -60,6 +60,7 @@ maybe - polymer from google
 
 *Step 5*
 
+- [ ] Parallel linear algebra
 - [ ] 3d truss finite element
 - [ ] 3d node load
 
