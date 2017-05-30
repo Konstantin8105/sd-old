@@ -170,6 +170,8 @@ func (m *Dim2) Solve() (err error) {
 			fmt.Println("localForce = ", localForce)
 		}
 
+		//TODO: can calculated in parallel local force
+
 		// Generate global mass matrix [Mo]
 		massGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetGlobalMass)
 		fmt.Println("GlobalMass = ", massGlobal)

@@ -30,9 +30,11 @@ FEA for steel structural engineer on golang
 - [ ] Calculate internal deformation
 - [ ] Calculate internal force
 - [ ] Calculate natural frequency
+- [ ] Buckling
 
 *Step 3*
 
+- [ ] Combine of truss and beams
 - [ ] Pins for 2d beam finite element
 - [ ] 2d uniform load
 - [ ] 2d trapezoidally uniform load
@@ -48,6 +50,7 @@ FEA for steel structural engineer on golang
 
 *Step 4*
 
+- [ ] HTML+CSS gui
 - [ ] Design of GUI for 2D elements
 
 threejs
@@ -60,6 +63,7 @@ maybe - polymer from google
 
 *Step 5*
 
+- [ ] Riks method for buckling
 - [ ] Parallel linear algebra
 - [ ] 3d truss finite element
 - [ ] 3d node load
