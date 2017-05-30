@@ -63,6 +63,7 @@ maybe - polymer from google
 - [ ] Parallel linear algebra
 - [ ] 3d truss finite element
 - [ ] 3d node load
+- [ ] rotate of shape
 
 
 - [ ] Database of shapes
