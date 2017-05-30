@@ -108,8 +108,8 @@ func GetStiffinerGlobalK(f FiniteElementer, degree *dof.DoF, info Information) (
 	return kor, axes
 }
 
-// GetStiffinerGlobalMass - global matrix of mass
-func GetStiffinerGlobalMass(f FiniteElementer, degree *dof.DoF, info Information) (linAlg.Matrix64, []dof.AxeNumber) {
+// GetGlobalMass - global matrix of mass
+func GetGlobalMass(f FiniteElementer, degree *dof.DoF, info Information) (linAlg.Matrix64, []dof.AxeNumber) {
 	mlocal := linAlg.NewMatrix64bySize(4, 4)
 	f.GetMassMr(&mlocal)
 

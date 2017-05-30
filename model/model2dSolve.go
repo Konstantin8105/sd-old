@@ -37,11 +37,8 @@ func (m *Dim2) Solve() (err error) {
 		// Create convertor index to axe
 		mapIndex := dof.NewMapIndex(&degreeGlobal)
 
-		// Generate global stiffiner matrix
+		// Generate global stiffiner matrix [Ko]
 		stiffinerKGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetStiffinerGlobalK)
-
-		// Generate global mass matrix
-		massGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetStiffinerMassMr)
 
 		// Create load vector
 		loads := linAlg.NewMatrix64bySize(len(degreeGlobal), 1)
@@ -170,9 +167,38 @@ func (m *Dim2) Solve() (err error) {
 				}
 				localForce = append(localForce, sum)
 			}
-
 			fmt.Println("localForce = ", localForce)
 		}
+
+		// Generate global mass matrix [Mo]
+		massGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetGlobalMass)
+		fmt.Println("GlobalMass = ", massGlobal)
+
+		// Calculate matrix [H] = [Ko]^-1 * [Mo]
+		if stiffinerKGlobal.GetRowSize() != stiffinerKGlobal.GetColumnSize() {
+			panic("Not correct size of global stiffiner matrix")
+		}
+		n := stiffinerKGlobal.GetRowSize()
+		Ho := linAlg.NewMatrix64bySize(n, n)
+		buffer := linAlg.NewMatrix64bySize(n, 1)
+		for i := 0; i < n; i++ {
+			// Create vertical vector from [Mo]
+			for j := 0; j < n; j++ {
+				buffer.Set(j, 0, massGlobal.Get(j, i))
+			}
+			// Calculation
+			result := lu.Solve(buffer)
+			// Add vector to [Ho]
+			for j := 0; j < n; j++ {
+				Ho.Set(j, i, result.Get(j, 0))
+			}
+		}
+		fmt.Println("[Ho] = ", Ho)
+
+		// Calculation of natural frequency
+		eigen := solver.NewEigen(Ho)
+		fmt.Println("lambda       = ", eigen.GetRealEigenvalues())
+		fmt.Println("eigenvectors = ", eigen.GetV())
 	}
 
 	return nil

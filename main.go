@@ -111,7 +111,8 @@ func truss() {
 
 	// Materials
 	model.AddMaterial(material.Linear{
-		E: 2e11,
+		E:  2e11,
+		Ro: 78500,
 	}, []element.BeamIndex{1, 2, 3, 4, 5, 6, 7}...)
 
 	// Node force
@@ -124,4 +125,6 @@ func truss() {
 	}, []point.Index{4}...)
 
 	fmt.Println(model.Solve())
+
+	//TODO: create test for natural frequency
 }
