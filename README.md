@@ -62,6 +62,7 @@ https://github.com/mrdoob/three.js/tree/master/editor
 maybe - polymer from google
 
 **GUI**
+'''
 Main window:
 +----------------------------------------+
 |             North                      |
@@ -76,6 +77,8 @@ Main window:
 +----------------------------------------+
 |             South                      |
 +----------------------------------------+
+'''
+
 Description:
 North  - menu, toolbar, tabs
 West   - tree view for model, innet models, tabs
@@ -98,7 +101,7 @@ Design tabs:
 	- Material
 	- Specific
 	- Supports
-	- Cases
+	- Cases and loads
 - Calculation:
 	- Check code
 	- Allowable processors
