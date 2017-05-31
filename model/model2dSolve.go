@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/Konstantin8105/GoFea/dof"
 	"github.com/Konstantin8105/GoFea/element"
@@ -173,14 +174,50 @@ func (m *Dim2) Solve() (err error) {
 		//TODO: can calculated in parallel local force
 
 		// Generate global mass matrix [Mo]
+		n := stiffinerKGlobal.GetRowSize()
 		massGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetGlobalMass)
-		fmt.Println("GlobalMass = ", massGlobal)
+		// m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetGlobalMass)
+		//  linAlg.NewMatrix64bySize(n, n)
+
+		// TODO: Add to matrix mass the nodal mass
+		for _, node := range m.forceCases[caseNumber].nodeForces {
+			for _, inx := range node.pointIndexes {
+				d := dofSystem.GetDoF(inx)
+				if node.nodeForce.Fx != 0.0 {
+					h, err := mapIndex.GetByAxe(d[0])
+					if err == nil {
+						massGlobal.Set(h, h, massGlobal.Get(h, h)+math.Abs(node.nodeForce.Fx))
+					}
+				}
+				if node.nodeForce.Fy != 0.0 {
+					h, err := mapIndex.GetByAxe(d[1])
+					if err == nil {
+						massGlobal.Set(h, h, massGlobal.Get(h, h)+math.Abs(node.nodeForce.Fy))
+					}
+				}
+				//if node.nodeForce.M != 0.0 {
+				//	h, err := mapIndex.GetByAxe(d[2])
+				//	if err == nil {
+				//		massGlobal.Set(h, h, massGlobal.Get(h, h)+math.Abs(node.nodeForce.M))
+				//		fmt.Println("Add M to mass")
+				//	}
+				//}
+			}
+		}
+
+		//TODO: CHECKUING GRAVITY TO MATRIX MASS
+		for i := 0; i < massGlobal.GetRowSize(); i++ {
+			for j := 0; j < massGlobal.GetColumnSize(); j++ {
+				massGlobal.Set(i, j, massGlobal.Get(i, j)/9.806)
+			}
+		}
+		// TODO: ADD to mass WITH OR WITOUT SELFWEIGHT
 
 		// Calculate matrix [H] = [Ko]^-1 * [Mo]
 		if stiffinerKGlobal.GetRowSize() != stiffinerKGlobal.GetColumnSize() {
 			panic("Not correct size of global stiffiner matrix")
 		}
-		n := stiffinerKGlobal.GetRowSize()
+		fmt.Println("GlobalMass = ", massGlobal)
 		Ho := linAlg.NewMatrix64bySize(n, n)
 		buffer := linAlg.NewMatrix64bySize(n, 1)
 		for i := 0; i < n; i++ {
@@ -201,6 +238,12 @@ func (m *Dim2) Solve() (err error) {
 		eigen := solver.NewEigen(Ho)
 		fmt.Println("lambda       = ", eigen.GetRealEigenvalues())
 		fmt.Println("eigenvectors = ", eigen.GetV())
+		fmt.Println("getD = ", eigen.GetD())
+
+		value := eigen.GetRealEigenvalues()
+		for _, v := range value {
+			fmt.Printf("f = %.3v Hz\n", math.Sqrt(1.0/v)/2.0/math.Pi)
+		}
 	}
 
 	return nil
