@@ -47,6 +47,7 @@ FEA for steel structural engineer on golang
 
 - [ ] Create IO input  file format
 - [ ] Create IO output file format
+CALCULATION GRAPH
 
 *Step 4*
 
@@ -62,6 +63,7 @@ https://github.com/mrdoob/three.js/tree/master/editor
 maybe - polymer from google
 
 **GUI**
+
 '''
 Main window:
 +----------------------------------------+
@@ -119,10 +121,15 @@ Postprocessor view
 
 Code modification windows
 
+MENU OPTIONS
+
 
 
 *Step 5*
 
+PARALLE
+ CALCULATION
+ STACK DESIGN
 - [ ] Riks method for buckling
 - [ ] Parallel linear algebra
 - [ ] 3d truss finite element
