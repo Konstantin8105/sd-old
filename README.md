@@ -61,6 +61,63 @@ https://github.com/mrdoob/three.js/tree/master/editor
 
 maybe - polymer from google
 
+**GUI**
+Main window:
++----------------------------------------+
+|             North                      |
++----------------------------------------+
+|         |                    |         |
+| West    |    Center          | East    |
+|         |                    |         |
+|         |                    |         |
+|         |                    |         |
+|         |                    |         |
+|         |                    |         |
++----------------------------------------+
+|             South                      |
++----------------------------------------+
+Description:
+North  - menu, toolbar, tabs
+West   - tree view for model, innet models, tabs
+Center - 3D view of model
+East   - tables, property
+South  - status bar, 1-line with short information
+
+View options:
+- 2D
+- 3D: 6 sides, 3d view
+
+Design tabs:
+- Overview
+- Geometry:
+	- Point
+	- Lines
+	- Plates
+- Property:
+	- Shape
+	- Material
+	- Specific
+	- Supports
+	- Cases
+- Calculation:
+	- Check code
+	- Allowable processors
+	- Allowable computers
+
+Postprocessor view
+- Point
+	- Displacement
+	- Reactions
+- Beam
+	- Dia
+	- Code ratio
+- Plate
+	- View
+
+Code modification windows
+
+
+
 *Step 5*
 
 - [ ] Riks method for buckling
@@ -68,10 +125,12 @@ maybe - polymer from google
 - [ ] 3d truss finite element
 - [ ] 3d node load
 - [ ] rotate of shape
-
-
+- [ ] axe-symmetrical finite elements + buckling. Typical case - compress load for shell
 - [ ] Database of shapes
+- [ ] Triangulation for user shape
 - [ ] Gap finite element
+- [ ] Temperature load
+- [ ] Connection design
 - [ ] Tension finite element
 - [ ] Compress finite element
 - [ ] Sparse matrix solver
