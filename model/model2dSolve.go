@@ -195,6 +195,8 @@ func (m *Dim2) Solve() (err error) {
 						massGlobal.Set(h, h, massGlobal.Get(h, h)+math.Abs(node.nodeForce.Fy))
 					}
 				}
+				// TODO: Moment haven`t mass ???
+				// TODO: Check
 				//if node.nodeForce.M != 0.0 {
 				//	h, err := mapIndex.GetByAxe(d[2])
 				//	if err == nil {
@@ -240,10 +242,12 @@ func (m *Dim2) Solve() (err error) {
 		fmt.Println("eigenvectors = ", eigen.GetV())
 		fmt.Println("getD = ", eigen.GetD())
 
+		// TODO: fix for avoid strange frequency some is too small or too big
 		value := eigen.GetRealEigenvalues()
 		for _, v := range value {
-			fmt.Printf("f = %.3v Hz\n", math.Sqrt(1.0/v)/2.0/math.Pi)
+			fmt.Printf("f = %.5v Hz\n", math.Sqrt(1.0/v)/2.0/math.Pi)
 		}
+		// TODO: need add modal mass values for natural frquency calculation
 	}
 
 	return nil
