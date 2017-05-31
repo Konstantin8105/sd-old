@@ -127,8 +127,8 @@ MENU OPTIONS
 
 *Step 5*
 
-PARALLE
- CALCULATION
+MERGE MODELS
+PARALLE CALCULATION
  STACK DESIGN
 - [ ] Riks method for buckling
 - [ ] Parallel linear algebra
