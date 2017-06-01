@@ -87,13 +87,13 @@ Description:
 - Center - 3D view of model
 - East   - tables, property
 - South  - status bar, 1-line with short information
-Note: 
+> Note: 
 > - flexibility border between center and west, center and east
 > - tree view on West is flexibility and allowable collapse to border
 
 North. Toobar. View options:
 - 2D
-- 3D:
+- 3D view:
 	- XOY
 	- XOY back side
 	- XOZ 
@@ -101,11 +101,20 @@ North. Toobar. View options:
 	- YOZ
 	- YOZ back side
 	- XYZ(3d view)
+- 3D view:
+	- Simple
+	- Wireframe
+	- Realistic
+- 3D view:
+	- Orthonal
+	- Perspective
+	- Virtual reality
 
 North. Toolbal. View options:
 - Zoom "+"
 - Zoom "-"
-- Zoom in window
+- Zoom all
+- Zoom by window
 - Hand
 
 North toolbar. Create elements:
@@ -116,36 +125,41 @@ North toolbar. Create elements:
 - Copy array
 - Copy by circle
 
-North. Tabs:
-- Design
-- Postprocessor
+North toolbal. Cursor option:
+- Simple cursor
+- Smart cursor
 
-West tabs with internal tabs, if North tab is Design:
-- Overview
+North tabs (/ underline for - Center):
+- Design / 3D model
+- Text editor / Text
+- Postprocessor / 3D model
+
+West tabs with internal tabs (/ underline for - East), if North tab is Design:
+- Overview / None
 - Geometry:
-	- Point
-	- Lines
-	- Plates
+	- Point / Table of points
+	- Lines / Tables of points and lines
+	- Plates / Tables of points and plates
 - Property:
-	- Shape
-	- Material
-	- Specific
-	- Supports
-	- Cases and loads
+	- Shape / List of property
+	- Material / List of property
+	- Specific / List of property
+	- Supports / List of property
+	- Cases and loads / List of property
 - Calculation:
-	- Check code
-	- Allowable processors
-	- Allowable computers
+	- Check code / List of property 
+	- Allowable processors / List of property
+	- Allowable computers / List of property
 
-West tabs, if North tab = Postprocessor:
+West tabs (/ underline for - East), if North tab = Postprocessor:
 - Point
-	- Displacement
-	- Reactions
+	- Displacement / Tabs for table displacement: cases, max/min
+	- Reactions / Tabs for table reactions: cases, max/min, global
 - Beam
-	- Dia
-	- Code ratio
+	- Diagramm / None
+	- Code ratio / None
 - Plate
-	- View
+	- View / None
 
 South. Label indocators:
 - amount selected points
@@ -154,6 +168,9 @@ South. Label indocators:
 - amount beams
 - amount selected plates
 - amount plates
+
+South popup window:
+- recommendations, warnings, errors
 
 
 Code modification windows
