@@ -64,7 +64,7 @@ maybe - polymer from google
 
 **GUI**
 
-'''
+```
 Main window:
 +----------------------------------------+
 |             North                      |
@@ -79,20 +79,48 @@ Main window:
 +----------------------------------------+
 |             South                      |
 +----------------------------------------+
-'''
+```
 
 Description:
-North  - menu, toolbar, tabs
-West   - tree view for model, innet models, tabs
-Center - 3D view of model
-East   - tables, property
-South  - status bar, 1-line with short information
+- North  - menu, toolbar, tabs
+- West   - tree view for model of inlet models, tabs
+- Center - 3D view of model
+- East   - tables, property
+- South  - status bar, 1-line with short information
+Note: 
+> - flexibility border between center and west, center and east
+> - tree view on West is flexibility and allowable collapse to border
 
-View options:
+North. Toobar. View options:
 - 2D
-- 3D: 6 sides, 3d view
+- 3D:
+	- XOY
+	- XOY back side
+	- XOZ 
+	- XOZ back side
+	- YOZ
+	- YOZ back side
+	- XYZ(3d view)
 
-Design tabs:
+North. Toolbal. View options:
+- Zoom "+"
+- Zoom "-"
+- Zoom in window
+- Hand
+
+North toolbar. Create elements:
+- New point
+- New beam
+- New plate
+- Mirror elements
+- Copy array
+- Copy by circle
+
+North. Tabs:
+- Design
+- Postprocessor
+
+West tabs with internal tabs, if North tab is Design:
 - Overview
 - Geometry:
 	- Point
@@ -109,7 +137,7 @@ Design tabs:
 	- Allowable processors
 	- Allowable computers
 
-Postprocessor view
+West tabs, if North tab = Postprocessor:
 - Point
 	- Displacement
 	- Reactions
@@ -118,6 +146,15 @@ Postprocessor view
 	- Code ratio
 - Plate
 	- View
+
+South. Label indocators:
+- amount selected points
+- amount points
+- amount selected beams
+- amount beams
+- amount selected plates
+- amount plates
+
 
 Code modification windows
 
