@@ -12,6 +12,7 @@ type FiniteElementer interface {
 	GetCoordinateTransformation(tr *linAlg.Matrix64)
 	GetStiffinerK(kr *linAlg.Matrix64)
 	GetMassMr(mr *linAlg.Matrix64)
+	GetPotentialGr(gr *linAlg.Matrix64, localAxialForce float64)
 	GetDoF(degrees *dof.DoF) (axes []dof.AxeNumber)
 	//GetStiffinerGlobalK(degree *dof.DoF, info Information) (linAlg.Matrix64, []dof.AxeNumber)
 }

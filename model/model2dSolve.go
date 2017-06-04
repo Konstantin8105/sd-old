@@ -104,9 +104,9 @@ func (m *Dim2) Solve() (err error) {
 				}
 			}
 		}
-		//fmt.Println("degreeGlobal = ", degreeGlobal)
-		//fmt.Printf("K global = \n%s\n", stiffinerKGlobal)
-		//fmt.Printf("Load vector = \n%s\n", loads)
+		fmt.Println("degreeGlobal = ", degreeGlobal)
+		fmt.Printf("K global = \n%s\n", stiffinerKGlobal)
+		fmt.Printf("Load vector = \n%s\n", loads)
 
 		// Solving system of linear equations for finding
 		// the displacement in points in global system
@@ -125,19 +125,24 @@ func (m *Dim2) Solve() (err error) {
 			fmt.Println("klocalGlobal = ", klocal)
 			fmt.Println("degreeLocal = ", degreeLocal)
 			globalDisplacement := make([]float64, len(degreeLocal))
-			for i := 0; i < len(globalDisplacement); i++ {
-				found := false
-				for j := 0; j < len(degreeGlobal); j++ {
-					if degreeLocal[i] == degreeGlobal[j] {
-						found = true
-						globalDisplacement[i] = x.Get(j, 0)
-						break
+			// if not found in global displacement, then it is a pinned
+			// in local stiffiner matrix - than row and column is zero
+			// for avoid collisian - we put a zero
+			/*
+						for i := 0; i < len(globalDisplacement); i++ {
+					found := false
+					for j := 0; j < len(degreeGlobal); j++ {
+						if degreeLocal[i] == degreeGlobal[j] {
+							found = true
+							globalDisplacement[i] = x.Get(j, 0)
+							break
+						}
+					}
+					if !found {
+						//panic("Cannot found dof - MAY BE PINNED. Check")
 					}
 				}
-				if !found {
-					panic("Cannot found dof - MAY BE PINNED. Check")
-				}
-			}
+			*/
 			fmt.Println("globalDisplacement = ", globalDisplacement)
 
 			t := linAlg.NewMatrix64bySize(10, 10)
@@ -248,6 +253,38 @@ func (m *Dim2) Solve() (err error) {
 			fmt.Printf("f = %.5v Hz\n", math.Sqrt(1.0/v)/2.0/math.Pi)
 		}
 		// TODO: need add modal mass values for natural frquency calculation
+
+		// Linear buckling
+		potentialGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetGlobalPotential)
+		fmt.Println("PotentialGlobal = ", potentialGlobal)
+		HoPotential := linAlg.NewMatrix64bySize(n, n)
+		bufferPotential := linAlg.NewMatrix64bySize(n, 1)
+		fmt.Printf("lu = %#v\n", lu)
+		for i := 0; i < n; i++ {
+			// Create vertical vector from [Mo]
+			for j := 0; j < n; j++ {
+				bufferPotential.Set(j, 0, potentialGlobal.Get(j, i))
+			}
+			// Calculation
+			result := lu.Solve(bufferPotential)
+			// Add vector to [Ho]
+			for j := 0; j < n; j++ {
+				HoPotential.Set(j, i, result.Get(j, 0))
+			}
+		}
+		fmt.Println("[HoPotential] = ", HoPotential)
+
+		// Calculation of
+		eigenPotential := solver.NewEigen(HoPotential)
+		fmt.Println("lambda       = ", eigenPotential.GetRealEigenvalues())
+		fmt.Println("eigenvectors = ", eigenPotential.GetV())
+		fmt.Println("getD = ", eigenPotential.GetD())
+
+		valueP := eigenPotential.GetRealEigenvalues()
+		for _, v := range valueP {
+			fmt.Printf("P = %.5v\n", 1/v)
+		}
+
 	}
 
 	return nil

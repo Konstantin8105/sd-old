@@ -25,6 +25,7 @@ FEA for steel structural engineer on golang
 - [ ] 2d beam finite element
 - [ ] 2d gravity load
 - [ ] 2d displacement load
+- [ ] Selfweight load
 - [ ] Reactions in support
 - [ ] Calculate global deformation
 - [ ] Calculate internal deformation
@@ -34,6 +35,7 @@ FEA for steel structural engineer on golang
 
 *Step 3*
 
+- [ ] Modal mass of frame
 - [ ] Combine of truss and beams
 - [ ] Pins for 2d beam finite element
 - [ ] 2d uniform load
@@ -83,3 +85,7 @@ PARALLE CALCULATION
 - [ ] Sparse matrix solver
 - [ ] Time dependence
 - [ ] Nonlinear property of material. Temperature, corrosion.
+- [ ] Load force in global system coordinate
+- [ ] Load force in local system coordinate - important for non-linear buckling. [Ko] * Zo + [Go] * Zo = Po and Po is dependence of local point rotation.
+- [ ] Tests for all parts
+- [ ] Test buckling on tension !!! Important
