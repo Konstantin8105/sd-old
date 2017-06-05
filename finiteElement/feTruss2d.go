@@ -1,8 +1,6 @@
 package finiteElement
 
 import (
-	"fmt"
-
 	"github.com/Konstantin8105/GoFea/dof"
 	"github.com/Konstantin8105/GoFea/material"
 	"github.com/Konstantin8105/GoFea/point"
@@ -136,36 +134,13 @@ func GetStiffinerGlobalK(f FiniteElementer, degree *dof.DoF, info Information) (
 	f.GetCoordinateTransformation(&Tr)
 
 	kor := klocal.MultiplyTtKT(Tr)
-	fmt.Println("KLOCAL = ", klocal)
-	fmt.Println("TR = ", Tr)
-	fmt.Println("KOR = ", kor)
 
 	axes := f.GetDoF(degree)
 
-	var removePosition []int
-	for i := 0; i < len(axes); i++ {
-		found := false
-		for j := 0; j < len(axes); j++ {
-			if kor.Get(i, j) != 0.0 {
-				found = true
-				break
-			}
-		}
-		if found {
-			continue
-		}
-		removePosition = append(removePosition, i)
-	}
-
 	if info == WithoutZeroStiffiner {
-		// remove row and column from global stiffiner
-		kor.RemoveRowAndColumn(removePosition...)
-		// remove column from axes
-		dof.RemoveIndexes(&axes, removePosition...)
+		RemoveZeros(&kor, &axes)
 	}
 
-	fmt.Println("KOR2 = ", kor)
-	fmt.Println("*************")
 	return kor, axes
 }
 
@@ -181,31 +156,14 @@ func GetGlobalMass(f FiniteElementer, degree *dof.DoF, info Information) (linAlg
 
 	axes := f.GetDoF(degree)
 
-	var removePosition []int
-	for i := 0; i < len(axes); i++ {
-		found := false
-		for j := 0; j < len(axes); j++ {
-			if mor.Get(i, j) != 0.0 {
-				found = true
-				break
-			}
-		}
-		if found {
-			continue
-		}
-		removePosition = append(removePosition, i)
-	}
-
 	if info == WithoutZeroStiffiner {
-		// remove row and column from global stiffiner
-		mor.RemoveRowAndColumn(removePosition...)
-		// remove column from axes
-		dof.RemoveIndexes(&axes, removePosition...)
+		RemoveZeros(&mor, &axes)
 	}
 
 	return mor, axes
 }
 
+/*
 // GetGlobalPotential - global matrix of mass
 func GetGlobalPotential(f FiniteElementer, degree *dof.DoF, info Information) (linAlg.Matrix64, []dof.AxeNumber) {
 	mlocal := linAlg.NewMatrix64bySize(4, 4)
@@ -219,11 +177,23 @@ func GetGlobalPotential(f FiniteElementer, degree *dof.DoF, info Information) (l
 
 	axes := f.GetDoF(degree)
 
+	if info == WithoutZeroStiffiner {
+		RemoveZeros(&mor, &axes)
+	}
+
+	return mor, axes
+}
+*/
+
+// RemoveZeros - remove columns, rows of matrix and columns of dof
+func RemoveZeros(matrix *linAlg.Matrix64, axes *[]dof.AxeNumber) {
 	var removePosition []int
-	for i := 0; i < len(axes); i++ {
+	// TODO: len --> to matrix lenght
+	// TODO: at the first check diagonal element
+	for i := 0; i < len(*axes); i++ {
 		found := false
-		for j := 0; j < len(axes); j++ {
-			if mor.Get(i, j) != 0.0 {
+		for j := 0; j < len(*axes); j++ {
+			if (*matrix).Get(i, j) != 0.0 {
 				found = true
 				break
 			}
@@ -234,12 +204,9 @@ func GetGlobalPotential(f FiniteElementer, degree *dof.DoF, info Information) (l
 		removePosition = append(removePosition, i)
 	}
 
-	if info == WithoutZeroStiffiner {
-		// remove row and column from global stiffiner
-		mor.RemoveRowAndColumn(removePosition...)
-		// remove column from axes
-		dof.RemoveIndexes(&axes, removePosition...)
-	}
-
-	return mor, axes
+	// TODO: can parallel
+	// remove row and column from global stiffiner
+	(*matrix).RemoveRowAndColumn(removePosition...)
+	// remove column from axes
+	dof.RemoveIndexes(axes, removePosition...)
 }

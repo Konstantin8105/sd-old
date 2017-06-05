@@ -19,9 +19,15 @@ FEA for steel structural engineer on golang
 - [X] Calculate internal force
 - [X] Calculate natural frequency
 - [ ] Buckling
+- [ ] Vector for linear algebra
+- [ ] Refactoring
+- [ ] Testing
+- [ ] Benchmark tests
+- [ ] Release
 
 *Step 2*
 
+- [ ] New git branch
 - [ ] 2d beam finite element
 - [ ] 2d gravity load
 - [ ] 2d displacement load
@@ -32,9 +38,14 @@ FEA for steel structural engineer on golang
 - [ ] Calculate internal force
 - [ ] Calculate natural frequency
 - [ ] Buckling
+- [ ] Refactoring
+- [ ] Testing
+- [ ] Benchmark tests
+- [ ] Release
 
 *Step 3*
 
+- [ ] New git branch
 - [ ] Modal mass of frame
 - [ ] Combine of truss and beams
 - [ ] Pins for 2d beam finite element
@@ -44,6 +55,10 @@ FEA for steel structural engineer on golang
 - [ ] Calculate internal deformation
 - [ ] Calculate internal force
 - [ ] Calculate natural frequency
+- [ ] Refactoring
+- [ ] Testing
+- [ ] Benchmark tests
+- [ ] Release
 
 *Step 3.10*
 
@@ -71,6 +86,7 @@ PARALLE CALCULATION
  STACK DESIGN
 - [ ] Riks method for buckling
 - [ ] Parallel linear algebra
+- [ ] 3d node
 - [ ] 3d truss finite element
 - [ ] 3d node load
 - [ ] rotate of shape
