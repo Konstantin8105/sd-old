@@ -48,6 +48,7 @@ FEA for steel structural engineer on golang
 
 *Step 3*
 
+- [ ] Redirection loads
 - [ ] New git branch
 - [ ] Modal mass of frame
 - [ ] Combine of truss and beams
