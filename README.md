@@ -48,6 +48,7 @@ FEA for steel structural engineer on golang
 
 *Step 3*
 
+- [ ] Many loads for natural frequency calculation
 - [ ] Redirection loads
 - [ ] New git branch
 - [ ] Modal mass of frame
