@@ -276,7 +276,8 @@ func (m *Dim2) Solve() (err error) {
 		for _, beam := range m.beams {
 			fe := m.getBeamFiniteElement(beam.Index)
 
-			/*klocal,*/ _, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &dofSystem, finiteElement.FullInformation)
+			/*klocal,*/
+			_, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &dofSystem, finiteElement.FullInformation)
 			globalDisplacement := make([]float64, len(degreeLocal))
 			// if not found in global displacement, then it is a pinned
 			// in local stiffiner matrix - than row and column is zero
@@ -400,6 +401,7 @@ func (m *Dim2) Solve() (err error) {
 		//	for iter := 0; iter < 1000; iter++ {
 
 		//}
+		// TODO add non-linear buckling calculation
 	}
 
 	return nil

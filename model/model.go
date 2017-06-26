@@ -49,6 +49,10 @@ type Model struct {
 	forceCases  forceCase
 }
 
+// TODO: add property for truss elements
+// TODO: add property for natural freq calculation
+// TODO: add property fot buckling checking
+
 // AddCoodinates - add coordinate to model
 func (m *Model) AddCoodinates(coordinates ...point.Dim3) {
 	m.coordinates = append(m.coordinates, coordinates...)

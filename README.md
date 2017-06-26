@@ -27,6 +27,9 @@ FEA for steel structural engineer on golang
 
 *Step 2*
 
+- [ ] add property for truss elements
+- [ ] add property for buckling analyze of case
+- [ ] add natural frequency property
 - [ ] New git branch
 - [ ] 2d beam finite element
 - [ ] 2d gravity load
