@@ -25,6 +25,10 @@ FEA for steel structural engineer on golang
 - [ ] Benchmark tests
 - [ ] Release
 
+*Step 1.1*
+
+- [ ] Create RPC client-server for fast calculation
+
 *Step 2*
 
 - [ ] add property for truss elements
