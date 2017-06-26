@@ -54,7 +54,7 @@ FEA for steel structural engineer on golang
 *Step 3*
 
 - [ ] Many loads for natural frequency calculation
-- [ ] Redirection loads
+- [ ] Redirection loads and cheching recursive loading
 - [ ] New git branch
 - [ ] Modal mass of frame
 - [ ] Combine of truss and beams
