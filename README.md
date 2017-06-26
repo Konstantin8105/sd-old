@@ -29,6 +29,7 @@ FEA for steel structural engineer on golang
 *Step 1.1*
 
 - [ ] Create RPC client-server for fast calculation
+- [ ] GNU GSL at the base or Eigen.Tuxfamily.org 
 
 *Step 2*
 
