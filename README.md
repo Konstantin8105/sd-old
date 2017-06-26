@@ -20,6 +20,7 @@ FEA for steel structural engineer on golang
 - [X] Calculate natural frequency
 - [ ] Buckling
 - [ ] Vector for linear algebra
+- [ ] Add Travis checking of project
 - [ ] Refactoring
 - [ ] Testing
 - [ ] Benchmark tests
