@@ -94,7 +94,7 @@ maybe - polymer from google
 
 MERGE MODELS
 PARALLE CALCULATION
- STACK DESIGN
+STACK DESIGN, see https://github.com/Konstantin8105/Stack.FEA
 - [ ] Separate finite elements on small elements
 - [ ] Riks method for buckling
 - [ ] Parallel linear algebra
