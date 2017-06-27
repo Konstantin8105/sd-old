@@ -92,9 +92,9 @@ maybe - polymer from google
 
 *Step 5*
 
-MERGE MODELS
-PARALLE CALCULATION
-STACK DESIGN, see https://github.com/Konstantin8105/Stack.FEA
+* MERGE MODELS
+* STACK DESIGN, see https://github.com/Konstantin8105/Stack.FEA
+
 - [ ] Intersection between beams
 - [ ] Separate finite elements on small elements
 - [ ] Riks method for buckling
