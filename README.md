@@ -125,3 +125,4 @@ maybe - polymer from google
 - [ ] Code review
 - [ ] Code coverage
 - [ ] Add examples of calculation
+- [ ] Contribution rules
