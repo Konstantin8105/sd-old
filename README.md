@@ -79,6 +79,7 @@ CALCULATION GRAPH
 
 *Step 4*
 
+- [ ] Minimal build configuration. Best way is Go native code.
 - [ ] 3D, tables, graphs
 - [ ] HTML+CSS gui
 - [ ] Design of GUI for 2D elements
@@ -119,3 +120,5 @@ maybe - polymer from google
 - [ ] Load force in local system coordinate - important for non-linear buckling. [Ko] * Zo + [Go] * Zo = Po and Po is dependence of local point rotation.
 - [ ] Tests for all parts
 - [ ] Test buckling on tension !!! Important
+- [ ] Code review
+- [ ] Code coverage
