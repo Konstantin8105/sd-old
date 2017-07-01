@@ -79,6 +79,7 @@ CALCULATION GRAPH
 
 *Step 4*
 
+- [ ] 3D, tables, graphs
 - [ ] HTML+CSS gui
 - [ ] Design of GUI for 2D elements
 
