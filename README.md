@@ -97,6 +97,8 @@ maybe - polymer from google
 * MERGE MODELS
 * STACK DESIGN, see https://github.com/Konstantin8105/Stack.FEA
 
+- [ ] working with geometry inside
+- [ ] triangulation of regions
 - [ ] Intersection between beams
 - [ ] Separate finite elements on small elements
 - [ ] Riks method for buckling
@@ -122,3 +124,4 @@ maybe - polymer from google
 - [ ] Test buckling on tension !!! Important
 - [ ] Code review
 - [ ] Code coverage
+- [ ] Add examples of calculation
