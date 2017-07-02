@@ -126,3 +126,4 @@ maybe - polymer from google
 - [ ] Code coverage
 - [ ] Add examples of calculation
 - [ ] Contribution rules
+- [ ] Automatic tool for truss frames
