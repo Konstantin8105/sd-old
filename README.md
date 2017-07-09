@@ -127,3 +127,4 @@ maybe - polymer from google
 - [ ] Add examples of calculation
 - [ ] Contribution rules
 - [ ] Automatic tool for truss frames
+- [ ] Where is money?
