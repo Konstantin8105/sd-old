@@ -316,10 +316,10 @@ func (m *Dim2) Solve() (err error) {
 				localForce = append(localForce, sum)
 			}
 
-			fmt.Println("local Force = ", localForce)
+			//fmt.Println("local Force = ", localForce)
 			if localForce[0] > 0.0 && localForce[3] < 0.0 {
 				// TODO : it is not correct , because uniform load can change
-				fmt.Println("Compress")
+				//fmt.Println("Compress")
 			} else {
 				// TODO: testing
 				localForce[0] = 0.0
@@ -344,10 +344,10 @@ func (m *Dim2) Solve() (err error) {
 			}
 		}
 
-		fmt.Println("PotentialGlobal = ", potentialGlobal)
+		//fmt.Println("PotentialGlobal = ", potentialGlobal)
 		HoPotential := linAlg.NewMatrix64bySize(n, n)
 		bufferPotential := linAlg.NewMatrix64bySize(n, 1)
-		fmt.Printf("lu = %#v\n", lu)
+		//fmt.Printf("lu = %#v\n", lu)
 		for i := 0; i < n; i++ {
 			// Create vertical vector from [Mo]
 			for j := 0; j < n; j++ {
@@ -360,7 +360,7 @@ func (m *Dim2) Solve() (err error) {
 				HoPotential.Set(j, i, result.Get(j, 0))
 			}
 		}
-		fmt.Println("[HoPotential] = ", HoPotential)
+		//fmt.Println("[HoPotential] = ", HoPotential)
 		{
 			// TODO: check
 			// Remove zero rows and columns
@@ -384,13 +384,14 @@ func (m *Dim2) Solve() (err error) {
 		}
 		// Calculation of
 		eigenPotential := solver.NewEigen(HoPotential)
-		fmt.Println("lambda       = ", eigenPotential.GetRealEigenvalues())
-		fmt.Println("lambda Re    = ", eigenPotential.GetImagEigenvalues())
-		fmt.Println("eigenvectors = ", eigenPotential.GetV())
-		fmt.Println("getD = ", eigenPotential.GetD())
+		//fmt.Println("lambda       = ", eigenPotential.GetRealEigenvalues())
+		//fmt.Println("lambda Re    = ", eigenPotential.GetImagEigenvalues())
+		//fmt.Println("eigenvectors = ", eigenPotential.GetV())
+		//fmt.Println("getD = ", eigenPotential.GetD())
 
 		// TODO: Remove strange results
 		valueP := eigenPotential.GetRealEigenvalues()
+		fmt.Println("Linear buckling loads:")
 		for _, v := range valueP {
 			fmt.Printf("P = %.5v\n", 1.0/v)
 		}
@@ -401,11 +402,45 @@ func (m *Dim2) Solve() (err error) {
 		//	for iter := 0; iter < 1000; iter++ {
 
 		//}
-		// TODO add non-linear buckling calculation
-	}
 
+		// Nolinear buckling calculation
+		// algorithm Newton-Raphfon
+		loadsOld := zeroCopy(m.forceCases[caseNumber])
+		displacementOld := zeroDisplacement(...)
+		resultOld := converge
+		displacementOld, resultOld = calculate(loadsOld)
+
+		loadsNew := m.forceCases[caseNumber]
+		var displacementNew Matrix64
+		var resultNew  resultNolinearBuckling
+		displacementNew, resultNew = calculate(loadsNew)
+
+
+		eps := 0.01
+		for {
+			
+			if deltaDisp(displacementNew, displacementOld) <= eps && deltaLoads(loadsNew, loadsOld) <= eps && resultOld == converge && resultNew == diverge {
+				break
+			}
+			switch resultNew{
+			case converge:
+				loadsOld = loadsNew
+				loadsNew = mulpiply(2.0, loadsNew)
+			case diverge:
+				loadsNew = average(loadsNew, loadsOld)// (loadsNew + loadsOld)/2.0
+			}
+			displacementNew, resultNew = calculate(loadsNew)
+		}
+	}
 	return nil
 }
+
+type resultNolinearBuckling int
+const(
+	diverge resultNolinearBuckling = iota
+	converge resultNolinearBuckling
+)
+
 
 func (m *Dim2) getBeamFiniteElement(inx element.BeamIndex) (fe finiteElement.FiniteElementer) {
 	material, err := m.getMaterial(inx)
