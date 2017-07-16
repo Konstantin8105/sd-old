@@ -415,6 +415,14 @@ func (m *Dim2) Solve() (err error) {
 		var resultNew  resultNolinearBuckling
 		displacementNew, resultNew = calculate(loadsNew)
 
+		for {
+			if resultNew == diverge{
+				break
+			}
+			loadsOld = loadsNew
+			resultOld = resultNew
+			loadsNew = multiply(2.0, loadsNew)
+		}
 
 		eps := 0.01
 		for {
@@ -422,14 +430,13 @@ func (m *Dim2) Solve() (err error) {
 			if deltaDisp(displacementNew, displacementOld) <= eps && deltaLoads(loadsNew, loadsOld) <= eps && resultOld == converge && resultNew == diverge {
 				break
 			}
-			switch resultNew{
+			loadAverage := average(loadsNew, loadsOld)
+			switch resultAverage{
 			case converge:
-				loadsOld = loadsNew
-				loadsNew = mulpiply(2.0, loadsNew)
+				loadsOld = loadsAverage 
 			case diverge:
-				loadsNew = average(loadsNew, loadsOld)// (loadsNew + loadsOld)/2.0
+				loadsNew = loadsAverage
 			}
-			displacementNew, resultNew = calculate(loadsNew)
 		}
 	}
 	return nil
