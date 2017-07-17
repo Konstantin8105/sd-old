@@ -405,49 +405,59 @@ func (m *Dim2) Solve() (err error) {
 
 		// Nolinear buckling calculation
 		// algorithm Newton-Raphfon
-		loadsOld := zeroCopy(m.forceCases[caseNumber])
-		displacementOld := zeroDisplacement(...)
-		resultOld := converge
-		displacementOld, resultOld = calculate(loadsOld)
-
-		loadsNew := m.forceCases[caseNumber]
-		var displacementNew Matrix64
-		var resultNew  resultNolinearBuckling
-		displacementNew, resultNew = calculate(loadsNew)
-
-		for {
-			if resultNew == diverge{
-				break
-			}
-			loadsOld = loadsNew
-			resultOld = resultNew
-			loadsNew = multiply(2.0, loadsNew)
+		type step struct {
+			forces       forceCase2d
+			displacement linAlg.Matrix64
 		}
-
-		eps := 0.01
-		for {
-			
-			if deltaDisp(displacementNew, displacementOld) <= eps && deltaLoads(loadsNew, loadsOld) <= eps && resultOld == converge && resultNew == diverge {
-				break
-			}
-			loadAverage := average(loadsNew, loadsOld)
-			switch resultAverage{
-			case converge:
-				loadsOld = loadsAverage 
-			case diverge:
-				loadsNew = loadsAverage
-			}
+		type iteration struct {
+			step
+			result resultNolinearBuckling
 		}
+		/*
+			loadsOld := zeroCopy(m.forceCases[caseNumber])
+			displacementOld := zeroDisplacement(...)
+			resultOld := converge
+			displacementOld, resultOld = calculate(loadsOld)
+
+			loadsNew := m.forceCases[caseNumber]
+			var displacementNew Matrix64
+			var resultNew  resultNolinearBuckling
+			displacementNew, resultNew = calculate(loadsNew)
+
+			for {
+				if resultNew == diverge{
+					break
+				}
+				loadsOld = loadsNew
+				resultOld = resultNew
+				loadsNew = multiply(2.0, loadsNew)
+			}
+
+			eps := 0.01
+			for {
+
+				if deltaDisp(displacementNew, displacementOld) <= eps && deltaLoads(loadsNew, loadsOld) <= eps && resultOld == converge && resultNew == diverge {
+					break
+				}
+				loadAverage := average(loadsNew, loadsOld)
+				switch resultAverage{
+				case converge:
+					loadsOld = loadsAverage
+				case diverge:
+					loadsNew = loadsAverage
+				}
+			}
+		*/
 	}
 	return nil
 }
 
 type resultNolinearBuckling int
-const(
-	diverge resultNolinearBuckling = iota
-	converge resultNolinearBuckling
-)
 
+const (
+	diverge resultNolinearBuckling = iota
+	converge
+)
 
 func (m *Dim2) getBeamFiniteElement(inx element.BeamIndex) (fe finiteElement.FiniteElementer) {
 	material, err := m.getMaterial(inx)
