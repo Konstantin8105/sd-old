@@ -405,12 +405,15 @@ func (m *Dim2) Solve() (err error) {
 
 		// Nolinear buckling calculation
 		// algorithm Newton-Raphfon
+		// для дальнейшего развития
+		// необходимо рекурсивно вызывать эту
+		// функцию Solve
 		type step struct {
 			forces       forceCase2d
 			displacement linAlg.Matrix64
 		}
 		type iteration struct {
-			step
+			s      step
 			result resultNolinearBuckling
 		}
 		/*
