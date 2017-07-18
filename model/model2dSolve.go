@@ -8,8 +8,8 @@ import (
 	"github.com/Konstantin8105/GoFea/element"
 	"github.com/Konstantin8105/GoFea/finiteElement"
 	"github.com/Konstantin8105/GoFea/utils"
-	"github.com/Konstantin8105/GoLinAlg/linAlg"
-	"github.com/Konstantin8105/GoLinAlg/linAlg/solver"
+	"github.com/Konstantin8105/GoLinAlg/matrix"
+	"github.com/Konstantin8105/GoLinAlg/solver"
 )
 
 // Solve - solving finite element
@@ -42,7 +42,7 @@ func (m *Dim2) Solve() (err error) {
 		stiffinerKGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetStiffinerGlobalK)
 
 		// Create load vector
-		loads := linAlg.NewMatrix64bySize(len(degreeGlobal), 1)
+		loads := matrix.NewMatrix64bySize(len(degreeGlobal), 1)
 		for _, node := range m.forceCases[caseNumber].nodeForces {
 			for _, inx := range node.pointIndexes {
 				d := dofSystem.GetDoF(inx)
@@ -138,7 +138,7 @@ func (m *Dim2) Solve() (err error) {
 			}
 			//fmt.Println("globalDisplacement = ", globalDisplacement)
 
-			t := linAlg.NewMatrix64bySize(10, 10)
+			t := matrix.NewMatrix64bySize(10, 10)
 			fe.GetCoordinateTransformation(&t)
 			//fmt.Println("tr.glo --", t)
 
@@ -153,7 +153,7 @@ func (m *Dim2) Solve() (err error) {
 			}
 			//fmt.Println("localDisplacement = ", localDisplacement)
 
-			kk := linAlg.NewMatrix64bySize(10, 10)
+			kk := matrix.NewMatrix64bySize(10, 10)
 			fe.GetStiffinerK(&kk)
 			//fmt.Println("klocalll -->", kk)
 
@@ -218,8 +218,8 @@ func (m *Dim2) Solve() (err error) {
 			panic("Not correct size of global stiffiner matrix")
 		}
 		//fmt.Println("GlobalMass = ", massGlobal)
-		Ho := linAlg.NewMatrix64bySize(n, n)
-		buffer := linAlg.NewMatrix64bySize(n, 1)
+		Ho := matrix.NewMatrix64bySize(n, n)
+		buffer := matrix.NewMatrix64bySize(n, 1)
 		for i := 0; i < n; i++ {
 			// Create vertical vector from [Mo]
 			for j := 0; j < n; j++ {
@@ -272,7 +272,7 @@ func (m *Dim2) Solve() (err error) {
 
 		// Linear buckling
 		//potentialGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetGlobalPotential)
-		potentialGlobal := linAlg.NewMatrix64bySize(stiffinerKGlobal.GetRowSize(), stiffinerKGlobal.GetColumnSize())
+		potentialGlobal := matrix.NewMatrix64bySize(stiffinerKGlobal.GetRowSize(), stiffinerKGlobal.GetColumnSize())
 		for _, beam := range m.beams {
 			fe := m.getBeamFiniteElement(beam.Index)
 
@@ -291,7 +291,7 @@ func (m *Dim2) Solve() (err error) {
 				}
 			}
 
-			t := linAlg.NewMatrix64bySize(10, 10)
+			t := matrix.NewMatrix64bySize(10, 10)
 			fe.GetCoordinateTransformation(&t)
 
 			// Zo = T_t * Z
@@ -304,7 +304,7 @@ func (m *Dim2) Solve() (err error) {
 				localDisplacement = append(localDisplacement, sum)
 			}
 
-			kk := linAlg.NewMatrix64bySize(10, 10)
+			kk := matrix.NewMatrix64bySize(10, 10)
 			fe.GetStiffinerK(&kk)
 
 			var localForce []float64
@@ -325,7 +325,7 @@ func (m *Dim2) Solve() (err error) {
 				localForce[0] = 0.0
 			}
 
-			grLocal := linAlg.NewMatrix64bySize(6, 6)
+			grLocal := matrix.NewMatrix64bySize(6, 6)
 			fe.GetPotentialGr(&grLocal, localForce[0])
 
 			// Add local stiffiner matrix to global matrix
@@ -345,8 +345,8 @@ func (m *Dim2) Solve() (err error) {
 		}
 
 		//fmt.Println("PotentialGlobal = ", potentialGlobal)
-		HoPotential := linAlg.NewMatrix64bySize(n, n)
-		bufferPotential := linAlg.NewMatrix64bySize(n, 1)
+		HoPotential := matrix.NewMatrix64bySize(n, n)
+		bufferPotential := matrix.NewMatrix64bySize(n, 1)
 		//fmt.Printf("lu = %#v\n", lu)
 		for i := 0; i < n; i++ {
 			// Create vertical vector from [Mo]
@@ -410,7 +410,7 @@ func (m *Dim2) Solve() (err error) {
 		// функцию Solve
 		type step struct {
 			forces       forceCase2d
-			displacement linAlg.Matrix64
+			displacement matrix.T64
 		}
 		type iteration struct {
 			s      step
@@ -496,8 +496,8 @@ func (m *Dim2) getBeamFiniteElement(inx element.BeamIndex) (fe finiteElement.Fin
 	return nil
 }
 
-func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dofSystem *dof.DoF, mapIndex *dof.MapIndex, f func(finiteElement.FiniteElementer, *dof.DoF, finiteElement.Information) (linAlg.Matrix64, []dof.AxeNumber)) linAlg.Matrix64 {
-	globalResult := linAlg.NewMatrix64bySize(len(*degreeGlobal), len(*degreeGlobal))
+func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dofSystem *dof.DoF, mapIndex *dof.MapIndex, f func(finiteElement.FiniteElementer, *dof.DoF, finiteElement.Information) (matrix.T64, []dof.AxeNumber)) matrix.T64 {
+	globalResult := matrix.NewMatrix64bySize(len(*degreeGlobal), len(*degreeGlobal))
 	for _, beam := range m.beams {
 		fe := m.getBeamFiniteElement(beam.Index)
 		klocal, degreeLocal := f(fe, dofSystem, finiteElement.WithoutZeroStiffiner)

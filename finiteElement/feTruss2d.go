@@ -5,7 +5,7 @@ import (
 	"github.com/Konstantin8105/GoFea/material"
 	"github.com/Konstantin8105/GoFea/point"
 	"github.com/Konstantin8105/GoFea/shape"
-	"github.com/Konstantin8105/GoLinAlg/linAlg"
+	"github.com/Konstantin8105/GoLinAlg/matrix"
 )
 
 // TrussDim2 - truss on 2D interpratation
@@ -16,7 +16,7 @@ type TrussDim2 struct {
 }
 
 // GetCoordinateTransformation - matrix of transform between local and global system coordinate
-func (f *TrussDim2) GetCoordinateTransformation(tr *linAlg.Matrix64) {
+func (f *TrussDim2) GetCoordinateTransformation(tr *matrix.T64) {
 	lenght := point.LenghtDim2(f.Points)
 	lambdaXX := (f.Points[1].X - f.Points[0].X) / lenght
 	lambdaXY := (f.Points[1].Y - f.Points[0].Y) / lenght
@@ -43,7 +43,7 @@ func (f *TrussDim2) GetCoordinateTransformation(tr *linAlg.Matrix64) {
 }
 
 // GetStiffinerK - matrix of stiffiner
-func (f *TrussDim2) GetStiffinerK(kr *linAlg.Matrix64) {
+func (f *TrussDim2) GetStiffinerK(kr *matrix.T64) {
 	lenght := point.LenghtDim2(f.Points)
 	EFL := f.Material.E * f.Shape.A / lenght
 	/*
@@ -61,7 +61,7 @@ func (f *TrussDim2) GetStiffinerK(kr *linAlg.Matrix64) {
 }
 
 // GetMassMr - matrix mass of finite element
-func (f *TrussDim2) GetMassMr(mr *linAlg.Matrix64) {
+func (f *TrussDim2) GetMassMr(mr *matrix.T64) {
 	mu := f.Shape.A * f.Material.Ro
 	lenght := point.LenghtDim2(f.Points)
 	mul3 := lenght / 3.0 * mu
@@ -81,7 +81,7 @@ func (f *TrussDim2) GetMassMr(mr *linAlg.Matrix64) {
 }
 
 // GetPotentialGr - matrix potential loads for linear buckling
-func (f *TrussDim2) GetPotentialGr(gr *linAlg.Matrix64, localAxialForce float64) {
+func (f *TrussDim2) GetPotentialGr(gr *matrix.T64, localAxialForce float64) {
 	lenght := point.LenghtDim2(f.Points)
 	/*
 		gr.SetNewSize(2, 2)
@@ -126,11 +126,11 @@ func (f *TrussDim2) GetDoF(degrees *dof.DoF) (axes []dof.AxeNumber) {
 }
 
 // GetStiffinerGlobalK - global matrix of stiffiner
-func GetStiffinerGlobalK(f FiniteElementer, degree *dof.DoF, info Information) (linAlg.Matrix64, []dof.AxeNumber) {
-	klocal := linAlg.NewMatrix64bySize(4, 4)
+func GetStiffinerGlobalK(f FiniteElementer, degree *dof.DoF, info Information) (matrix.T64, []dof.AxeNumber) {
+	klocal := matrix.NewMatrix64bySize(4, 4)
 	f.GetStiffinerK(&klocal)
 
-	Tr := linAlg.NewMatrix64bySize(4, 4)
+	Tr := matrix.NewMatrix64bySize(4, 4)
 	f.GetCoordinateTransformation(&Tr)
 
 	kor := klocal.MultiplyTtKT(Tr)
@@ -145,11 +145,11 @@ func GetStiffinerGlobalK(f FiniteElementer, degree *dof.DoF, info Information) (
 }
 
 // GetGlobalMass - global matrix of mass
-func GetGlobalMass(f FiniteElementer, degree *dof.DoF, info Information) (linAlg.Matrix64, []dof.AxeNumber) {
-	mlocal := linAlg.NewMatrix64bySize(4, 4)
+func GetGlobalMass(f FiniteElementer, degree *dof.DoF, info Information) (matrix.T64, []dof.AxeNumber) {
+	mlocal := matrix.NewMatrix64bySize(4, 4)
 	f.GetMassMr(&mlocal)
 
-	Tr := linAlg.NewMatrix64bySize(4, 4)
+	Tr := matrix.NewMatrix64bySize(4, 4)
 	f.GetCoordinateTransformation(&Tr)
 
 	mor := mlocal.MultiplyTtKT(Tr)
@@ -186,7 +186,7 @@ func GetGlobalPotential(f FiniteElementer, degree *dof.DoF, info Information) (l
 */
 
 // RemoveZeros - remove columns, rows of matrix and columns of dof
-func RemoveZeros(matrix *linAlg.Matrix64, axes *[]dof.AxeNumber) {
+func RemoveZeros(matrix *matrix.T64, axes *[]dof.AxeNumber) {
 	var removePosition []int
 	// TODO: len --> to matrix lenght
 	// TODO: at the first check diagonal element
