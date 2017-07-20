@@ -1,15 +1,17 @@
-package utils
+package utils_test
 
 import (
 	"math/rand"
 	"testing"
+
+	"github.com/Konstantin8105/GoFea/utils"
 )
 
 func TestUniqueInt1(t *testing.T) {
 	array := []int{1, 2, 3, 4, 5}
 	result := []int{1, 2, 3, 4, 5}
 
-	UniqueInt(&array)
+	utils.UniqueInt(&array)
 	Compare(t, array, result)
 }
 
@@ -17,7 +19,7 @@ func TestUniqueInt2(t *testing.T) {
 	array := []int{1, 1, 1, 1, 5}
 	result := []int{1, 5}
 
-	UniqueInt(&array)
+	utils.UniqueInt(&array)
 	Compare(t, array, result)
 }
 
@@ -25,7 +27,7 @@ func TestUniqueInt3(t *testing.T) {
 	array := []int{1, 2, 2, 2, 5}
 	result := []int{1, 2, 5}
 
-	UniqueInt(&array)
+	utils.UniqueInt(&array)
 	Compare(t, array, result)
 }
 
@@ -33,7 +35,7 @@ func TestUniqueInt4(t *testing.T) {
 	array := []int{1, 2, 2, 2, 2}
 	result := []int{1, 2}
 
-	UniqueInt(&array)
+	utils.UniqueInt(&array)
 	Compare(t, array, result)
 }
 
@@ -41,7 +43,7 @@ func TestUniqueInt5(t *testing.T) {
 	array := []int{2, 2, 2, 2, 2}
 	result := []int{2}
 
-	UniqueInt(&array)
+	utils.UniqueInt(&array)
 	Compare(t, array, result)
 }
 
@@ -49,7 +51,7 @@ func TestUniqueInt6(t *testing.T) {
 	array := []int{20, 200, 2, 2, 5}
 	result := []int{2, 5, 20, 200}
 
-	UniqueInt(&array)
+	utils.UniqueInt(&array)
 	Compare(t, array, result)
 }
 
@@ -57,7 +59,7 @@ func TestUniqueInt7(t *testing.T) {
 	array := []int{1, 200, 2, 2, 5}
 	result := []int{1, 2, 5, 200}
 
-	UniqueInt(&array)
+	utils.UniqueInt(&array)
 	Compare(t, array, result)
 }
 
@@ -65,7 +67,7 @@ func TestUniqueInt8(t *testing.T) {
 	array := []int{200, 200, 2, 2, 5}
 	result := []int{2, 5, 200}
 
-	UniqueInt(&array)
+	utils.UniqueInt(&array)
 	Compare(t, array, result)
 }
 
@@ -73,7 +75,7 @@ func TestUniqueInt9(t *testing.T) {
 	array := []int{20, 5, 2, 2, 5}
 	result := []int{2, 5, 20}
 
-	UniqueInt(&array)
+	utils.UniqueInt(&array)
 	Compare(t, array, result)
 }
 
@@ -81,7 +83,7 @@ func TestUniqueInt10(t *testing.T) {
 	array := []int{-1, 200, 2, 2, 5}
 	result := []int{-1, 2, 5, 200}
 
-	UniqueInt(&array)
+	utils.UniqueInt(&array)
 	Compare(t, array, result)
 }
 
@@ -113,7 +115,7 @@ func Benchmark1000(b *testing.B) {
 		c := make([]int, size, size)
 		copy(c, array)
 		b.StartTimer()
-		UniqueInt(&c)
+		utils.UniqueInt(&c)
 		b.StopTimer()
 	}
 	b.ReportAllocs()

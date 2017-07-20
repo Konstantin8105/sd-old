@@ -11,6 +11,7 @@ import (
 
 // Dim2 - base struct of data for model in 2d
 type Dim2 struct {
+	// input data
 	points     []point.Dim2
 	beams      []element.Beam
 	truss      []trussGroup

@@ -1,20 +1,9 @@
 package main_test
 
-import (
-	"fmt"
-
-	"github.com/Konstantin8105/GoFea/element"
-	"github.com/Konstantin8105/GoFea/force"
-	"github.com/Konstantin8105/GoFea/material"
-	"github.com/Konstantin8105/GoFea/model"
-	"github.com/Konstantin8105/GoFea/point"
-	"github.com/Konstantin8105/GoFea/shape"
-	"github.com/Konstantin8105/GoFea/support"
-)
-
+/*
 func ExampleFrame3DD() {
 
-	var model model.Model
+	var model model.Dim2
 
 	// input data of exB
 
@@ -26,7 +15,7 @@ func ExampleFrame3DD() {
 		point.Dim3{Index: 5, X: -1.2, Y: 0.9, Z: 0.0},
 	}
 
-	model.AddCoodinates(coordinates...)
+	model.AddPoint(coordinates...)
 
 	beams := []element.Beam{
 		element.Beam{
@@ -103,3 +92,4 @@ func ExampleFrame3DD() {
 	fmt.Println("OK")
 	// Output: OK
 }
+*/

@@ -1,10 +1,37 @@
 package model
 
 type forceCase2d struct {
+	// input data
 	indexCase     uint
 	gravityForces []gravityForce2d
 	nodeForces    []nodeForce2d
+	/*
+		// output data
+		// statis property
+		static        staticTypes
+		displacements []displacement2d
+		localForces   []localForce
+
+		// dynamic property
+		dynamicType  dynamicTypes
+		dynamicValue []float64
+	*/
 }
+
+/*
+type staticTypes bool
+
+const (
+	linear staticTypes = false
+	nolinear
+)
+
+type dynamicTypes int
+
+const (
+	naturalFrequency dynamicTypes = iota
+	bucklingFactors
+)
 
 /*
 func zeroCopy(f forceCase2d) (result forceCase2d) {
