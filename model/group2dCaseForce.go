@@ -1,24 +1,28 @@
 package model
 
+import (
+	"github.com/Konstantin8105/GoFea/displacement"
+	"github.com/Konstantin8105/GoFea/forceLocal"
+)
+
 type forceCase2d struct {
+	indexCase int
+
 	// input data
-	indexCase     uint
 	gravityForces []gravityForce2d
 	nodeForces    []nodeForce2d
-	/*
-		// output data
-		// statis property
-		static        staticTypes
-		displacements []displacement2d
-		localForces   []localForce
 
-		// dynamic property
-		dynamicType  dynamicTypes
-		dynamicValue []float64
-	*/
+	// output data
+	// statis property
+	static        staticTypes
+	displacements []displacement.Dim2
+	localForces   []forceLocal.Beam2d
+
+	// dynamic property
+	dynamicType  dynamicTypes
+	dynamicValue []float64
 }
 
-/*
 type staticTypes bool
 
 const (
@@ -29,7 +33,8 @@ const (
 type dynamicTypes int
 
 const (
-	naturalFrequency dynamicTypes = iota
+	none dynamicTypes = iota
+	naturalFrequency
 	bucklingFactors
 )
 

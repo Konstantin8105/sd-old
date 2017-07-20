@@ -77,10 +77,12 @@ func TestTruss(t *testing.T) {
 	}, 1)
 
 	m.AddSupport(support.Dim2{
+		Dx: support.Fix,
 		Dy: support.Fix,
 	}, 2)
 
 	m.AddSupport(support.Dim2{
+		Dx: support.Fix,
 		Dy: support.Fix,
 	}, 3)
 
@@ -106,14 +108,13 @@ func TestTruss(t *testing.T) {
 
 	err := m.Solve()
 	if err != nil {
-		t.Errorf("Cannot solving")
+		t.Errorf("Cannot solving. error = %v", err)
 	}
 
 	// results
-	/*
-		N1 = 48500 // 20900
-		N2 = 18200 // 12060
-	*/
+
+	//N1 = 48500 // 20900
+	//N2 = 18200 // 12060
 
 	//TODO: create test for natural frequency
 
@@ -231,6 +232,4 @@ func TestTruss(t *testing.T) {
 
 	//TODO: create test for natural frequency
 
-}
-
-*/
+}*/

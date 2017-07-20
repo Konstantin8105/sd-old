@@ -61,7 +61,7 @@ func (m *Dim2) AddMaterial(material material.Linear, beamIndexes ...element.Beam
 }
 
 // AddNodeForce - add node force in force case
-func (m *Dim2) AddNodeForce(caseNumber uint, nodeForce force.NodeDim2, pointIndexes ...point.Index) {
+func (m *Dim2) AddNodeForce(caseNumber int, nodeForce force.NodeDim2, pointIndexes ...point.Index) {
 	for i := range m.forceCases {
 		if m.forceCases[i].indexCase == caseNumber {
 			m.forceCases[i].nodeForces = append(m.forceCases[i].nodeForces, nodeForce2d{
@@ -85,7 +85,7 @@ func (m *Dim2) AddNodeForce(caseNumber uint, nodeForce force.NodeDim2, pointInde
 }
 
 // AddGravityForce - add gravity force in force case
-func (m *Dim2) AddGravityForce(caseNumber uint, gravityForce force.GravityDim2, beamIndexes ...element.BeamIndex) {
+func (m *Dim2) AddGravityForce(caseNumber int, gravityForce force.GravityDim2, beamIndexes ...element.BeamIndex) {
 	for i := range m.forceCases {
 		if m.forceCases[i].indexCase == caseNumber {
 			m.forceCases[i].gravityForces = append(m.forceCases[i].gravityForces, gravityForce2d{
