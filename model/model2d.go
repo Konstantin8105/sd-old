@@ -26,13 +26,6 @@ func (m *Dim2) AddPoint(points ...point.Dim2) {
 	m.points = append(m.points, points...)
 }
 
-// AddBeam - add beam to model
-func (m *Dim2) AddBeam(beams ...element.Elementer) {
-	for _, b := range beams {
-		m.elements = append(m.elements, element.Elementer(b))
-	}
-}
-
 // AddElement - add beam to model
 func (m *Dim2) AddElement(elements ...element.Elementer) {
 	m.elements = append(m.elements, elements...)

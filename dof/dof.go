@@ -38,8 +38,6 @@ func NewBeam(elements []element.Elementer, dim Dim) (d DoF) {
 			for i := range beam.PointIndexes {
 				array = append(array, int(beam.PointIndexes[i]))
 			}
-		case element.Triangle:
-			panic("")
 		default:
 			panic("")
 		}

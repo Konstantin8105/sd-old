@@ -52,17 +52,17 @@ func TestTruss(t *testing.T) {
 		Y:     -1.5,
 	})
 
-	m.AddBeam(element.Beam{
+	m.AddElement(element.Beam{
 		Index:        7,
 		PointIndexes: [2]point.Index{4, 2},
 	})
 
-	m.AddBeam(element.Beam{
+	m.AddElement(element.Beam{
 		Index:        8,
 		PointIndexes: [2]point.Index{4, 1},
 	})
 
-	m.AddBeam(element.Beam{
+	m.AddElement(element.Beam{
 		Index:        9,
 		PointIndexes: [2]point.Index{4, 3},
 	})
