@@ -7,5 +7,5 @@ import (
 
 type shapeGroup struct {
 	shape       shape.Shape
-	beamIndexes []element.BeamIndex
+	beamIndexes []element.ElementIndex
 }

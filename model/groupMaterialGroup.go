@@ -7,5 +7,5 @@ import (
 
 type materialLinearGroup struct {
 	material    material.Linear
-	beamIndexes []element.BeamIndex
+	beamIndexes []element.ElementIndex
 }

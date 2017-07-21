@@ -1,9 +1,17 @@
 package element
 
-import "github.com/Konstantin8105/GoFea/point"
+import (
+	"fmt"
 
-// Beam - property of element
+	"github.com/Konstantin8105/GoFea/point"
+)
+
+// Beam - property of beam element
 type Beam struct {
-	Index        BeamIndex
+	Index        ElementIndex
 	PointIndexes [2]point.Index
+}
+
+func (e Beam) ElementDescription() string {
+	return fmt.Sprintf("Beam element №%v with points %v", e.Index, e.PointIndexes)
 }

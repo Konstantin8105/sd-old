@@ -13,7 +13,7 @@ import (
 type Dim2 struct {
 	// input data
 	points     []point.Dim2
-	beams      []element.Beam
+	elements   []element.Elementer
 	truss      []trussGroup
 	supports   []supportGroup2d
 	shapes     []shapeGroup
@@ -27,12 +27,19 @@ func (m *Dim2) AddPoint(points ...point.Dim2) {
 }
 
 // AddBeam - add beam to model
-func (m *Dim2) AddBeam(beams ...element.Beam) {
-	m.beams = append(m.beams, beams...)
+func (m *Dim2) AddBeam(beams ...element.Elementer) {
+	for _, b := range beams {
+		m.elements = append(m.elements, element.Elementer(b))
+	}
+}
+
+// AddElement - add beam to model
+func (m *Dim2) AddElement(elements ...element.Elementer) {
+	m.elements = append(m.elements, elements...)
 }
 
 // AddTrussProperty - add truss property for beam
-func (m *Dim2) AddTrussProperty(beamIndexes ...element.BeamIndex) {
+func (m *Dim2) AddTrussProperty(beamIndexes ...element.ElementIndex) {
 	m.truss = append(m.truss, trussGroup{beamIndexes: beamIndexes})
 }
 
@@ -45,7 +52,7 @@ func (m *Dim2) AddSupport(support support.Dim2, pointIndexes ...point.Index) {
 }
 
 // AddShape - add shape property for beam
-func (m *Dim2) AddShape(shape shape.Shape, beamIndexes ...element.BeamIndex) {
+func (m *Dim2) AddShape(shape shape.Shape, beamIndexes ...element.ElementIndex) {
 	m.shapes = append(m.shapes, shapeGroup{
 		shape:       shape,
 		beamIndexes: beamIndexes,
@@ -53,7 +60,7 @@ func (m *Dim2) AddShape(shape shape.Shape, beamIndexes ...element.BeamIndex) {
 }
 
 // AddMaterial - add material for beam
-func (m *Dim2) AddMaterial(material material.Linear, beamIndexes ...element.BeamIndex) {
+func (m *Dim2) AddMaterial(material material.Linear, beamIndexes ...element.ElementIndex) {
 	m.materials = append(m.materials, materialLinearGroup{
 		material:    material,
 		beamIndexes: beamIndexes,
@@ -85,7 +92,7 @@ func (m *Dim2) AddNodeForce(caseNumber int, nodeForce force.NodeDim2, pointIndex
 }
 
 // AddGravityForce - add gravity force in force case
-func (m *Dim2) AddGravityForce(caseNumber int, gravityForce force.GravityDim2, beamIndexes ...element.BeamIndex) {
+func (m *Dim2) AddGravityForce(caseNumber int, gravityForce force.GravityDim2, beamIndexes ...element.ElementIndex) {
 	for i := range m.forceCases {
 		if m.forceCases[i].indexCase == caseNumber {
 			m.forceCases[i].gravityForces = append(m.forceCases[i].gravityForces, gravityForce2d{

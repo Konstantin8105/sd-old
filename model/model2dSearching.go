@@ -10,7 +10,7 @@ import (
 )
 
 // getShape - searching shape for beam
-func (m *Dim2) getShape(index element.BeamIndex) (s shape.Shape, err error) {
+func (m *Dim2) getShape(index element.ElementIndex) (s shape.Shape, err error) {
 	for _, shapes := range m.shapes {
 		for _, inx := range shapes.beamIndexes {
 			if inx == index {
@@ -22,7 +22,7 @@ func (m *Dim2) getShape(index element.BeamIndex) (s shape.Shape, err error) {
 }
 
 // getMaterial - searching material for beam
-func (m *Dim2) getMaterial(index element.BeamIndex) (mat material.Linear, err error) {
+func (m *Dim2) getMaterial(index element.ElementIndex) (mat material.Linear, err error) {
 	for _, material := range m.materials {
 		for _, inx := range material.beamIndexes {
 			if index == inx {
@@ -36,10 +36,10 @@ func (m *Dim2) getMaterial(index element.BeamIndex) (mat material.Linear, err er
 }
 
 // getCoordinate - return coordinate of beam
-func (m *Dim2) getCoordinate(index element.BeamIndex) (c [2]point.Dim2, err error) {
+func (m *Dim2) getCoordinate(index element.ElementIndex) (c [2]point.Dim2, err error) {
 	var inx [2]point.Index
 	var found bool
-	for _, beam := range m.beams {
+	for _, beam := range m.elements {
 		if beam.Index == index {
 			inx = beam.PointIndexes
 			found = true
@@ -68,7 +68,7 @@ func (m *Dim2) getCoordinate(index element.BeamIndex) (c [2]point.Dim2, err erro
 }
 
 // isTruss - return true if beam is truss
-func (m *Dim2) isTruss(index element.BeamIndex) bool {
+func (m *Dim2) isTruss(index element.ElementIndex) bool {
 	for _, group := range m.truss {
 		for _, inx := range group.beamIndexes {
 			if inx == index {

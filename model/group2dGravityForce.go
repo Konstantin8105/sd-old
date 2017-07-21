@@ -7,5 +7,5 @@ import (
 
 type gravityForce2d struct {
 	gravityForce force.GravityDim2
-	beamIndexes  []element.BeamIndex
+	beamIndexes  []element.ElementIndex
 }

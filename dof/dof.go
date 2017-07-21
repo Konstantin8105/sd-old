@@ -28,7 +28,7 @@ type DoF struct {
 }
 
 // NewBeam - add new beam
-func NewBeam(beams []element.Beam, dim Dim) (d DoF) {
+func NewBeam(beams []element.Elementer, dim Dim) (d DoF) {
 	array := make([]int, len(beams)*2, len(beams)*2)
 	for i := range beams {
 		array[i*2+0] = int(beams[i].PointIndexes[0])

@@ -7,5 +7,5 @@ import "github.com/Konstantin8105/GoFea/element"
 type Beam2d struct {
 	Fx, Fy float64
 	M      float64
-	Index  element.BeamIndex
+	Index  element.ElementIndex
 }

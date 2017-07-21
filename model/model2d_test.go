@@ -78,17 +78,17 @@ func TestTruss(t *testing.T) {
 	// Shapes
 	m.AddShape(shape.Shape{
 		A: 300e-6,
-	}, []element.BeamIndex{7, 9}...)
+	}, []element.ElementIndex{7, 9}...)
 
 	m.AddShape(shape.Shape{
 		A: 300e-6,
-	}, []element.BeamIndex{8}...)
+	}, []element.ElementIndex{8}...)
 
 	// Materials
 	m.AddMaterial(material.Linear{
 		E:  2e11,
 		Ro: 78500,
-	}, []element.BeamIndex{7, 8, 9}...)
+	}, []element.ElementIndex{7, 8, 9}...)
 
 	// Node force
 	m.AddNodeForce(1, force.NodeDim2{

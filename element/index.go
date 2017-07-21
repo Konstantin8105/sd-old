@@ -1,4 +1,4 @@
 package element
 
-// BeamIndex - alias
-type BeamIndex int
+// ElementIndex - alias
+type ElementIndex int
