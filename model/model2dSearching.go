@@ -36,22 +36,32 @@ func (m *Dim2) getMaterial(index element.ElementIndex) (mat material.Linear, err
 }
 
 // getCoordinate - return coordinate of beam
-func (m *Dim2) getCoordinate(index element.ElementIndex) (c [2]point.Dim2, err error) {
-	var inx [2]point.Index
+func (m *Dim2) getCoordinate(index element.ElementIndex) (c []point.Dim2, err error) {
+	var inx []point.Index
 	var found bool
-	for _, beam := range m.elements {
-		if beam.Index == index {
-			inx = beam.PointIndexes
+	for _, e := range m.elements {
+		switch e.(type) {
+		case element.Beam:
+			beam := e.(element.Beam)
+			if beam.Index != index {
+				continue
+			}
+			for i := range beam.PointIndexes {
+				inx = append(inx, beam.PointIndexes[i])
+			}
 			found = true
 			break
+
+		default:
+			panic("")
 		}
 	}
 	if !found {
 		return c, fmt.Errorf("Cannot found beam with index #%v", index)
 	}
 
-	var coord [2]point.Dim2
-	for i := 0; i < 2; i++ {
+	coord := make([]point.Dim2, len(inx), len(inx))
+	for i := 0; i < len(inx); i++ {
 		found = false
 		for _, c := range m.points {
 			if inx[i] == c.Index {

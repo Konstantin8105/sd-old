@@ -19,7 +19,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 
 	// Generate degree of freedom in global system
 	var degreeGlobal []dof.AxeNumber
-	dofSystem := dof.NewBeam(m.beams, dof.Dim2d)
+	dofSystem := dof.NewBeam(m.elements, dof.Dim2d)
 	for _, beam := range m.beams {
 		fe := m.getBeamFiniteElement(beam.Index)
 		_, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &dofSystem, finiteElement.WithoutZeroStiffiner)

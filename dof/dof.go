@@ -28,11 +28,21 @@ type DoF struct {
 }
 
 // NewBeam - add new beam
-func NewBeam(beams []element.Elementer, dim Dim) (d DoF) {
-	array := make([]int, len(beams)*2, len(beams)*2)
-	for i := range beams {
-		array[i*2+0] = int(beams[i].PointIndexes[0])
-		array[i*2+1] = int(beams[i].PointIndexes[1])
+Почему тут элементы а не точки?
+func NewBeam(elements []element.Elementer, dim Dim) (d DoF) {
+	var array []int
+	for _, e := range elements {
+		switch e.(type) {
+		case element.Beam:
+			beam := e.(element.Beam)
+			for i := range beam.PointIndexes {
+				array = append(array, int(beam.PointIndexes[i]))
+			}
+		case element.Triangle:
+			panic("")
+		default:
+			panic("")
+		}
 	}
 	utils.UniqueInt(&array)
 	d.dofArray = array
