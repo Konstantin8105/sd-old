@@ -71,20 +71,9 @@ func TestTruss(t *testing.T) {
 	m.AddTrussProperty(7, 8, 9)
 
 	// Supports
-	m.AddSupport(support.Dim2{
-		Dx: support.Fix,
-		Dy: support.Fix,
-	}, 1)
-
-	m.AddSupport(support.Dim2{
-		Dx: support.Fix,
-		Dy: support.Fix,
-	}, 2)
-
-	m.AddSupport(support.Dim2{
-		Dx: support.Fix,
-		Dy: support.Fix,
-	}, 3)
+	m.AddSupport(support.FixedDim2(), 1)
+	m.AddSupport(support.FixedDim2(), 2)
+	m.AddSupport(support.FixedDim2(), 3)
 
 	// Shapes
 	m.AddShape(shape.Shape{
@@ -92,7 +81,7 @@ func TestTruss(t *testing.T) {
 	}, []element.BeamIndex{7, 9}...)
 
 	m.AddShape(shape.Shape{
-		A: 200e-6,
+		A: 300e-6,
 	}, []element.BeamIndex{8}...)
 
 	// Materials
@@ -113,8 +102,12 @@ func TestTruss(t *testing.T) {
 
 	// results
 
-	//N1 = 48500 // 20900
-	//N2 = 18200 // 12060
+	// displacement : 0.849 mm
+	// F7 = F9 = 26097.87104956486
+	// F8 = 34797.16132338987
+	// Reaction in point 3:
+	// Fx = 13048.934 N
+	// Fy = 22601.425 N
 
 	//TODO: create test for natural frequency
 
