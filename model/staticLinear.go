@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Konstantin8105/GoFea/dof"
+	"github.com/Konstantin8105/GoFea/element"
 	"github.com/Konstantin8105/GoFea/finiteElement"
 	"github.com/Konstantin8105/GoFea/utils"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
@@ -20,10 +21,16 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 	// Generate degree of freedom in global system
 	var degreeGlobal []dof.AxeNumber
 	dofSystem := dof.NewBeam(m.elements, dof.Dim2d)
-	for _, beam := range m.beams {
-		fe := m.getBeamFiniteElement(beam.Index)
-		_, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &dofSystem, finiteElement.WithoutZeroStiffiner)
-		degreeGlobal = append(degreeGlobal, degreeLocal...)
+	for _, ele := range m.elements {
+		switch ele.(type) {
+		case element.Beam:
+			beam := ele.(element.Beam)
+			fe := m.getBeamFiniteElement(beam.Index)
+			_, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &dofSystem, finiteElement.WithoutZeroStiffiner)
+			degreeGlobal = append(degreeGlobal, degreeLocal...)
+		default:
+			panic("")
+		}
 	}
 	{
 		is := dof.ConvertToInt(degreeGlobal)
@@ -114,55 +121,61 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 
 	fmt.Printf("Global displacement = \n%s\n", x)
 	//fmt.Println("degreeGlobal = ", degreeGlobal)
-	for _, beam := range m.beams {
-		fe := m.getBeamFiniteElement(beam.Index)
-		/*klocal,*/ _, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &dofSystem, finiteElement.FullInformation)
-		//fmt.Println("=============")
-		//fmt.Println("klocalGlobal = ", klocal)
-		//fmt.Println("degreeLocal = ", degreeLocal)
-		globalDisplacement := make([]float64, len(degreeLocal))
-		// if not found in global displacement, then it is a pinned
-		// in local stiffiner matrix - than row and column is zero
-		// for avoid collisian - we put a zero
-		for i := 0; i < len(globalDisplacement); i++ {
-			for j := 0; j < len(degreeGlobal); j++ {
-				if degreeLocal[i] == degreeGlobal[j] {
-					globalDisplacement[i] = x.Get(j, 0)
-					break
+	for _, ele := range m.elements {
+		switch ele.(type) {
+		case element.Beam:
+			beam := ele.(element.Beam)
+			fe := m.getBeamFiniteElement(beam.Index)
+			/*klocal,*/ _, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &dofSystem, finiteElement.FullInformation)
+			//fmt.Println("=============")
+			//fmt.Println("klocalGlobal = ", klocal)
+			//fmt.Println("degreeLocal = ", degreeLocal)
+			globalDisplacement := make([]float64, len(degreeLocal))
+			// if not found in global displacement, then it is a pinned
+			// in local stiffiner matrix - than row and column is zero
+			// for avoid collisian - we put a zero
+			for i := 0; i < len(globalDisplacement); i++ {
+				for j := 0; j < len(degreeGlobal); j++ {
+					if degreeLocal[i] == degreeGlobal[j] {
+						globalDisplacement[i] = x.Get(j, 0)
+						break
+					}
 				}
 			}
-		}
-		//fmt.Println("globalDisplacement = ", globalDisplacement)
+			//fmt.Println("globalDisplacement = ", globalDisplacement)
 
-		t := matrix.NewMatrix64bySize(10, 10)
-		fe.GetCoordinateTransformation(&t)
-		//fmt.Println("tr.glo --", t)
+			t := matrix.NewMatrix64bySize(10, 10)
+			fe.GetCoordinateTransformation(&t)
+			//fmt.Println("tr.glo --", t)
 
-		// Zo = T_t * Z
-		var localDisplacement []float64
-		for i := 0; i < t.GetRowSize(); i++ {
-			sum := 0.0
-			for j := 0; j < t.GetColumnSize(); j++ {
-				sum += t.Get(i, j) * globalDisplacement[j]
+			// Zo = T_t * Z
+			var localDisplacement []float64
+			for i := 0; i < t.GetRowSize(); i++ {
+				sum := 0.0
+				for j := 0; j < t.GetColumnSize(); j++ {
+					sum += t.Get(i, j) * globalDisplacement[j]
+				}
+				localDisplacement = append(localDisplacement, sum)
 			}
-			localDisplacement = append(localDisplacement, sum)
-		}
-		fmt.Println("localDisplacement = ", localDisplacement)
+			fmt.Println("localDisplacement = ", localDisplacement)
 
-		kk := matrix.NewMatrix64bySize(10, 10)
-		fe.GetStiffinerK(&kk)
-		//fmt.Println("klocalll -->", kk)
+			kk := matrix.NewMatrix64bySize(10, 10)
+			fe.GetStiffinerK(&kk)
+			//fmt.Println("klocalll -->", kk)
 
-		var localForce []float64
-		for i := 0; i < kk.GetRowSize(); i++ {
-			sum := 0.0
-			for j := 0; j < kk.GetRowSize(); j++ {
-				sum += kk.Get(i, j) * localDisplacement[j]
+			var localForce []float64
+			for i := 0; i < kk.GetRowSize(); i++ {
+				sum := 0.0
+				for j := 0; j < kk.GetRowSize(); j++ {
+					sum += kk.Get(i, j) * localDisplacement[j]
+				}
+				localForce = append(localForce, sum)
 			}
-			localForce = append(localForce, sum)
+			fmt.Println("localForce = ", localForce)
+			_ = localForce
+		default:
+			panic("")
 		}
-		fmt.Println("localForce = ", localForce)
-		_ = localForce
 	}
 
 	return nil

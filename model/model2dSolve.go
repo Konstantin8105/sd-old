@@ -7,6 +7,7 @@ import (
 	"github.com/Konstantin8105/GoFea/dof"
 	"github.com/Konstantin8105/GoFea/element"
 	"github.com/Konstantin8105/GoFea/finiteElement"
+	"github.com/Konstantin8105/GoFea/point"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
 )
 
@@ -78,10 +79,17 @@ func (m *Dim2) getBeamFiniteElement(inx element.ElementIndex) (fe finiteElement.
 		panic(fmt.Errorf("Cannot calculate lenght for beam #%v. Error = %v", inx, err))
 	}
 	if m.isTruss(inx) {
+		if len(coord) != 2 {
+			panic("")
+		}
+		var c [2]point.Dim2
+		for i := 0; i < len(coord); i++ {
+			c[i] = coord[i]
+		}
 		f := finiteElement.TrussDim2{
 			Material: material,
 			Shape:    shape,
-			Points:   coord,
+			Points:   c,
 		}
 		return &f
 	} /* else {
@@ -100,22 +108,28 @@ func (m *Dim2) getBeamFiniteElement(inx element.ElementIndex) (fe finiteElement.
 
 func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dofSystem *dof.DoF, mapIndex *dof.MapIndex, f func(finiteElement.FiniteElementer, *dof.DoF, finiteElement.Information) (matrix.T64, []dof.AxeNumber)) matrix.T64 {
 	globalResult := matrix.NewMatrix64bySize(len(*degreeGlobal), len(*degreeGlobal))
-	for _, beam := range m.beams {
-		fe := m.getBeamFiniteElement(beam.Index)
-		klocal, degreeLocal := f(fe, dofSystem, finiteElement.WithoutZeroStiffiner)
-		// Add local stiffiner matrix to global matrix
-		for i := 0; i < len(degreeLocal); i++ {
-			g, err := mapIndex.GetByAxe(degreeLocal[i])
-			if err != nil {
-				continue
-			}
-			for j := 0; j < len(degreeLocal); j++ {
-				h, err := mapIndex.GetByAxe(degreeLocal[j])
+	for _, ele := range m.elements {
+		switch ele.(type) {
+		case element.Beam:
+			beam := ele.(element.Beam)
+			fe := m.getBeamFiniteElement(beam.Index)
+			klocal, degreeLocal := f(fe, dofSystem, finiteElement.WithoutZeroStiffiner)
+			// Add local stiffiner matrix to global matrix
+			for i := 0; i < len(degreeLocal); i++ {
+				g, err := mapIndex.GetByAxe(degreeLocal[i])
 				if err != nil {
 					continue
 				}
-				globalResult.Set(g, h, globalResult.Get(g, h)+klocal.Get(i, j))
+				for j := 0; j < len(degreeLocal); j++ {
+					h, err := mapIndex.GetByAxe(degreeLocal[j])
+					if err != nil {
+						continue
+					}
+					globalResult.Set(g, h, globalResult.Get(g, h)+klocal.Get(i, j))
+				}
 			}
+		default:
+			panic("")
 		}
 	}
 	return globalResult
