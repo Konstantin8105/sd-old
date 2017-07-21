@@ -49,10 +49,18 @@ func (m *Dim2) Solve() (err error) {
 
 	close(resCh)
 
-	if len(summaryResult) == 0 {
+	var haveError bool
+	for _, s := range summaryResult {
+		if s.err != nil {
+			haveError = true
+			break
+		}
+	}
+	if !haveError {
 		return nil
 	}
 
+	// TODO: more beatiful
 	return fmt.Errorf("%#v", summaryResult)
 }
 
