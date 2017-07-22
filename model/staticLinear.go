@@ -11,16 +11,17 @@ import (
 	"github.com/Konstantin8105/GoLinAlg/solver"
 )
 
-func (m *Dim2) solveCase(forceCase *forceCase2d) error {
-
-	fmt.Println("case = ", forceCase.indexCase)
-	// TODO : check everything
-	// TODO : sort  everything
-	// TODO : compress loads by number
+// generateDof - create degree's of freedom for model
+// return:
+// degreeGlobal - degree of freedom in global system, created in according to "real" finite elements and it is not the same "dofSystem" for models with many pin.
+// mapIndex     - convert axe from degreeGlobal to position in global matrix stiffiners, mass, ...
+// dofSystem    - all degree of freedom in global system coordinate for model
+func (m *Dim2) generateDof() (degreeGlobal []dof.AxeNumber, mapIndex dof.MapIndex, dofSystem dof.DoF) {
 
 	// Generate degree of freedom in global system
-	var degreeGlobal []dof.AxeNumber
-	dofSystem := dof.NewBeam(m.elements, dof.Dim2d)
+	dofSystem = dof.ForElements(m.elements, dof.Dim2d)
+
+	// "real" degree of freedom in global system
 	for _, ele := range m.elements {
 		switch ele.(type) {
 		case element.Beam:
@@ -39,7 +40,18 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 	}
 
 	// Create convertor index to axe
-	mapIndex := dof.NewMapIndex(&degreeGlobal)
+	mapIndex = dof.NewMapIndex(&degreeGlobal)
+	return
+}
+
+func (m *Dim2) solveCase(forceCase *forceCase2d) error {
+
+	fmt.Println("case = ", forceCase.indexCase)
+	// TODO : check everything
+	// TODO : sort  everything
+	// TODO : compress loads by number
+
+	degreeGlobal, mapIndex, dofSystem := m.generateDof()
 
 	// Generate global stiffiner matrix [Ko]
 	stiffinerKGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetStiffinerGlobalK)

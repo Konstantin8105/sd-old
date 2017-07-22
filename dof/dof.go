@@ -27,9 +27,8 @@ type DoF struct {
 	dimension Dim
 }
 
-// NewBeam - add new beam
-// TODO Почему тут элементы а не точки?
-func NewBeam(elements []element.Elementer, dim Dim) (d DoF) {
+// ForElements - add new beam
+func ForElements(elements []element.Elementer, dim Dim) (d DoF) {
 	var array []int
 	for _, e := range elements {
 		switch e.(type) {
