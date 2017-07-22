@@ -1,12 +1,12 @@
 package model
 
 import (
-	"github.com/Konstantin8105/GoFea/element"
-	"github.com/Konstantin8105/GoFea/force"
-	"github.com/Konstantin8105/GoFea/material"
-	"github.com/Konstantin8105/GoFea/point"
-	"github.com/Konstantin8105/GoFea/shape"
-	"github.com/Konstantin8105/GoFea/support"
+	"github.com/Konstantin8105/GoFea/input/element"
+	"github.com/Konstantin8105/GoFea/input/force"
+	"github.com/Konstantin8105/GoFea/input/material"
+	"github.com/Konstantin8105/GoFea/input/point"
+	"github.com/Konstantin8105/GoFea/input/shape"
+	"github.com/Konstantin8105/GoFea/input/support"
 )
 
 // Dim2 - base struct of data for model in 2d

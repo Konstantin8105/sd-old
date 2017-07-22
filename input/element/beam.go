@@ -3,7 +3,7 @@ package element
 import (
 	"fmt"
 
-	"github.com/Konstantin8105/GoFea/point"
+	"github.com/Konstantin8105/GoFea/input/point"
 )
 
 // Beam - property of beam element

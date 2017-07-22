@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/Konstantin8105/GoFea/element"
-	"github.com/Konstantin8105/GoFea/shape"
+	"github.com/Konstantin8105/GoFea/input/element"
+	"github.com/Konstantin8105/GoFea/input/shape"
 )
 
 type shapeGroup struct {

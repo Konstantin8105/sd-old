@@ -1,7 +1,7 @@
 package finiteElement
 
 import (
-	"github.com/Konstantin8105/GoFea/dof"
+	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
 )
 

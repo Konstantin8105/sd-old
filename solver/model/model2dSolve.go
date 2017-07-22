@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/Konstantin8105/GoFea/dof"
-	"github.com/Konstantin8105/GoFea/element"
-	"github.com/Konstantin8105/GoFea/finiteElement"
-	"github.com/Konstantin8105/GoFea/point"
+	"github.com/Konstantin8105/GoFea/input/element"
+	"github.com/Konstantin8105/GoFea/input/point"
+	"github.com/Konstantin8105/GoFea/solver/dof"
+	"github.com/Konstantin8105/GoFea/solver/finiteElement"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
 )
 

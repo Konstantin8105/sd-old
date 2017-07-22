@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/Konstantin8105/GoFea/displacement"
-	"github.com/Konstantin8105/GoFea/forceLocal"
+	"github.com/Konstantin8105/GoFea/output/displacement"
+	"github.com/Konstantin8105/GoFea/output/forceLocal"
 )
 
 type forceCase2d struct {

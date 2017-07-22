@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/Konstantin8105/GoFea/element"
-	"github.com/Konstantin8105/GoFea/point"
+	"github.com/Konstantin8105/GoFea/input/element"
+	"github.com/Konstantin8105/GoFea/input/point"
 	"github.com/Konstantin8105/GoFea/utils"
 )
 

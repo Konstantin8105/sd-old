@@ -1,6 +1,6 @@
 package forceLocal
 
-import "github.com/Konstantin8105/GoFea/element"
+import "github.com/Konstantin8105/GoFea/input/element"
 
 // Beam2d - local forces for beam 2d
 // Unit - N

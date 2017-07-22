@@ -1,10 +1,10 @@
 package finiteElement
 
 import (
-	"github.com/Konstantin8105/GoFea/dof"
-	"github.com/Konstantin8105/GoFea/material"
-	"github.com/Konstantin8105/GoFea/point"
-	"github.com/Konstantin8105/GoFea/shape"
+	"github.com/Konstantin8105/GoFea/input/material"
+	"github.com/Konstantin8105/GoFea/input/point"
+	"github.com/Konstantin8105/GoFea/input/shape"
+	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
 )
 

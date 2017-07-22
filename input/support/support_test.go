@@ -3,7 +3,7 @@ package support_test
 import (
 	"testing"
 
-	"github.com/Konstantin8105/GoFea/support"
+	"github.com/Konstantin8105/GoFea/input/support"
 )
 
 func Test2d(t *testing.T) {
