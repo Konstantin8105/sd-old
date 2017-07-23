@@ -7,6 +7,7 @@ import (
 	"github.com/Konstantin8105/GoFea/input/point"
 	"github.com/Konstantin8105/GoFea/input/shape"
 	"github.com/Konstantin8105/GoFea/input/support"
+	"github.com/Konstantin8105/GoFea/solver/dof"
 )
 
 // Dim2 - base struct of data for model in 2d
@@ -19,6 +20,11 @@ type Dim2 struct {
 	shapes     []shapeGroup
 	materials  []materialLinearGroup
 	forceCases []forceCase2d
+
+	// internal data
+	degreeInGlobalMatrix []dof.AxeNumber // degree of freedom in global system, created in according to "real" finite elements and it is not the same "dofSystem" for models with many pin.
+	indexsInGlobalMatrix dof.MapIndex    // convert axe from degreeGlobal to position in global matrix stiffiners, mass, ...
+	degreeForPoint       dof.DoF         // all degree of freedom in global system coordinate for each point
 }
 
 // AddPoint - add point to model

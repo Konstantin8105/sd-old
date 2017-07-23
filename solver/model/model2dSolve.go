@@ -14,6 +14,9 @@ import (
 // Solve - solving finite element
 func (m *Dim2) Solve() (err error) {
 
+	// generate degrees of freedom
+	m.generateDof()
+
 	// create error channel
 	type results struct {
 		err       error

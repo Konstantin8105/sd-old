@@ -1,6 +1,11 @@
 package utils
 
-import "sort"
+import (
+	"sort"
+
+	"github.com/Konstantin8105/GoFea/input/point"
+	"github.com/Konstantin8105/GoFea/solver/dof"
+)
 
 // UniqueInt - create unique int`s in array
 func UniqueInt(array *[]int) {
@@ -29,4 +34,28 @@ func UniqueInt(array *[]int) {
 		}
 	}
 	(*array) = (*array)[0:inx]
+}
+
+func UniqueAxeNumber(axes *[]dof.AxeNumber) {
+	ints := make([]int, len(*axes), len(*axes))
+	for i := 0; i < len(*axes); i++ {
+		ints[i] = int((*axes)[i])
+	}
+	UniqueInt(&ints)
+	(*axes) = (*axes)[0:len(ints)]
+	for i := 0; i < len(*axes); i++ {
+		(*axes)[i] = dof.AxeNumber(ints[i])
+	}
+}
+
+func UniquePointIndex(points *[]point.Index) {
+	ints := make([]int, len(*points), len(*points))
+	for i := 0; i < len(*points); i++ {
+		ints[i] = int((*points)[i])
+	}
+	UniqueInt(&ints)
+	(*points) = (*points)[0:len(ints)]
+	for i := 0; i < len(*points); i++ {
+		(*points)[i] = point.Index(ints[i])
+	}
 }

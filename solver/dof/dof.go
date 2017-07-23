@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/Konstantin8105/GoFea/input/element"
 	"github.com/Konstantin8105/GoFea/input/point"
-	"github.com/Konstantin8105/GoFea/utils"
 )
 
 // Dim - dimension unit
@@ -23,36 +21,16 @@ type AxeNumber int
 
 // DoF - degree of freedom
 type DoF struct {
-	dofArray  []int
-	dimension Dim
-}
-
-// ForElements - add new beam
-func ForElements(elements []element.Elementer, dim Dim) (d DoF) {
-	var array []int
-	for _, e := range elements {
-		switch e.(type) {
-		case element.Beam:
-			beam := e.(element.Beam)
-			for i := range beam.PointIndexes {
-				array = append(array, int(beam.PointIndexes[i]))
-			}
-		default:
-			panic("")
-		}
-	}
-	utils.UniqueInt(&array)
-	d.dofArray = array
-	d.dimension = dim
-	return d
+	DofArray  []point.Index
+	Dimension Dim
 }
 
 // GetDoF - get degree of freedom for point index
 func (d *DoF) GetDoF(index point.Index) []AxeNumber {
-	if d.dimension == Dim2d {
-		axes := make([]AxeNumber, int(d.dimension), int(d.dimension))
+	if d.Dimension == Dim2d {
+		axes := make([]AxeNumber, int(d.Dimension), int(d.Dimension))
 		number := d.found(index)
-		for i := 0; i < int(d.dimension); i++ {
+		for i := 0; i < int(d.Dimension); i++ {
 			axes[i] = AxeNumber(i + number*int(Dim2d))
 		}
 		return axes
@@ -61,32 +39,14 @@ func (d *DoF) GetDoF(index point.Index) []AxeNumber {
 }
 
 func (d *DoF) found(index point.Index) int {
-	i := sort.Search(len(d.dofArray), func(i int) bool { return d.dofArray[i] >= int(index) })
-	if i >= 0 && i < len(d.dofArray) && d.dofArray[i] == int(index) {
+	i := sort.Search(len(d.DofArray), func(i int) bool { return int(d.DofArray[i]) >= int(index) })
+	if i >= 0 && i < len(d.DofArray) && int(d.DofArray[i]) == int(index) {
 		// index is present at array[i]
 		return i
 	}
 	// index is not present in array,
 	// but i is the index where it would be inserted.
 	panic("Not correct binary searching")
-}
-
-// ConvertToInt - convert to int
-func ConvertToInt(axes []AxeNumber) []int {
-	result := make([]int, len(axes), len(axes))
-	for i := 0; i < len(axes); i++ {
-		result[i] = int(axes[i])
-	}
-	return result
-}
-
-// ConvertToAxe - convert to axe
-func ConvertToAxe(ins []int) []AxeNumber {
-	result := make([]AxeNumber, len(ins), len(ins))
-	for i := 0; i < len(ins); i++ {
-		result[i] = AxeNumber(ins[i])
-	}
-	return result
 }
 
 // RemoveIndexes - remove indexex for axeNumber slice

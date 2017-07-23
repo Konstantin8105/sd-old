@@ -6,43 +6,9 @@ import (
 	"github.com/Konstantin8105/GoFea/input/element"
 	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoFea/solver/finiteElement"
-	"github.com/Konstantin8105/GoFea/utils"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
 	"github.com/Konstantin8105/GoLinAlg/solver"
 )
-
-// generateDof - create degree's of freedom for model
-// return:
-// degreeGlobal - degree of freedom in global system, created in according to "real" finite elements and it is not the same "dofSystem" for models with many pin.
-// mapIndex     - convert axe from degreeGlobal to position in global matrix stiffiners, mass, ...
-// dofSystem    - all degree of freedom in global system coordinate for model
-func (m *Dim2) generateDof() (degreeGlobal []dof.AxeNumber, mapIndex dof.MapIndex, dofSystem dof.DoF) {
-
-	// Generate degree of freedom in global system
-	dofSystem = dof.ForElements(m.elements, dof.Dim2d)
-
-	// "real" degree of freedom in global system
-	for _, ele := range m.elements {
-		switch ele.(type) {
-		case element.Beam:
-			beam := ele.(element.Beam)
-			fe := m.getBeamFiniteElement(beam.Index)
-			_, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &dofSystem, finiteElement.WithoutZeroStiffiner)
-			degreeGlobal = append(degreeGlobal, degreeLocal...)
-		default:
-			panic("")
-		}
-	}
-	{
-		is := dof.ConvertToInt(degreeGlobal)
-		utils.UniqueInt(&is)
-		degreeGlobal = dof.ConvertToAxe(is)
-	}
-
-	// Create convertor index to axe
-	mapIndex = dof.NewMapIndex(&degreeGlobal)
-	return
-}
 
 func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 
@@ -51,30 +17,28 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 	// TODO : sort  everything
 	// TODO : compress loads by number
 
-	degreeGlobal, mapIndex, dofSystem := m.generateDof()
-
 	// Generate global stiffiner matrix [Ko]
-	stiffinerKGlobal := m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetStiffinerGlobalK)
+	stiffinerKGlobal := m.convertFromLocalToGlobalSystem(&m.degreeInGlobalMatrix, &m.degreeForPoint, &m.indexsInGlobalMatrix, finiteElement.GetStiffinerGlobalK)
 
 	// Create load vector
-	loads := matrix.NewMatrix64bySize(len(degreeGlobal), 1)
+	loads := matrix.NewMatrix64bySize(len(m.degreeInGlobalMatrix), 1)
 	for _, node := range forceCase.nodeForces {
 		for _, inx := range node.pointIndexes {
-			d := dofSystem.GetDoF(inx)
+			d := m.degreeForPoint.GetDoF(inx)
 			if node.nodeForce.Fx != 0.0 {
-				h, err := mapIndex.GetByAxe(d[0])
+				h, err := m.indexsInGlobalMatrix.GetByAxe(d[0])
 				if err == nil {
 					loads.Set(h, 0, node.nodeForce.Fx)
 				}
 			}
 			if node.nodeForce.Fy != 0.0 {
-				h, err := mapIndex.GetByAxe(d[1])
+				h, err := m.indexsInGlobalMatrix.GetByAxe(d[1])
 				if err == nil {
 					loads.Set(h, 0, node.nodeForce.Fy)
 				}
 			}
 			if node.nodeForce.M != 0.0 {
-				h, err := mapIndex.GetByAxe(d[2])
+				h, err := m.indexsInGlobalMatrix.GetByAxe(d[2])
 				if err == nil {
 					loads.Set(h, 0, node.nodeForce.M)
 				}
@@ -87,7 +51,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 	// and load vector
 	for _, sup := range m.supports {
 		for _, inx := range sup.pointIndexes {
-			d := dofSystem.GetDoF(inx)
+			d := m.degreeForPoint.GetDoF(inx)
 			var result []dof.AxeNumber
 			if sup.support.Dx == true {
 				result = append(result, d[0])
@@ -101,12 +65,12 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 			// modify stiffiner matrix for correct
 			// adding support
 			for i := 0; i < len(result); i++ {
-				g, err := mapIndex.GetByAxe(result[i])
+				g, err := m.indexsInGlobalMatrix.GetByAxe(result[i])
 				if err != nil {
 					continue
 				}
-				for j := 0; j < len(degreeGlobal); j++ {
-					h, err := mapIndex.GetByAxe(degreeGlobal[j])
+				for j := 0; j < len(m.degreeInGlobalMatrix); j++ {
+					h, err := m.indexsInGlobalMatrix.GetByAxe(m.degreeInGlobalMatrix[j])
 					if err != nil {
 						continue
 					}
@@ -119,7 +83,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 			}
 		}
 	}
-	fmt.Println("degreeGlobal = ", degreeGlobal)
+	fmt.Println("degreeGlobal = ", m.degreeInGlobalMatrix)
 	fmt.Printf("K global = \n%s\n", stiffinerKGlobal)
 	fmt.Printf("Load vector = \n%s\n", loads)
 
@@ -138,7 +102,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 		case element.Beam:
 			beam := ele.(element.Beam)
 			fe := m.getBeamFiniteElement(beam.Index)
-			/*klocal,*/ _, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &dofSystem, finiteElement.FullInformation)
+			/*klocal,*/ _, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.FullInformation)
 			//fmt.Println("=============")
 			//fmt.Println("klocalGlobal = ", klocal)
 			//fmt.Println("degreeLocal = ", degreeLocal)
@@ -147,8 +111,8 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 			// in local stiffiner matrix - than row and column is zero
 			// for avoid collisian - we put a zero
 			for i := 0; i < len(globalDisplacement); i++ {
-				for j := 0; j < len(degreeGlobal); j++ {
-					if degreeLocal[i] == degreeGlobal[j] {
+				for j := 0; j < len(m.degreeInGlobalMatrix); j++ {
+					if degreeLocal[i] == m.degreeInGlobalMatrix[j] {
 						globalDisplacement[i] = x.Get(j, 0)
 						break
 					}
