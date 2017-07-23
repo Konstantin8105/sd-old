@@ -14,12 +14,11 @@ FEA for steel structural engineer on golang
 - [X] Create global stiffiner matrix
 - [X] Create load vector
 - [X] Solve system of linear equation
-- [X] Calculate global deformation
-- [X] Calculate internal deformation
-- [X] Calculate internal force
-- [X] Calculate natural frequency
-- [ ] Vector for linear algebra
-- [ ] Add Travis checking of project
+- [ ] Calculate global deformation
+- [ ] Calculate internal deformation
+- [ ] Calculate internal force
+- [ ] Calculate natural frequency
+- [ ] Return results of calculation
 - [ ] Refactoring
 - [ ] Testing
 - [ ] Benchmark tests
@@ -78,6 +77,7 @@ CALCULATION GRAPH
 
 *Step 4*
 
+- [ ] Add Travis checking of project
 - [ ] Minimal build configuration. Best way is Go native code.
 - [ ] 3D, tables, graphs
 - [ ] HTML+CSS gui
