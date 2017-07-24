@@ -1,10 +1,9 @@
 package model
 
 import (
-	"fmt"
-
 	"github.com/Konstantin8105/GoFea/input/element"
 	"github.com/Konstantin8105/GoFea/output/displacement"
+	"github.com/Konstantin8105/GoFea/output/forceLocal"
 	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoFea/solver/finiteElement"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
@@ -13,7 +12,6 @@ import (
 
 func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 
-	fmt.Println("case = ", forceCase.indexCase)
 	// TODO : check everything
 	// TODO : sort  everything
 	// TODO : compress loads by number
@@ -84,9 +82,6 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 			}
 		}
 	}
-	fmt.Println("degreeGlobal = ", m.degreeInGlobalMatrix)
-	fmt.Printf("K global = \n%s\n", stiffinerKGlobal)
-	fmt.Printf("Load vector = \n%s\n", loads)
 
 	// Solving system of linear equations for finding
 	// the displacement in points in global system
@@ -96,12 +91,10 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 	globalDisp := lu.Solve(loads)
 	// TODO: rename global vector of displacement
 
-	fmt.Printf("Global displacement = \n%s\n", globalDisp)
-
 	// global displacement for points
 	for _, p := range m.points {
 		axes := m.degreeForPoint.GetDoF(p.Index)
-		var disp displacement.Dim2
+		var disp displacement.PointDim2
 		disp.Index = p.Index
 		for i := range axes {
 			for j := 0; j < len(m.degreeInGlobalMatrix); j++ {
@@ -120,18 +113,14 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 			}
 		}
 		forceCase.globalDisplacements = append(forceCase.globalDisplacements, disp)
-		fmt.Println("disp -- > ", disp)
 	}
-	//fmt.Println("degreeGlobal = ", degreeGlobal)
+
 	for _, ele := range m.elements {
 		switch ele.(type) {
 		case element.Beam:
 			beam := ele.(element.Beam)
 			fe := m.getBeamFiniteElement(beam.Index)
-			/*klocal,*/ _, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.FullInformation)
-			//fmt.Println("=============")
-			//fmt.Println("klocalGlobal = ", klocal)
-			//fmt.Println("degreeLocal = ", degreeLocal)
+			_, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.FullInformation)
 			globalDisplacement := make([]float64, len(degreeLocal))
 			// if not found in global displacement, then it is a pinned
 			// in local stiffiner matrix - than row and column is zero
@@ -144,11 +133,9 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 					}
 				}
 			}
-			fmt.Println("globalDisplacement = ", globalDisplacement)
 
 			t := matrix.NewMatrix64bySize(10, 10)
 			fe.GetCoordinateTransformation(&t)
-			//fmt.Println("tr.glo --", t)
 
 			// Zo = T_t * Z
 			var localDisplacement []float64
@@ -159,22 +146,44 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 				}
 				localDisplacement = append(localDisplacement, sum)
 			}
-			fmt.Println("localDisplacement = ", localDisplacement)
+			forceCase.localDisplacement = append(forceCase.localDisplacement, displacement.BeamDim2{
+				Begin: displacement.Dim2{
+					Dx: localDisplacement[0],
+					Dy: localDisplacement[1],
+					Dm: localDisplacement[2],
+				},
+				End: displacement.Dim2{
+					Dx: localDisplacement[3],
+					Dy: localDisplacement[4],
+					Dm: localDisplacement[5],
+				},
+				Index: beam.Index,
+			})
 
-			kk := matrix.NewMatrix64bySize(10, 10)
-			fe.GetStiffinerK(&kk)
-			//fmt.Println("klocalll -->", kk)
+			klocal := matrix.NewMatrix64bySize(10, 10)
+			fe.GetStiffinerK(&klocal)
 
 			var localForce []float64
-			for i := 0; i < kk.GetRowSize(); i++ {
+			for i := 0; i < klocal.GetRowSize(); i++ {
 				sum := 0.0
-				for j := 0; j < kk.GetRowSize(); j++ {
-					sum += kk.Get(i, j) * localDisplacement[j]
+				for j := 0; j < klocal.GetRowSize(); j++ {
+					sum += klocal.Get(i, j) * localDisplacement[j]
 				}
 				localForce = append(localForce, sum)
 			}
-			fmt.Println("localForce = ", localForce)
-			_ = localForce
+			forceCase.localForces = append(forceCase.localForces, forceLocal.BeamDim2{
+				Begin: forceLocal.Dim2{
+					Fx: localForce[0],
+					Fy: localForce[1],
+					M:  localForce[2],
+				},
+				End: forceLocal.Dim2{
+					Fx: localForce[3],
+					Fy: localForce[4],
+					M:  localForce[5],
+				},
+				Index: beam.Index,
+			})
 		default:
 			panic("")
 		}

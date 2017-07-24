@@ -21,8 +21,9 @@ type forceCase2d struct {
 	dynamicValue []float64
 
 	// output data
-	globalDisplacements []displacement.Dim2
-	localForces         []forceLocal.Beam2d
+	globalDisplacements []displacement.PointDim2
+	localDisplacement   []displacement.BeamDim2
+	localForces         []forceLocal.BeamDim2
 	reactions           []reaction.Dim2
 }
 

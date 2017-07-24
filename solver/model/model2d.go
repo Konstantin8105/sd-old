@@ -1,12 +1,15 @@
 package model
 
 import (
+	"fmt"
+
 	"github.com/Konstantin8105/GoFea/input/element"
 	"github.com/Konstantin8105/GoFea/input/force"
 	"github.com/Konstantin8105/GoFea/input/material"
 	"github.com/Konstantin8105/GoFea/input/point"
 	"github.com/Konstantin8105/GoFea/input/shape"
 	"github.com/Konstantin8105/GoFea/input/support"
+	"github.com/Konstantin8105/GoFea/output/displacement"
 	"github.com/Konstantin8105/GoFea/solver/dof"
 )
 
@@ -115,4 +118,19 @@ func (m *Dim2) AddGravityForce(caseNumber int, gravityForce force.GravityDim2, b
 	fc.gravityForces = append(fc.gravityForces, gf)
 
 	m.forceCases = append(m.forceCases, fc)
+}
+
+// GetGlobalDisplacement - return global displacement
+func (m *Dim2) GetGlobalDisplacement(caseNumber int, pointIndex point.Index) (d displacement.Dim2, err error) {
+	for _, f := range m.forceCases {
+		if f.indexCase == caseNumber {
+			for _, g := range f.globalDisplacements {
+				if g.Index == pointIndex {
+					return g.Dim2, nil
+				}
+			}
+			return d, fmt.Errorf("Cannot found point")
+		}
+	}
+	return d, fmt.Errorf("Cannot found case by number")
 }
