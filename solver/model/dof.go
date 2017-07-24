@@ -13,18 +13,10 @@ func (m *Dim2) generateDof() {
 
 	// Generate degreeForPoint - degree of freedom in global system for each point of finite element
 	{
-		var pointIndexes []point.Index
-		for _, ele := range m.elements {
-			switch e := ele.(type) {
-			case element.Beam:
-				for i := range e.PointIndexes {
-					pointIndexes = append(pointIndexes, e.PointIndexes[i])
-				}
-			default:
-				panic("")
-			}
+		pointIndexes := make([]point.Index, len(m.points), len(m.points))
+		for i := range m.points {
+			pointIndexes = append(pointIndexes, m.points[i].Index)
 		}
-		utils.UniquePointIndex(&pointIndexes)
 		m.degreeForPoint = dof.DoF{
 			DofArray:  pointIndexes,
 			Dimension: dof.Dim2d,

@@ -24,6 +24,9 @@ FEA for steel structural engineer on golang
 - [ ] Benchmark tests
 - [ ] Release
 
+	// TODO: add checking - point cannot have same number
+
+
 *Step 1.1*
 
 - [ ] Create RPC client-server for fast calculation

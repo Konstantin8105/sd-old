@@ -3,6 +3,7 @@ package model
 import (
 	"github.com/Konstantin8105/GoFea/output/displacement"
 	"github.com/Konstantin8105/GoFea/output/forceLocal"
+	"github.com/Konstantin8105/GoFea/output/reaction"
 )
 
 type forceCase2d struct {
@@ -12,15 +13,17 @@ type forceCase2d struct {
 	gravityForces []gravityForce2d
 	nodeForces    []nodeForce2d
 
-	// output data
 	// statis property
-	static        staticTypes
-	displacements []displacement.Dim2
-	localForces   []forceLocal.Beam2d
+	static staticTypes
 
 	// dynamic property
 	dynamicType  dynamicTypes
 	dynamicValue []float64
+
+	// output data
+	globalDisplacements []displacement.Dim2
+	localForces         []forceLocal.Beam2d
+	reactions           []reaction.Dim2
 }
 
 type staticTypes bool

@@ -21,6 +21,9 @@ type Dim2 struct {
 	materials  []materialLinearGroup
 	forceCases []forceCase2d
 
+	//TODO: if we have nolinear finite element then,
+	// dof can be different between load cases
+
 	// internal data
 	degreeInGlobalMatrix []dof.AxeNumber // degree of freedom in global system, created in according to "real" finite elements and it is not the same "dofSystem" for models with many pin.
 	indexsInGlobalMatrix dof.MapIndex    // convert axe from degreeGlobal to position in global matrix stiffiners, mass, ...

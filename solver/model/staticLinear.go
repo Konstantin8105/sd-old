@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Konstantin8105/GoFea/input/element"
+	"github.com/Konstantin8105/GoFea/output/displacement"
 	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoFea/solver/finiteElement"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
@@ -92,10 +93,35 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 	// TODO: if you have nonlinear elements, then we can use
 	// TODO: one global stiffiner matrix for all cases
 	lu := solver.NewLUsolver(stiffinerKGlobal)
-	x := lu.Solve(loads)
+	globalDisp := lu.Solve(loads)
 	// TODO: rename global vector of displacement
 
-	fmt.Printf("Global displacement = \n%s\n", x)
+	fmt.Printf("Global displacement = \n%s\n", globalDisp)
+
+	// global displacement for points
+	for _, p := range m.points {
+		axes := m.degreeForPoint.GetDoF(p.Index)
+		var disp displacement.Dim2
+		disp.Index = p.Index
+		for i := range axes {
+			for j := 0; j < len(m.degreeInGlobalMatrix); j++ {
+				// TODO : only for 2d
+				if axes[i] == m.degreeInGlobalMatrix[j] {
+					if i == 0 {
+						disp.Dx = globalDisp.Get(j, 0)
+					}
+					if i == 1 {
+						disp.Dy = globalDisp.Get(j, 0)
+					}
+					if i == 2 {
+						disp.Dm = globalDisp.Get(j, 0)
+					}
+				}
+			}
+		}
+		forceCase.globalDisplacements = append(forceCase.globalDisplacements, disp)
+		fmt.Println("disp -- > ", disp)
+	}
 	//fmt.Println("degreeGlobal = ", degreeGlobal)
 	for _, ele := range m.elements {
 		switch ele.(type) {
@@ -113,12 +139,12 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 			for i := 0; i < len(globalDisplacement); i++ {
 				for j := 0; j < len(m.degreeInGlobalMatrix); j++ {
 					if degreeLocal[i] == m.degreeInGlobalMatrix[j] {
-						globalDisplacement[i] = x.Get(j, 0)
+						globalDisplacement[i] = globalDisp.Get(j, 0)
 						break
 					}
 				}
 			}
-			//fmt.Println("globalDisplacement = ", globalDisplacement)
+			fmt.Println("globalDisplacement = ", globalDisplacement)
 
 			t := matrix.NewMatrix64bySize(10, 10)
 			fe.GetCoordinateTransformation(&t)

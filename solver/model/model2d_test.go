@@ -52,6 +52,13 @@ func TestTruss(t *testing.T) {
 		Y:     -1.5,
 	})
 
+	// add empty point
+	m.AddPoint(point.Dim2{
+		Index: 40,
+		X:     10.,
+		Y:     0.0,
+	})
+
 	m.AddElement(element.Beam{
 		Index:        7,
 		PointIndexes: [2]point.Index{4, 2},
