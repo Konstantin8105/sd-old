@@ -1,5 +1,7 @@
 # GoFea
 
+[![Coverage Status](https://coveralls.io/repos/github/Konstantin8105/GoFea/badge.svg?branch=master)](https://coveralls.io/github/Konstantin8105/GoFea?branch=master)
+
 FEA for steel structural engineer on golang
 
 **TODO`s**:
