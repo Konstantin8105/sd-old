@@ -97,6 +97,7 @@ func (m *Dim2) AddNodeForce(caseNumber int, nodeForce force.NodeDim2, pointIndex
 	m.forceCases = append(m.forceCases, fc)
 }
 
+/*
 // AddGravityForce - add gravity force in force case
 func (m *Dim2) AddGravityForce(caseNumber int, gravityForce force.GravityDim2, beamIndexes ...element.ElementIndex) {
 	for i := range m.forceCases {
@@ -120,6 +121,7 @@ func (m *Dim2) AddGravityForce(caseNumber int, gravityForce force.GravityDim2, b
 
 	m.forceCases = append(m.forceCases, fc)
 }
+*/
 
 // GetGlobalDisplacement - return global displacement
 func (m *Dim2) GetGlobalDisplacement(caseNumber int, pointIndex point.Index) (d displacement.Dim2, err error) {

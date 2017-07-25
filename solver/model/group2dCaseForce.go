@@ -10,8 +10,8 @@ type forceCase2d struct {
 	indexCase int
 
 	// input data
-	gravityForces []gravityForce2d
-	nodeForces    []nodeForce2d
+	//TODO: gravityForces []gravityForce2d
+	nodeForces []nodeForce2d
 
 	// statis property
 	static staticTypes

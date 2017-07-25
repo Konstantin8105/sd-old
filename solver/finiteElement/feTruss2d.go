@@ -48,6 +48,7 @@ func (f *TrussDim2) GetStiffinerK(kr *matrix.T64) {
 	kr.Set(3, 3, EFL)
 }
 
+/*
 // GetMassMr - matrix mass of finite element
 func (f *TrussDim2) GetMassMr(mr *matrix.T64) {
 	mu := f.Shape.A * f.Material.Ro
@@ -61,7 +62,9 @@ func (f *TrussDim2) GetMassMr(mr *matrix.T64) {
 	mr.Set(3, 0, mul6)
 	mr.Set(3, 3, mul3)
 }
+*/
 
+/*
 // GetPotentialGr - matrix potential loads for linear buckling
 func (f *TrussDim2) GetPotentialGr(gr *matrix.T64, localAxialForce float64) {
 	lenght := point.LenghtDim2(f.Points)
@@ -75,6 +78,7 @@ func (f *TrussDim2) GetPotentialGr(gr *matrix.T64, localAxialForce float64) {
 	gr.Set(4, 1, -NL)
 	gr.Set(4, 4, NL)
 }
+*/
 
 // GetDoF - return numbers for degree of freedom in global system
 // coordinate
@@ -113,6 +117,7 @@ func GetStiffinerGlobalK(f FiniteElementer, degree *dof.DoF, info Information) (
 	return kor, axes
 }
 
+/*
 // GetGlobalMass - global matrix of mass
 func GetGlobalMass(f FiniteElementer, degree *dof.DoF, info Information) (matrix.T64, []dof.AxeNumber) {
 	mlocal := matrix.NewMatrix64bySize(4, 4)
@@ -131,6 +136,7 @@ func GetGlobalMass(f FiniteElementer, degree *dof.DoF, info Information) (matrix
 
 	return mor, axes
 }
+*/
 
 /*
 // GetGlobalPotential - global matrix of mass

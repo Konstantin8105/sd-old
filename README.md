@@ -6,9 +6,7 @@
 
 FEA for steel structural engineer on golang
 
-**TODO`s**:
-
-*Step 1 - Calculate truss model in 2D*
+*Step 0.1 - Calculate truss model in 2D*
 
 - [X] 2d point
 - [X] 2d support
@@ -17,47 +15,46 @@ FEA for steel structural engineer on golang
 - [X] Create global stiffiner matrix
 - [X] Create load vector
 - [X] Solve system of linear equation
-- [ ] Calculate global deformation
-- [ ] Calculate internal deformation
-- [ ] Calculate internal force
+- [X] Calculate global deformation
+- [X] Calculate internal deformation
+- [X] Calculate internal force
+- [X] Refactoring
+- [X] Testing
+- [X] Benchmark tests
+- [X] Add git tag
+
+---------------------
+
+**TODO`s**:
+
+
+*Step 0.2 - Calculate truss model in 2D*
+
+- [ ] New git branch
+- [ ] Add property for nolinear deformation
+- [ ] Nolinear deformation
+- [ ] Reactions in support
+- [ ] Add natural frequency property
 - [ ] Calculate natural frequency
-- [ ] Return results of calculation
+- [ ] Add property for buckling analyze of case
+- [ ] Buckling
 - [ ] Refactoring
 - [ ] Testing
 - [ ] Benchmark tests
-- [ ] Release
+- [ ] Merge pull request(PR)
+- [ ] Add git tag
 
-	// TODO: add checking - point cannot have same number
+*Step*
 
-
-*Step 1.1*
-
-- [ ] Create RPC client-server for fast calculation
-
-*Step 2*
-
-- [ ] Buckling
-- [ ] add property for truss elements
-- [ ] add property for buckling analyze of case
-- [ ] add natural frequency property
-- [ ] New git branch
 - [ ] 2d beam finite element
 - [ ] 2d gravity load
 - [ ] 2d displacement load
 - [ ] Selfweight load
-- [ ] Reactions in support
 - [ ] Calculate global deformation
 - [ ] Calculate internal deformation
 - [ ] Calculate internal force
 - [ ] Calculate natural frequency
 - [ ] Buckling
-- [ ] Refactoring
-- [ ] Testing
-- [ ] Benchmark tests
-- [ ] Release
-
-*Step 3*
-
 - [ ] Many loads for natural frequency calculation
 - [ ] Redirection loads and cheching recursive loading
 - [ ] New git branch
@@ -70,20 +67,9 @@ FEA for steel structural engineer on golang
 - [ ] Calculate internal deformation
 - [ ] Calculate internal force
 - [ ] Calculate natural frequency
-- [ ] Refactoring
-- [ ] Testing
-- [ ] Benchmark tests
-- [ ] Release
-
-*Step 3.10*
-
 - [ ] Create IO input  file format
 - [ ] Create IO output file format
-CALCULATION GRAPH
-
-*Step 4*
-
-- [ ] Add Travis checking of project
+- [ ] CALCULATION GRAPH
 - [ ] Minimal build configuration. Best way is Go native code.
 - [ ] 3D, tables, graphs
 - [ ] HTML+CSS gui
@@ -94,14 +80,12 @@ https://threejs.org/
 http://davidscottlyons.com/threejs/presentations/frontporch14/#slide-0
 https://threejs.org/editor/
 https://github.com/mrdoob/three.js/tree/master/editor
-
 maybe - polymer from google
 
-*Step 5*
-
-* MERGE MODELS
-* STACK DESIGN, see https://github.com/Konstantin8105/Stack.FEA
-
+- [ ] MERGE MODELS
+- [ ] STACK DESIGN, see https://github.com/Konstantin8105/Stack.FEA
+- [ ] add checking - point cannot have same number
+- [ ] Create RPC client-server for fast calculation
 - [ ] working with geometry inside
 - [ ] triangulation of regions
 - [ ] Intersection between beams
