@@ -1,6 +1,8 @@
 package model_test
 
 import (
+	"fmt"
+	"math"
 	"testing"
 
 	"github.com/Konstantin8105/GoFea/input/element"
@@ -109,15 +111,60 @@ func TestTruss(t *testing.T) {
 
 	// results
 
-	// displacement : 0.849 mm
-	// F7 = F9 = 26097.87104956486
-	// F8 = 34797.16132338987
-	// Reaction in point 3:
-	// Fx = 13048.934 N
-	// Fy = 22601.425 N
-
-	//TODO: create test for natural frequency
-
+	// displacement : 0.870 mm
+	// F7 = F9 = 26098 N
+	// F8 = 34797 N
+	{
+		d, err := m.GetGlobalDisplacement(1, point.Index(4))
+		if err != nil {
+			t.Errorf("Cannot found global displacement. %v", err)
+		}
+		de := -0.870e-3 // meter
+		if math.Abs((d.Dy-de)/de) > 0.01 {
+			t.Errorf("global displacement = %v. Expected displacement = %v", d.Dy, de)
+		}
+		fmt.Println("de = ", de)
+		fmt.Println("d = ", d)
+	}
+	{
+		f7 := -26098.
+		b, e, err := m.GetLocalForce(1, element.ElementIndex(7))
+		if err != nil {
+			t.Errorf("Cannot found local force. %v", err)
+		}
+		if math.Abs((math.Abs(b.Fx)-math.Abs(e.Fx))/b.Fx) > 0.01 {
+			t.Errorf("Not symmetrical loads. %v %v", b.Fx, e.Fx)
+		}
+		if math.Abs((f7-b.Fx)/f7) > 0.01 {
+			t.Errorf("axial force for beam 7 is %v. Expected = %v", f7, b.Fx)
+		}
+	}
+	{
+		f8 := -34797.
+		b, e, err := m.GetLocalForce(1, element.ElementIndex(8))
+		if err != nil {
+			t.Errorf("Cannot found local force. %v", err)
+		}
+		if math.Abs((math.Abs(b.Fx)-math.Abs(e.Fx))/b.Fx) > 0.01 {
+			t.Errorf("Not symmetrical loads. %v %v", b.Fx, e.Fx)
+		}
+		if math.Abs((f8-b.Fx)/f8) > 0.01 {
+			t.Errorf("axial force for beam 8 is %v. Expected = %v", f8, b.Fx)
+		}
+	}
+	{
+		f9 := -26098.
+		b, e, err := m.GetLocalForce(1, element.ElementIndex(7))
+		if err != nil {
+			t.Errorf("Cannot found local force. %v", err)
+		}
+		if math.Abs((math.Abs(b.Fx)-math.Abs(e.Fx))/b.Fx) > 0.01 {
+			t.Errorf("Not symmetrical loads. %v %v", b.Fx, e.Fx)
+		}
+		if math.Abs((f9-b.Fx)/f9) > 0.01 {
+			t.Errorf("axial force for beam 9 is %v. Expected = %v", f9, b.Fx)
+		}
+	}
 }
 
 /*
