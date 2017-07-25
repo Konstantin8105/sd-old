@@ -10,6 +10,7 @@ import (
 	"github.com/Konstantin8105/GoFea/input/shape"
 	"github.com/Konstantin8105/GoFea/input/support"
 	"github.com/Konstantin8105/GoFea/output/displacement"
+	"github.com/Konstantin8105/GoFea/output/forceLocal"
 	"github.com/Konstantin8105/GoFea/solver/dof"
 )
 
@@ -133,4 +134,19 @@ func (m *Dim2) GetGlobalDisplacement(caseNumber int, pointIndex point.Index) (d 
 		}
 	}
 	return d, fmt.Errorf("Cannot found case by number")
+}
+
+// GetLocalForce - return local force of beam
+func (m *Dim2) GetLocalForce(caseNumber int, beamIndex element.ElementIndex) (begin, end forceLocal.Dim2, err error) {
+	for _, f := range m.forceCases {
+		if f.indexCase == caseNumber {
+			for _, l := range f.localForces {
+				if l.Index == beamIndex {
+					return l.Begin, l.End, nil
+				}
+			}
+			return begin, end, fmt.Errorf("Cannot found beam")
+		}
+	}
+	return begin, end, fmt.Errorf("Cannot found case by number")
 }
