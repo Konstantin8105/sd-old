@@ -1,7 +1,6 @@
 package model_test
 
 import (
-	"fmt"
 	"math"
 	"testing"
 
@@ -14,13 +13,6 @@ import (
 	"github.com/Konstantin8105/GoFea/solver/model"
 )
 
-// book :
-// "Сопротивление материалов"
-// Учебник для вузов
-// 4-е издание
-// год 1979
-// страница 139-141
-//
 //  *2   *1   *3
 //   \   |   /
 //    7  8  9
@@ -123,8 +115,6 @@ func TestTruss(t *testing.T) {
 		if math.Abs((d.Dy-de)/de) > 0.01 {
 			t.Errorf("global displacement = %v. Expected displacement = %v", d.Dy, de)
 		}
-		fmt.Println("de = ", de)
-		fmt.Println("d = ", d)
 	}
 	{
 		f7 := -26098.
@@ -167,11 +157,11 @@ func TestTruss(t *testing.T) {
 	}
 }
 
-/*
-func TestTruss(t *testing.T) {
-	var model model.Dim2
+// test based on methodic
+func TestTrussFrame(t *testing.T) {
+	var m model.Dim2
 
-	model.AddPoint([]point.Dim2{
+	m.AddPoint([]point.Dim2{
 		point.Dim2{
 			Index: 1,
 			X:     0.0,
@@ -199,7 +189,7 @@ func TestTruss(t *testing.T) {
 		},
 	}...)
 
-	model.AddBeam([]element.Beam{
+	m.AddElement([]element.Elementer{
 		element.Beam{
 			Index:        1,
 			PointIndexes: [2]point.Index{1, 2},
@@ -231,52 +221,106 @@ func TestTruss(t *testing.T) {
 	}...)
 
 	// Truss
-	model.AddTrussProperty(1, 2, 3, 4, 5, 6, 7)
+	m.AddTrussProperty(1, 2, 3, 4, 5, 6, 7)
 
 	// Supports
-	model.AddSupport(support.Dim2{
+	m.AddSupport(support.Dim2{
 		Dx: support.Fix,
 		Dy: support.Fix,
 	}, 1)
 
-	model.AddSupport(support.Dim2{
+	m.AddSupport(support.Dim2{
 		Dy: support.Fix,
 	}, 3)
 
-	model.AddSupport(support.Dim2{
+	m.AddSupport(support.Dim2{
 		Dy: support.Fix,
 	}, 5)
 
 	// Shapes
-	model.AddShape(shape.Shape{
+	m.AddShape(shape.Shape{
 		A: 40e-4,
-	}, []element.BeamIndex{1, 5}...)
+	}, []element.ElementIndex{1, 5}...)
 
-	model.AddShape(shape.Shape{
+	m.AddShape(shape.Shape{
 		A: 64e-4,
-	}, []element.BeamIndex{2, 6}...)
+	}, []element.ElementIndex{2, 6}...)
 
-	model.AddShape(shape.Shape{
+	m.AddShape(shape.Shape{
 		A: 60e-4,
-	}, []element.BeamIndex{3, 4, 7}...)
+	}, []element.ElementIndex{3, 4, 7}...)
 
 	// Materials
-	model.AddMaterial(material.Linear{
+	m.AddMaterial(material.Linear{
 		E:  2e11,
 		Ro: 78500,
-	}, []element.BeamIndex{1, 2, 3, 4, 5, 6, 7}...)
+	}, []element.ElementIndex{1, 2, 3, 4, 5, 6, 7}...)
 
 	// Node force
-	model.AddNodeForce(1, force.NodeDim2{
+	m.AddNodeForce(1, force.NodeDim2{
 		Fx: -70000.0,
 	}, []point.Index{2}...)
 
-	model.AddNodeForce(1, force.NodeDim2{
+	m.AddNodeForce(1, force.NodeDim2{
 		Fx: 42000.0,
 	}, []point.Index{4}...)
 
-	fmt.Println(model.Solve())
+	err := m.Solve()
+	if err != nil {
+		t.Errorf("Cannot solving. error = %v", err)
+	}
 
-	//TODO: create test for natural frequency
+	{
+		// displacement for point 2:
+		Dx := -0.4610423e-3 // m
+		Dy := -0.1575000e-3 // m
+		d, err := m.GetGlobalDisplacement(1, point.Index(2))
+		if err != nil {
+			t.Errorf("Cannot found global displacement. %v", err)
+		}
+		if math.Abs((d.Dx-Dx)/Dx) > 0.01 {
+			t.Errorf("point 1. global displacement by axe X = %v. Expected displacement = %v", d.Dx, Dx)
+		}
+		if math.Abs((d.Dy-Dy)/Dy) > 0.01 {
+			t.Errorf("point 1. global displacement by axe Y = %v. Expected displacement = %v", d.Dy, Dy)
+		}
+	}
+	{
+		// displacement for point 4:
+		Dx := -0.0380192e-3 // m
+		Dy := +0.0333751e-3 // m
+		d, err := m.GetGlobalDisplacement(1, point.Index(4))
+		if err != nil {
+			t.Errorf("Cannot found global displacement. %v", err)
+		}
+		if math.Abs((d.Dx-Dx)/Dx) > 0.01 {
+			t.Errorf("point 4. global displacement by axe X = %v. Expected displacement = %v", d.Dx, Dx)
+		}
+		if math.Abs((d.Dy-Dy)/Dy) > 0.01 {
+			t.Errorf("point 4. global displacement by axe Y = %v. Expected displacement = %v", d.Dy, Dy)
+		}
+	}
+	{
+		// local force for beam 2
+		FxBegin := 34166.633
+		b, _, err := m.GetLocalForce(1, element.ElementIndex(2))
+		if err != nil {
+			t.Errorf("Cannot found local force in beam 2. %v", err)
+		}
+		if math.Abs((FxBegin-b.Fx)/FxBegin) > 0.01 {
+			t.Errorf("axial force for beam 2 is %v. Expected = %v", FxBegin, b.Fx)
+		}
+	}
+	{
+		// local force for beam 7
+		FxBegin := -61594.72633
+		b, _, err := m.GetLocalForce(1, element.ElementIndex(7))
+		if err != nil {
+			t.Errorf("Cannot found local force in beam 2. %v", err)
+		}
+		if math.Abs((FxBegin-b.Fx)/FxBegin) > 0.01 {
+			t.Errorf("axial force for beam 7 is %v. Expected = %v", FxBegin, b.Fx)
+		}
+	}
 
-}*/
+}
