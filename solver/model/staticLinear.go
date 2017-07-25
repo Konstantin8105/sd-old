@@ -12,10 +12,6 @@ import (
 
 func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 
-	// TODO : check everything
-	// TODO : sort  everything
-	// TODO : compress loads by number
-
 	// Generate global stiffiner matrix [Ko]
 	stiffinerKGlobal := m.convertFromLocalToGlobalSystem(&m.degreeInGlobalMatrix, &m.degreeForPoint, &m.indexsInGlobalMatrix, finiteElement.GetStiffinerGlobalK)
 
@@ -85,11 +81,9 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 
 	// Solving system of linear equations for finding
 	// the displacement in points in global system
-	// TODO: if you have nonlinear elements, then we can use
 	// TODO: one global stiffiner matrix for all cases
 	lu := solver.NewLUsolver(stiffinerKGlobal)
 	globalDisp := lu.Solve(loads)
-	// TODO: rename global vector of displacement
 
 	// global displacement for points
 	for _, p := range m.points {

@@ -17,6 +17,10 @@ func (m *Dim2) Solve() (err error) {
 	// generate degrees of freedom
 	m.generateDof()
 
+	// TODO : check everything
+	// TODO : sort  everything
+	// TODO : compress loads by number
+
 	// create error channel
 	type results struct {
 		err       error
