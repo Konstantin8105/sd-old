@@ -3,7 +3,6 @@ package utils
 import (
 	"sort"
 
-	"github.com/Konstantin8105/GoFea/input/point"
 	"github.com/Konstantin8105/GoFea/solver/dof"
 )
 
@@ -48,6 +47,7 @@ func UniqueAxeNumber(axes *[]dof.AxeNumber) {
 	}
 }
 
+/*
 func UniquePointIndex(points *[]point.Index) {
 	ints := make([]int, len(*points), len(*points))
 	for i := 0; i < len(*points); i++ {
@@ -59,3 +59,4 @@ func UniquePointIndex(points *[]point.Index) {
 		(*points)[i] = point.Index(ints[i])
 	}
 }
+*/

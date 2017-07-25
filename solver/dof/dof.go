@@ -58,7 +58,7 @@ func RemoveIndexes(a *[]AxeNumber, indexes ...int) {
 	// sorting indexes for optimization of algoritm
 	sort.Ints(indexes)
 	// global checking indexes
-	if indexes[len(indexes)-1] >= len(*a) {
+	if indexes[len(indexes)-1] >= len(*a) || indexes[0] < 0 {
 		panic(fmt.Errorf("indexes is outside of matrix. Indexes = %v", indexes))
 	}
 	// modify values
