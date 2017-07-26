@@ -14,6 +14,11 @@ import (
 // Solve - solving finite element
 func (m *Dim2) Solve() (err error) {
 
+	err = m.checkInputData()
+	if err != nil {
+		return err
+	}
+
 	// generate degrees of freedom
 	m.generateDof()
 
@@ -110,7 +115,8 @@ func (m *Dim2) getBeamFiniteElement(inx element.ElementIndex) (fe finiteElement.
 			return err
 		}
 	}*/
-	return nil
+	//return nil
+	panic("Please add finite element")
 }
 
 func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dofSystem *dof.DoF, mapIndex *dof.MapIndex, f func(finiteElement.FiniteElementer, *dof.DoF, finiteElement.Information) (matrix.T64, []dof.AxeNumber)) matrix.T64 {
