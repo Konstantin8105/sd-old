@@ -27,15 +27,12 @@ type DoF struct {
 
 // GetDoF - get degree of freedom for point index
 func (d *DoF) GetDoF(index point.Index) []AxeNumber {
-	if d.Dimension == Dim2d {
-		axes := make([]AxeNumber, int(d.Dimension), int(d.Dimension))
-		number := d.found(index)
-		for i := 0; i < int(d.Dimension); i++ {
-			axes[i] = AxeNumber(i + number*int(Dim2d))
-		}
-		return axes
+	axes := make([]AxeNumber, int(d.Dimension), int(d.Dimension))
+	number := d.found(index)
+	for i := 0; i < int(d.Dimension); i++ {
+		axes[i] = AxeNumber(i + number*int(d.Dimension))
 	}
-	panic("Please add algorithm")
+	return axes
 }
 
 func (d *DoF) found(index point.Index) int {
