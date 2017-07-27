@@ -113,7 +113,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 		switch ele.(type) {
 		case element.Beam:
 			beam := ele.(element.Beam)
-			fe := m.getBeamFiniteElement(beam.Index)
+			fe := m.getBeamFiniteElement(beam.GetIndex())
 			_, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.FullInformation)
 			globalDisplacement := make([]float64, len(degreeLocal))
 			// if not found in global displacement, then it is a pinned
@@ -151,7 +151,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 					Dy: localDisplacement[4],
 					Dm: localDisplacement[5],
 				},
-				Index: beam.Index,
+				Index: beam.GetIndex(),
 			})
 
 			klocal := matrix.NewMatrix64bySize(10, 10)
@@ -176,7 +176,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 					Fy: localForce[4],
 					M:  localForce[5],
 				},
-				Index: beam.Index,
+				Index: beam.GetIndex(),
 			})
 		default:
 			panic("")

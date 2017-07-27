@@ -43,11 +43,11 @@ func (m *Dim2) getCoordinate(index element.Index) (c []point.Dim2, err error) {
 		switch e.(type) {
 		case element.Beam:
 			beam := e.(element.Beam)
-			if beam.Index != index {
+			if beam.GetIndex() != index {
 				continue
 			}
-			for i := range beam.PointIndexes {
-				inx = append(inx, beam.PointIndexes[i])
+			for i := range beam.GetPointIndex() {
+				inx = append(inx, beam.GetPointIndex()[i])
 			}
 			found = true
 			break

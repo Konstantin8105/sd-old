@@ -125,7 +125,7 @@ func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dof
 		switch ele.(type) {
 		case element.Beam:
 			beam := ele.(element.Beam)
-			fe := m.getBeamFiniteElement(beam.Index)
+			fe := m.getBeamFiniteElement(beam.GetIndex())
 			klocal, degreeLocal := f(fe, dofSystem, finiteElement.WithoutZeroStiffiner)
 			// Add local stiffiner matrix to global matrix
 			for i := 0; i < len(degreeLocal); i++ {
