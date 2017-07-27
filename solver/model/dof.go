@@ -5,7 +5,6 @@ import (
 	"github.com/Konstantin8105/GoFea/input/point"
 	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoFea/solver/finiteElement"
-	"github.com/Konstantin8105/GoFea/utils"
 )
 
 // generateDof - create degree's of freedom for model
@@ -37,7 +36,7 @@ func (m *Dim2) generateDof() {
 				panic("")
 			}
 		}
-		utils.UniqueAxeNumber(&axes)
+		dof.UniqueAxeNumber(&axes)
 		m.degreeInGlobalMatrix = axes
 	}
 

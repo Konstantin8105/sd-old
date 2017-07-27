@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	"github.com/Konstantin8105/GoFea/input/point"
+	"github.com/Konstantin8105/GoFea/utils"
 )
 
 // Dim - dimension unit
@@ -53,7 +54,9 @@ func RemoveIndexes(a *[]AxeNumber, indexes ...int) {
 		return
 	}
 	// sorting indexes for optimization of algoritm
-	sort.Ints(indexes)
+	utils.UniqueInt(&indexes)
+	UniqueAxeNumber(a)
+
 	// global checking indexes
 	if indexes[len(indexes)-1] >= len(*a) || indexes[0] < 0 {
 		panic(fmt.Errorf("indexes is outside of matrix. Indexes = %v", indexes))
@@ -71,4 +74,17 @@ func RemoveIndexes(a *[]AxeNumber, indexes ...int) {
 	}
 
 	(*a) = (*a)[0 : len(*a)-len(indexes)]
+}
+
+// UniqueAxeNumber - create unique axes in array
+func UniqueAxeNumber(axes *[]AxeNumber) {
+	ints := make([]int, len(*axes), len(*axes))
+	for i := 0; i < len(*axes); i++ {
+		ints[i] = int((*axes)[i])
+	}
+	utils.UniqueInt(&ints)
+	(*axes) = (*axes)[0:len(ints)]
+	for i := 0; i < len(*axes); i++ {
+		(*axes)[i] = AxeNumber(ints[i])
+	}
 }

@@ -4,7 +4,6 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoFea/utils"
 )
 
@@ -120,20 +119,4 @@ func Benchmark1000(b *testing.B) {
 		b.StopTimer()
 	}
 	b.ReportAllocs()
-}
-
-func TestUniqueAxeNumber(t *testing.T) {
-	array := []dof.AxeNumber{5, 3, 3, 5}
-	result := []dof.AxeNumber{3, 5}
-
-	utils.UniqueAxeNumber(&array)
-
-	if len(array) != len(result) {
-		t.Errorf("Wrong")
-	}
-	for i := range array {
-		if array[i] != result[i] {
-			t.Errorf("Wrong")
-		}
-	}
 }
