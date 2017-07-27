@@ -25,8 +25,9 @@ func (m *Dim2) checkInputData() error {
 		return fmt.Errorf(errorText, "Please add load case in model")
 	}
 
-	// checking two point with same number
-	var zeroElements []element.ElementIndex
+	// checking lenght of finite element beam
+	// for avoid divide by zero
+	var zeroElements []element.Index
 	for _, e := range m.elements {
 		coord, err := m.getCoordinate(e.GetIndex())
 		if err != nil {
@@ -54,9 +55,6 @@ func (m *Dim2) checkInputData() error {
 	}
 
 	// checking beam with same number
-
-	// checking lenght of finite element beam
-	// for avoid divide by zero
 
 	//
 

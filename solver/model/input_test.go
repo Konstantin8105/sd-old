@@ -127,7 +127,7 @@ func TestErrorBeamWithoutLoad(t *testing.T) {
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
-	}, []element.ElementIndex{7}...)
+	}, []element.Index{7}...)
 
 	err := m.Solve()
 	if err == nil {
@@ -154,7 +154,7 @@ func TestErrorShape(t *testing.T) {
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
-	}, []element.ElementIndex{7, 8, 9, 10}...)
+	}, []element.Index{7, 8, 9, 10}...)
 
 	err := m.Solve()
 	if err == nil {
@@ -181,14 +181,14 @@ func TestErrorBeamWithLoad(t *testing.T) {
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
-	}, []element.ElementIndex{7}...)
+	}, []element.Index{7}...)
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{2}...)
 	m.AddMaterial(material.Linear{
 		E:  2e11,
 		Ro: 78500,
-	}, []element.ElementIndex{7}...)
+	}, []element.Index{7}...)
 	m.AddTrussProperty(7)
 
 	err := m.Solve()
@@ -257,17 +257,17 @@ func TestErrorZeroLenght(t *testing.T) {
 	// Shapes
 	m.AddShape(shape.Shape{
 		A: 300e-6,
-	}, []element.ElementIndex{7, 9}...)
+	}, []element.Index{7, 9}...)
 
 	m.AddShape(shape.Shape{
 		A: 300e-6,
-	}, []element.ElementIndex{8}...)
+	}, []element.Index{8}...)
 
 	// Materials
 	m.AddMaterial(material.Linear{
 		E:  2e11,
 		Ro: 78500,
-	}, []element.ElementIndex{7, 8, 9}...)
+	}, []element.Index{7, 8, 9}...)
 
 	// Node force
 	m.AddNodeForce(1, force.NodeDim2{

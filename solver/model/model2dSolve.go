@@ -77,7 +77,7 @@ func (m *Dim2) Solve() (err error) {
 	return fmt.Errorf("%#v", summaryResult)
 }
 
-func (m *Dim2) getBeamFiniteElement(inx element.ElementIndex) (fe finiteElement.FiniteElementer) {
+func (m *Dim2) getBeamFiniteElement(inx element.Index) (fe finiteElement.FiniteElementer) {
 	material, err := m.getMaterial(inx)
 	if err != nil {
 		panic(fmt.Errorf("Cannot found material for beam #%v. Error = %v", inx, err))

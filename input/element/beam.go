@@ -6,11 +6,21 @@ import (
 
 // Beam - property of beam element
 type Beam struct {
-	Index        ElementIndex
-	PointIndexes [2]point.Index
+	index        Index
+	pointIndexes []point.Index
 }
 
 // GetIndex - return index of beam
-func (b Beam) GetIndex() ElementIndex {
-	return b.Index
+func (b Beam) GetIndex() Index {
+	return b.index
+}
+
+// GetPointIndex - return indexes of point for that finite element
+func (b Beam) GetPointIndex() []point.Index {
+	return b.pointIndexes
+}
+
+// GetAmountPoint - return amount points in finite element
+func (b Beam) GetAmountPoint() int {
+	return 2
 }

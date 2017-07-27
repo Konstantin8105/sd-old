@@ -18,5 +18,5 @@ type PointDim2 struct {
 
 type BeamDim2 struct {
 	Begin, End Dim2
-	Index      element.ElementIndex
+	Index      element.Index
 }
