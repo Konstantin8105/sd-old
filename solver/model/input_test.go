@@ -53,10 +53,11 @@ func TestErrorTwoNode(t *testing.T) {
 
 func TestErrorBeamAlone(t *testing.T) {
 	var m model.Dim2
-	m.AddElement(element.Beam{
-		Index:        7,
-		PointIndexes: [2]point.Index{4, 2},
-	})
+	// m.AddElement(element.Beam{
+	// 	Index:        7,
+	// 	PointIndexes: [2]point.Index{4, 2},
+	// })
+	m.AddElement(element.NewBeam(7, 4, 2))
 	err := m.Solve()
 	if err == nil {
 		t.Errorf("Haven't error for one beam alone")
@@ -75,10 +76,11 @@ func TestErrorBeamWithoutSupport(t *testing.T) {
 		X:     -0.8660254,
 		Y:     0.,
 	})
-	m.AddElement(element.Beam{
-		Index:        7,
-		PointIndexes: [2]point.Index{1, 2},
-	})
+	// m.AddElement(element.Beam{
+	// 	Index:        7,
+	// 	PointIndexes: [2]point.Index{1, 2},
+	// })
+	m.AddElement(element.NewBeam(7, 1, 2))
 	err := m.Solve()
 	if err == nil {
 		t.Errorf("Haven't error for model without support")
@@ -97,10 +99,11 @@ func TestErrorBeamWithoutLoadAndShape(t *testing.T) {
 		X:     -0.8660254,
 		Y:     0.,
 	})
-	m.AddElement(element.Beam{
-		Index:        7,
-		PointIndexes: [2]point.Index{1, 2},
-	})
+	// m.AddElement(element.Beam{
+	// 	Index:        7,
+	// 	PointIndexes: [2]point.Index{1, 2},
+	// })
+	m.AddElement(element.NewBeam(7, 1, 2))
 	m.AddSupport(support.FixedDim2(), 1)
 	err := m.Solve()
 	if err == nil {
@@ -120,10 +123,11 @@ func TestErrorBeamWithoutLoad(t *testing.T) {
 		X:     -0.8660254,
 		Y:     0.,
 	})
-	m.AddElement(element.Beam{
-		Index:        7,
-		PointIndexes: [2]point.Index{1, 2},
-	})
+	// m.AddElement(element.Beam{
+	// 	Index:        7,
+	// 	PointIndexes: [2]point.Index{1, 2},
+	// })
+	m.AddElement(element.NewBeam(7, 1, 2))
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
@@ -147,10 +151,11 @@ func TestErrorShape(t *testing.T) {
 		X:     -0.8660254,
 		Y:     0.,
 	})
-	m.AddElement(element.Beam{
-		Index:        7,
-		PointIndexes: [2]point.Index{1, 2},
-	})
+	// m.AddElement(element.Beam{
+	// 	Index:        7,
+	// 	PointIndexes: [2]point.Index{1, 2},
+	// })
+	m.AddElement(element.NewBeam(7, 1, 2))
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
@@ -174,10 +179,11 @@ func TestErrorBeamWithLoad(t *testing.T) {
 		X:     -0.8660254,
 		Y:     0.,
 	})
-	m.AddElement(element.Beam{
-		Index:        7,
-		PointIndexes: [2]point.Index{1, 2},
-	})
+	// m.AddElement(element.Beam{
+	// 	Index:        7,
+	// 	PointIndexes: [2]point.Index{1, 2},
+	// })
+	m.AddElement(element.NewBeam(7, 1, 2))
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
@@ -231,20 +237,25 @@ func TestErrorZeroLenght(t *testing.T) {
 		Y:     0.0,
 	})
 
-	m.AddElement(element.Beam{
-		Index:        7,
-		PointIndexes: [2]point.Index{4, 2},
-	})
-
-	m.AddElement(element.Beam{
-		Index:        8,
-		PointIndexes: [2]point.Index{4, 1},
-	})
-
-	m.AddElement(element.Beam{
-		Index:        9,
-		PointIndexes: [2]point.Index{4, 3},
-	})
+	// m.AddElement(element.Beam{
+	// 	Index:        7,
+	// 	PointIndexes: [2]point.Index{4, 2},
+	// })
+	//
+	// m.AddElement(element.Beam{
+	// 	Index:        8,
+	// 	PointIndexes: [2]point.Index{4, 1},
+	// })
+	//
+	// m.AddElement(element.Beam{
+	// 	Index:        9,
+	// 	PointIndexes: [2]point.Index{4, 3},
+	// })
+	m.AddElement([]element.Elementer{
+		element.NewBeam(7, 4, 2),
+		element.NewBeam(8, 4, 1),
+		element.NewBeam(9, 4, 3),
+	}...)
 
 	// Truss
 	m.AddTrussProperty(7, 8, 9)

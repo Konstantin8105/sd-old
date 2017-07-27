@@ -10,6 +10,13 @@ type Beam struct {
 	pointIndexes []point.Index
 }
 
+// NewBeam - create new beam element
+func NewBeam(i Index, p0, p1 point.Index) (beam Beam) {
+	beam.index = i
+	beam.pointIndexes = append(beam.pointIndexes, p0, p1)
+	return
+}
+
 // GetIndex - return index of beam
 func (b Beam) GetIndex() Index {
 	return b.index
