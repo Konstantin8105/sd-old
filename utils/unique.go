@@ -35,6 +35,7 @@ func UniqueInt(array *[]int) {
 	(*array) = (*array)[0:inx]
 }
 
+// UniqueAxeNumber - create unique axes in array
 func UniqueAxeNumber(axes *[]dof.AxeNumber) {
 	ints := make([]int, len(*axes), len(*axes))
 	for i := 0; i < len(*axes); i++ {

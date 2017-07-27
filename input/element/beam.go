@@ -9,3 +9,8 @@ type Beam struct {
 	Index        ElementIndex
 	PointIndexes [2]point.Index
 }
+
+// GetIndex - return index of beam
+func (b Beam) GetIndex() ElementIndex {
+	return b.Index
+}
