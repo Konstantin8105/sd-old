@@ -1,4 +1,4 @@
 package element
 
-// ElementIndex - alias
-type ElementIndex int
+// Index - alias
+type Index int

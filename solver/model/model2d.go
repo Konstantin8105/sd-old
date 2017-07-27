@@ -45,7 +45,7 @@ func (m *Dim2) AddElement(elements ...element.Elementer) {
 }
 
 // AddTrussProperty - add truss property for beam
-func (m *Dim2) AddTrussProperty(beamIndexes ...element.ElementIndex) {
+func (m *Dim2) AddTrussProperty(beamIndexes ...element.Index) {
 	m.truss = append(m.truss, trussGroup{beamIndexes: beamIndexes})
 }
 
@@ -58,7 +58,7 @@ func (m *Dim2) AddSupport(support support.Dim2, pointIndexes ...point.Index) {
 }
 
 // AddShape - add shape property for beam
-func (m *Dim2) AddShape(shape shape.Shape, beamIndexes ...element.ElementIndex) {
+func (m *Dim2) AddShape(shape shape.Shape, beamIndexes ...element.Index) {
 	m.shapes = append(m.shapes, shapeGroup{
 		shape:       shape,
 		beamIndexes: beamIndexes,
@@ -66,7 +66,7 @@ func (m *Dim2) AddShape(shape shape.Shape, beamIndexes ...element.ElementIndex) 
 }
 
 // AddMaterial - add material for beam
-func (m *Dim2) AddMaterial(material material.Linear, beamIndexes ...element.ElementIndex) {
+func (m *Dim2) AddMaterial(material material.Linear, beamIndexes ...element.Index) {
 	m.materials = append(m.materials, materialLinearGroup{
 		material:    material,
 		beamIndexes: beamIndexes,
@@ -139,7 +139,7 @@ func (m *Dim2) GetGlobalDisplacement(caseNumber int, pointIndex point.Index) (d 
 }
 
 // GetLocalForce - return local force of beam
-func (m *Dim2) GetLocalForce(caseNumber int, beamIndex element.ElementIndex) (begin, end forceLocal.Dim2, err error) {
+func (m *Dim2) GetLocalForce(caseNumber int, beamIndex element.Index) (begin, end forceLocal.Dim2, err error) {
 	for _, f := range m.forceCases {
 		if f.indexCase == caseNumber {
 			for _, l := range f.localForces {

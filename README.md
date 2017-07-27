@@ -8,20 +8,20 @@ FEA for steel structural engineer on golang
 
 *Step 0.1 - Calculate truss model in 2D*
 
-- [X] 2d point
-- [X] 2d support
-- [X] 2d truss finite element
-- [X] 2d node load
-- [X] Create global stiffiner matrix
-- [X] Create load vector
-- [X] Solve system of linear equation
-- [X] Calculate global deformation
-- [X] Calculate internal deformation
-- [X] Calculate internal force
-- [X] Refactoring
-- [X] Testing
-- [X] Benchmark tests
-- [X] Add git tag
+- [x] 2d point
+- [x] 2d support
+- [x] 2d truss finite element
+- [x] 2d node load
+- [x] Create global stiffiner matrix
+- [x] Create load vector
+- [x] Solve system of linear equation
+- [x] Calculate global deformation
+- [x] Calculate internal deformation
+- [x] Calculate internal force
+- [x] Refactoring
+- [x] Testing
+- [x] Benchmark tests
+- [x] Add git tag
 
 ---------------------
 
@@ -30,7 +30,7 @@ FEA for steel structural engineer on golang
 
 *Step 0.2 - Calculate truss model in 2D*
 
-- [ ] New git branch
+- [x] New git branch
 - [ ] Add property for nolinear deformation
 - [ ] Nolinear deformation
 - [ ] Reactions in support

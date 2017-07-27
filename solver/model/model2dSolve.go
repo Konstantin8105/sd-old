@@ -14,6 +14,11 @@ import (
 // Solve - solving finite element
 func (m *Dim2) Solve() (err error) {
 
+	err = m.checkInputData()
+	if err != nil {
+		return err
+	}
+
 	// generate degrees of freedom
 	m.generateDof()
 
@@ -72,7 +77,7 @@ func (m *Dim2) Solve() (err error) {
 	return fmt.Errorf("%#v", summaryResult)
 }
 
-func (m *Dim2) getBeamFiniteElement(inx element.ElementIndex) (fe finiteElement.FiniteElementer) {
+func (m *Dim2) getBeamFiniteElement(inx element.Index) (fe finiteElement.FiniteElementer) {
 	material, err := m.getMaterial(inx)
 	if err != nil {
 		panic(fmt.Errorf("Cannot found material for beam #%v. Error = %v", inx, err))
@@ -110,7 +115,8 @@ func (m *Dim2) getBeamFiniteElement(inx element.ElementIndex) (fe finiteElement.
 			return err
 		}
 	}*/
-	return nil
+	//return nil
+	panic("Please add finite element")
 }
 
 func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dofSystem *dof.DoF, mapIndex *dof.MapIndex, f func(finiteElement.FiniteElementer, *dof.DoF, finiteElement.Information) (matrix.T64, []dof.AxeNumber)) matrix.T64 {
@@ -119,7 +125,7 @@ func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dof
 		switch ele.(type) {
 		case element.Beam:
 			beam := ele.(element.Beam)
-			fe := m.getBeamFiniteElement(beam.Index)
+			fe := m.getBeamFiniteElement(beam.GetIndex())
 			klocal, degreeLocal := f(fe, dofSystem, finiteElement.WithoutZeroStiffiner)
 			// Add local stiffiner matrix to global matrix
 			for i := 0; i < len(degreeLocal); i++ {

@@ -5,7 +5,6 @@ import (
 	"github.com/Konstantin8105/GoFea/input/point"
 	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoFea/solver/finiteElement"
-	"github.com/Konstantin8105/GoFea/utils"
 )
 
 // generateDof - create degree's of freedom for model
@@ -30,14 +29,14 @@ func (m *Dim2) generateDof() {
 			switch ele.(type) {
 			case element.Beam:
 				beam := ele.(element.Beam)
-				fe := m.getBeamFiniteElement(beam.Index)
+				fe := m.getBeamFiniteElement(beam.GetIndex())
 				_, localAxes := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.WithoutZeroStiffiner)
 				axes = append(axes, localAxes...)
 			default:
 				panic("")
 			}
 		}
-		utils.UniqueAxeNumber(&axes)
+		dof.UniqueAxeNumber(&axes)
 		m.degreeInGlobalMatrix = axes
 	}
 

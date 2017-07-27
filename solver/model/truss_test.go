@@ -53,20 +53,26 @@ func TestTruss(t *testing.T) {
 		Y:     0.0,
 	})
 
-	m.AddElement(element.Beam{
-		Index:        7,
-		PointIndexes: [2]point.Index{4, 2},
-	})
+	// m.AddElement(element.Beam{
+	// 	Index:        7,
+	// 	PointIndexes: [2]point.Index{4, 2},
+	// })
+	//
+	// m.AddElement(element.Beam{
+	// 	Index:        8,
+	// 	PointIndexes: [2]point.Index{4, 1},
+	// })
+	//
+	// m.AddElement(element.Beam{
+	// 	Index:        9,
+	// 	PointIndexes: [2]point.Index{4, 3},
+	// })
 
-	m.AddElement(element.Beam{
-		Index:        8,
-		PointIndexes: [2]point.Index{4, 1},
-	})
-
-	m.AddElement(element.Beam{
-		Index:        9,
-		PointIndexes: [2]point.Index{4, 3},
-	})
+	m.AddElement([]element.Elementer{
+		element.NewBeam(7, 4, 2),
+		element.NewBeam(8, 4, 1),
+		element.NewBeam(9, 4, 3),
+	}...)
 
 	// Truss
 	m.AddTrussProperty(7, 8, 9)
@@ -79,17 +85,17 @@ func TestTruss(t *testing.T) {
 	// Shapes
 	m.AddShape(shape.Shape{
 		A: 300e-6,
-	}, []element.ElementIndex{7, 9}...)
+	}, []element.Index{7, 9}...)
 
 	m.AddShape(shape.Shape{
 		A: 300e-6,
-	}, []element.ElementIndex{8}...)
+	}, []element.Index{8}...)
 
 	// Materials
 	m.AddMaterial(material.Linear{
 		E:  2e11,
 		Ro: 78500,
-	}, []element.ElementIndex{7, 8, 9}...)
+	}, []element.Index{7, 8, 9}...)
 
 	// Node force
 	m.AddNodeForce(1, force.NodeDim2{
@@ -118,7 +124,7 @@ func TestTruss(t *testing.T) {
 	}
 	{
 		f7 := -26098.
-		b, e, err := m.GetLocalForce(1, element.ElementIndex(7))
+		b, e, err := m.GetLocalForce(1, element.Index(7))
 		if err != nil {
 			t.Errorf("Cannot found local force. %v", err)
 		}
@@ -131,7 +137,7 @@ func TestTruss(t *testing.T) {
 	}
 	{
 		f8 := -34797.
-		b, e, err := m.GetLocalForce(1, element.ElementIndex(8))
+		b, e, err := m.GetLocalForce(1, element.Index(8))
 		if err != nil {
 			t.Errorf("Cannot found local force. %v", err)
 		}
@@ -144,7 +150,7 @@ func TestTruss(t *testing.T) {
 	}
 	{
 		f9 := -26098.
-		b, e, err := m.GetLocalForce(1, element.ElementIndex(7))
+		b, e, err := m.GetLocalForce(1, element.Index(7))
 		if err != nil {
 			t.Errorf("Cannot found local force. %v", err)
 		}
@@ -190,34 +196,41 @@ func TestTrussFrame(t *testing.T) {
 	}...)
 
 	m.AddElement([]element.Elementer{
-		element.Beam{
-			Index:        1,
-			PointIndexes: [2]point.Index{1, 2},
-		},
-		element.Beam{
-			Index:        2,
-			PointIndexes: [2]point.Index{1, 3},
-		},
-		element.Beam{
-			Index:        3,
-			PointIndexes: [2]point.Index{1, 4},
-		},
-		element.Beam{
-			Index:        4,
-			PointIndexes: [2]point.Index{2, 4},
-		},
-		element.Beam{
-			Index:        5,
-			PointIndexes: [2]point.Index{3, 4},
-		},
-		element.Beam{
-			Index:        6,
-			PointIndexes: [2]point.Index{3, 5},
-		},
-		element.Beam{
-			Index:        7,
-			PointIndexes: [2]point.Index{4, 5},
-		},
+		// element.Beam{
+		// 	Index:        1,
+		// 	PointIndexes: [2]point.Index{1, 2},
+		// },
+		// element.Beam{
+		// 	Index:        2,
+		// 	PointIndexes: [2]point.Index{1, 3},
+		// },
+		// element.Beam{
+		// 	Index:        3,
+		// 	PointIndexes: [2]point.Index{1, 4},
+		// },
+		// element.Beam{
+		// 	Index:        4,
+		// 	PointIndexes: [2]point.Index{2, 4},
+		// },
+		// element.Beam{
+		// 	Index:        5,
+		// 	PointIndexes: [2]point.Index{3, 4},
+		// },
+		// element.Beam{
+		// 	Index:        6,
+		// 	PointIndexes: [2]point.Index{3, 5},
+		// },
+		//		element.Beam{
+		//			Index:        7,
+		//			PointIndexes: [2]point.Index{4, 5},
+		//		},
+		element.NewBeam(1, 1, 2),
+		element.NewBeam(2, 1, 3),
+		element.NewBeam(3, 1, 4),
+		element.NewBeam(4, 2, 4),
+		element.NewBeam(5, 3, 4),
+		element.NewBeam(6, 3, 5),
+		element.NewBeam(7, 4, 5),
 	}...)
 
 	// Truss
@@ -240,21 +253,21 @@ func TestTrussFrame(t *testing.T) {
 	// Shapes
 	m.AddShape(shape.Shape{
 		A: 40e-4,
-	}, []element.ElementIndex{1, 5}...)
+	}, []element.Index{1, 5}...)
 
 	m.AddShape(shape.Shape{
 		A: 64e-4,
-	}, []element.ElementIndex{2, 6}...)
+	}, []element.Index{2, 6}...)
 
 	m.AddShape(shape.Shape{
 		A: 60e-4,
-	}, []element.ElementIndex{3, 4, 7}...)
+	}, []element.Index{3, 4, 7}...)
 
 	// Materials
 	m.AddMaterial(material.Linear{
 		E:  2e11,
 		Ro: 78500,
-	}, []element.ElementIndex{1, 2, 3, 4, 5, 6, 7}...)
+	}, []element.Index{1, 2, 3, 4, 5, 6, 7}...)
 
 	// Node force
 	m.AddNodeForce(1, force.NodeDim2{
@@ -303,7 +316,7 @@ func TestTrussFrame(t *testing.T) {
 	{
 		// local force for beam 2
 		FxBegin := 34166.633
-		b, _, err := m.GetLocalForce(1, element.ElementIndex(2))
+		b, _, err := m.GetLocalForce(1, element.Index(2))
 		if err != nil {
 			t.Errorf("Cannot found local force in beam 2. %v", err)
 		}
@@ -314,7 +327,7 @@ func TestTrussFrame(t *testing.T) {
 	{
 		// local force for beam 7
 		FxBegin := -61594.72633
-		b, _, err := m.GetLocalForce(1, element.ElementIndex(7))
+		b, _, err := m.GetLocalForce(1, element.Index(7))
 		if err != nil {
 			t.Errorf("Cannot found local force in beam 2. %v", err)
 		}
