@@ -53,7 +53,7 @@ func RemoveIndexes(a *[]AxeNumber, indexes ...int) {
 	if len(indexes) == 0 {
 		return
 	}
-	// sorting indexes for optimization of algoritm
+	// sorting indexes for optimization of algorithm
 	utils.UniqueInt(&indexes)
 	UniqueAxeNumber(a)
 

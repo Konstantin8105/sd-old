@@ -6,7 +6,7 @@ type Dim2 struct {
 	M      Type
 }
 
-// FixedDim2 - fixed support in 2D interpratation
+// FixedDim2 - fixed support in 2D interpretation
 func FixedDim2() (s Dim2) {
 	return Dim2{Fix, Fix, Fix}
 }
