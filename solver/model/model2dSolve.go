@@ -2,7 +2,6 @@ package model
 
 import (
 	"fmt"
-	"sync"
 
 	"github.com/Konstantin8105/GoFea/input/element"
 	"github.com/Konstantin8105/GoFea/input/point"
@@ -29,38 +28,19 @@ func (m *Dim2) Solve() (err error) {
 	// create error channel
 	type results struct {
 		err       error
-		forceCase *forceCase2d
+		forceCase int
 	}
 
 	// summary result
 	var summaryResult []results
 
-	resCh := make(chan results)
-	go func() {
-		for rc := range resCh {
-			summaryResult = append(summaryResult, rc)
-		}
-	}()
-
-	// create workgroup
-	var wg sync.WaitGroup
-
 	for i := range m.forceCases {
-		wg.Add(1)
-		go func(f *forceCase2d) {
-			// work is done
-			defer wg.Done()
-
-			err := m.solveCase(f)
-			resCh <- results{
-				err:       err,
-				forceCase: f,
-			}
-		}(&(m.forceCases[i]))
+		err := m.solveCase(&(m.forceCases[i]))
+		summaryResult = append(summaryResult, results{
+			err:       err,
+			forceCase: m.forceCases[i].indexCase,
+		})
 	}
-	wg.Wait()
-
-	close(resCh)
 
 	var haveError bool
 	for _, s := range summaryResult {

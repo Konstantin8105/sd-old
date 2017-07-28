@@ -54,9 +54,5 @@ func (m *Dim2) checkInputData() error {
 		return fmt.Errorf("Finite element %s have length equal zero", list)
 	}
 
-	// checking beam with same number
-
-	//
-
 	return nil
 }
