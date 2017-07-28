@@ -8,7 +8,7 @@ import (
 	"github.com/Konstantin8105/GoLinAlg/matrix"
 )
 
-// TrussDim2 - truss on 2D interpratation
+// TrussDim2 - truss on 2D interpretation
 type TrussDim2 struct {
 	Material material.Linear
 	Shape    shape.Shape
@@ -17,9 +17,9 @@ type TrussDim2 struct {
 
 // GetCoordinateTransformation - matrix of transform between local and global system coordinate
 func (f *TrussDim2) GetCoordinateTransformation(tr *matrix.T64) {
-	lenght := point.LenghtDim2(f.Points)
-	lambdaXX := (f.Points[1].X - f.Points[0].X) / lenght
-	lambdaXY := (f.Points[1].Y - f.Points[0].Y) / lenght
+	length := point.LengthDim2(f.Points)
+	lambdaXX := (f.Points[1].X - f.Points[0].X) / length
+	lambdaXY := (f.Points[1].Y - f.Points[0].Y) / length
 
 	tr.SetNewSize(6, 6)
 	tr.Set(0, 0, lambdaXX)
@@ -38,8 +38,8 @@ func (f *TrussDim2) GetCoordinateTransformation(tr *matrix.T64) {
 
 // GetStiffinerK - matrix of stiffiner
 func (f *TrussDim2) GetStiffinerK(kr *matrix.T64) {
-	lenght := point.LenghtDim2(f.Points)
-	EFL := f.Material.E * f.Shape.A / lenght
+	length := point.LengthDim2(f.Points)
+	EFL := f.Material.E * f.Shape.A / length
 
 	kr.SetNewSize(6, 6)
 	kr.Set(0, 0, EFL)
@@ -52,9 +52,9 @@ func (f *TrussDim2) GetStiffinerK(kr *matrix.T64) {
 // GetMassMr - matrix mass of finite element
 func (f *TrussDim2) GetMassMr(mr *matrix.T64) {
 	mu := f.Shape.A * f.Material.Ro
-	lenght := point.LenghtDim2(f.Points)
-	mul3 := lenght / 3.0 * mu
-	mul6 := lenght / 6.0 * mu
+	length := point.LenghtDim2(f.Points)
+	mul3 := length / 3.0 * mu
+	mul6 := length / 6.0 * mu
 
 	mr.SetNewSize(6, 6)
 	mr.Set(0, 0, mul3)
@@ -67,10 +67,10 @@ func (f *TrussDim2) GetMassMr(mr *matrix.T64) {
 /*
 // GetPotentialGr - matrix potential loads for linear buckling
 func (f *TrussDim2) GetPotentialGr(gr *matrix.T64, localAxialForce float64) {
-	lenght := point.LenghtDim2(f.Points)
+	length := point.LenghtDim2(f.Points)
 
-	NL := localAxialForce / lenght
-	// TODO check somewhere lenght cannot by zero
+	NL := localAxialForce / length
+	// TODO check somewhere length cannot by zero
 
 	gr.SetNewSize(6, 6)
 	gr.Set(1, 1, NL)

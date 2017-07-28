@@ -26,7 +26,7 @@ func TestRemove(t *testing.T) {
 		t.Run(fmt.Sprintf("Remove-%v", index), func(t *testing.T) {
 			result := utils.Remove(test.a, test.b)
 			if len(result) != len(test.expected) {
-				t.Errorf("Wrong lenght of array.\nResult = %#v\nExpected = %#v", result, test.expected)
+				t.Errorf("Wrong length of array.\nResult = %#v\nExpected = %#v", result, test.expected)
 			}
 			for i := range result {
 				if result[i] != test.expected[i] {

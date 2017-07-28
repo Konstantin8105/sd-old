@@ -203,7 +203,7 @@ func TestErrorBeamWithLoad(t *testing.T) {
 	}
 }
 
-func TestErrorZeroLenght(t *testing.T) {
+func TestErrorZeroLength(t *testing.T) {
 	var m model.Dim2
 
 	m.AddPoint(point.Dim2{
@@ -287,6 +287,6 @@ func TestErrorZeroLenght(t *testing.T) {
 
 	err := m.Solve()
 	if err == nil {
-		t.Errorf("Haven`t checking on zero lenght of finite element")
+		t.Errorf("Haven`t checking on zero length of finite element")
 	}
 }

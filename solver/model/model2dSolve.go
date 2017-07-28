@@ -73,7 +73,7 @@ func (m *Dim2) Solve() (err error) {
 		return nil
 	}
 
-	// TODO: more beatiful
+	// TODO: more beautiful
 	return fmt.Errorf("%#v", summaryResult)
 }
 
@@ -88,7 +88,7 @@ func (m *Dim2) getBeamFiniteElement(inx element.Index) (fe finiteElement.FiniteE
 	}
 	coord, err := m.getCoordinate(inx)
 	if err != nil {
-		panic(fmt.Errorf("Cannot calculate lenght for beam #%v. Error = %v", inx, err))
+		panic(fmt.Errorf("Cannot calculate length for beam #%v. Error = %v", inx, err))
 	}
 	if m.isTruss(inx) {
 		if len(coord) != 2 {
