@@ -38,7 +38,7 @@ func (m *Dim2) checkInputData() error {
 				if i <= j {
 					continue
 				}
-				if utils.LenghtDim2(coord[i], coord[j]) <= 0.0 {
+				if utils.LengthDim2(coord[i], coord[j]) <= 0.0 {
 					zeroElements = append(zeroElements, e.GetIndex())
 					goto next
 				}
