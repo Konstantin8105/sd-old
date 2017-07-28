@@ -8,7 +8,7 @@ import (
 	"github.com/Konstantin8105/GoFea/utils"
 )
 
-func TestLenght2DZero(t *testing.T) {
+func TestLength2DZero(t *testing.T) {
 	p0 := point.Dim2{
 		X: 0.0,
 		Y: 0.0,
@@ -17,12 +17,12 @@ func TestLenght2DZero(t *testing.T) {
 		X: 0.0,
 		Y: 0.0,
 	}
-	if utils.LenghtDim2(p0, p1) > 0.0 {
-		t.Errorf("Wrong zero lenght test")
+	if utils.LengthDim2(p0, p1) > 0.0 {
+		t.Errorf("Wrong zero length test")
 	}
 }
 
-func TestLenght2DOne1(t *testing.T) {
+func TestLength2DOne1(t *testing.T) {
 	p0 := point.Dim2{
 		X: 0.0,
 		Y: 0.0,
@@ -31,12 +31,12 @@ func TestLenght2DOne1(t *testing.T) {
 		X: 1.0,
 		Y: 0.0,
 	}
-	if utils.LenghtDim2(p0, p1) != 1.0 {
-		t.Errorf("Wrong test with lenght 1")
+	if utils.LengthDim2(p0, p1) != 1.0 {
+		t.Errorf("Wrong test with length 1")
 	}
 }
 
-func TestLenght2DOne2(t *testing.T) {
+func TestLength2DOne2(t *testing.T) {
 	p0 := point.Dim2{
 		X: 0.0,
 		Y: 1.0,
@@ -45,12 +45,12 @@ func TestLenght2DOne2(t *testing.T) {
 		X: 0.0,
 		Y: 0.0,
 	}
-	if utils.LenghtDim2(p0, p1) != 1.0 {
-		t.Errorf("Wrong test with lenght 1")
+	if utils.LengthDim2(p0, p1) != 1.0 {
+		t.Errorf("Wrong test with length 1")
 	}
 }
 
-func TestLenght2DOne3(t *testing.T) {
+func TestLength2DOne3(t *testing.T) {
 	p0 := point.Dim2{
 		X: 0.0,
 		Y: 0.0,
@@ -59,7 +59,7 @@ func TestLenght2DOne3(t *testing.T) {
 		X: 1.0,
 		Y: 1.0,
 	}
-	if math.Abs(utils.LenghtDim2(p0, p1)-math.Sqrt(2.0)) > 1e-7 {
-		t.Errorf("Wrong test with lenght 1")
+	if math.Abs(utils.LengthDim2(p0, p1)-math.Sqrt(2.0)) > 1e-7 {
+		t.Errorf("Wrong test with length 1")
 	}
 }

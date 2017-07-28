@@ -25,7 +25,7 @@ func (m *Dim2) checkInputData() error {
 		return fmt.Errorf(errorText, "Please add load case in model")
 	}
 
-	// checking lenght of finite element beam
+	// checking length of finite element beam
 	// for avoid divide by zero
 	var zeroElements []element.Index
 	for _, e := range m.elements {
@@ -38,7 +38,7 @@ func (m *Dim2) checkInputData() error {
 				if i <= j {
 					continue
 				}
-				if utils.LenghtDim2(coord[i], coord[j]) <= 0.0 {
+				if utils.LengthDim2(coord[i], coord[j]) <= 0.0 {
 					zeroElements = append(zeroElements, e.GetIndex())
 					goto next
 				}
@@ -51,12 +51,8 @@ func (m *Dim2) checkInputData() error {
 		for i := range zeroElements {
 			list += fmt.Sprintf("%v,", zeroElements[i])
 		}
-		return fmt.Errorf("Finite element %s have lenght equal zero", list)
+		return fmt.Errorf("Finite element %s have length equal zero", list)
 	}
-
-	// checking beam with same number
-
-	//
 
 	return nil
 }

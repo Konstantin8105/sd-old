@@ -97,7 +97,7 @@ package model
 		// TODO: check
 		// Remove zero rows and columns
 		var removePosition []int
-		// TODO: len --> to matrix lenght
+		// TODO: len --> to matrix length
 		// TODO: at the first check diagonal element
 		for i := 0; i < HoPotential.GetRowSize(); i++ {
 			found := false

@@ -9,7 +9,7 @@ type Dim2 struct {
 	Index Index
 }
 
-// LenghtDim2 - distance between 2 points in 2d
-func LenghtDim2(points [2]Dim2) float64 {
+// LengthDim2 - distance between 2 points in 2d
+func LengthDim2(points [2]Dim2) float64 {
 	return math.Sqrt(math.Pow(points[0].X-points[1].X, 2.0) + math.Pow(points[0].Y-points[1].Y, 2.0))
 }

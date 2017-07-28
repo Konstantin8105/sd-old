@@ -70,7 +70,7 @@ func GetGlobalPotential(f FiniteElementer, degree *dof.DoF, info Information) (l
 // RemoveZeros - remove columns, rows of matrix and columns of dof
 func RemoveZeros(matrix *matrix.T64, axes *[]dof.AxeNumber) {
 	var removePosition []int
-	// TODO: len --> to matrix lenght
+	// TODO: len --> to matrix length
 	// TODO: at the first check diagonal element
 	for i := 0; i < len(*axes); i++ {
 		found := false
