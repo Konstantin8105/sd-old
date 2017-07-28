@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+
 	"github.com/Konstantin8105/GoFea/input/element"
 	"github.com/Konstantin8105/GoFea/output/displacement"
 	"github.com/Konstantin8105/GoFea/output/forceLocal"
@@ -76,6 +78,22 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 				// modify load vector on support
 				loads.Set(g, 0, 0.0)
 			}
+		}
+	}
+
+	{
+		// If all elements of loads is zero,
+		// then somethink wrong
+		var haveNonZeroElements bool
+		eps := 1e-8
+		for i := 0; i < loads.GetRowSize(); i++ {
+			if loads.Get(i, 0) > eps || loads.Get(i, 0) < -eps {
+				haveNonZeroElements = true
+				break
+			}
+		}
+		if !haveNonZeroElements {
+			return fmt.Errorf("Vector of loads have only zero elements")
 		}
 	}
 
