@@ -53,21 +53,6 @@ func TestTruss(t *testing.T) {
 		Y:     0.0,
 	})
 
-	// m.AddElement(element.Beam{
-	// 	Index:        7,
-	// 	PointIndexes: [2]point.Index{4, 2},
-	// })
-	//
-	// m.AddElement(element.Beam{
-	// 	Index:        8,
-	// 	PointIndexes: [2]point.Index{4, 1},
-	// })
-	//
-	// m.AddElement(element.Beam{
-	// 	Index:        9,
-	// 	PointIndexes: [2]point.Index{4, 3},
-	// })
-
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 		element.NewBeam(8, 4, 1),
@@ -196,34 +181,6 @@ func TestTrussFrame(t *testing.T) {
 	}...)
 
 	m.AddElement([]element.Elementer{
-		// element.Beam{
-		// 	Index:        1,
-		// 	PointIndexes: [2]point.Index{1, 2},
-		// },
-		// element.Beam{
-		// 	Index:        2,
-		// 	PointIndexes: [2]point.Index{1, 3},
-		// },
-		// element.Beam{
-		// 	Index:        3,
-		// 	PointIndexes: [2]point.Index{1, 4},
-		// },
-		// element.Beam{
-		// 	Index:        4,
-		// 	PointIndexes: [2]point.Index{2, 4},
-		// },
-		// element.Beam{
-		// 	Index:        5,
-		// 	PointIndexes: [2]point.Index{3, 4},
-		// },
-		// element.Beam{
-		// 	Index:        6,
-		// 	PointIndexes: [2]point.Index{3, 5},
-		// },
-		//		element.Beam{
-		//			Index:        7,
-		//			PointIndexes: [2]point.Index{4, 5},
-		//		},
 		element.NewBeam(1, 1, 2),
 		element.NewBeam(2, 1, 3),
 		element.NewBeam(3, 1, 4),
