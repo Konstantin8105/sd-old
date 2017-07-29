@@ -1,6 +1,8 @@
 package finiteElement
 
 import (
+	"fmt"
+
 	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
 )
@@ -69,24 +71,30 @@ func GetGlobalPotential(f FiniteElementer, degree *dof.DoF, info Information) (l
 
 // RemoveZeros - remove columns, rows of matrix and columns of dof
 func RemoveZeros(matrix *matrix.T64, axes *[]dof.AxeNumber) {
+	if matrix.GetRowSize() != len(*axes) || matrix.GetColumnSize() != len(*axes) {
+		panic(fmt.Errorf("Not correct input data.\nMatrix = %v\nAxes = %v", *matrix, *axes))
+	}
+	size := len(*axes)
 	var removePosition []int
-	// TODO: len --> to matrix length
-	// TODO: at the first check diagonal element
-	for i := 0; i < len(*axes); i++ {
+	for i := 0; i < size; i++ {
 		found := false
-		for j := 0; j < len(*axes); j++ {
-			if (*matrix).Get(i, j) != 0.0 {
-				found = true
-				break
+		if (*matrix).Get(i, i) == 0.0 {
+			for j := 0; j < size; j++ {
+				if (*matrix).Get(i, j) != 0.0 {
+					found = true
+					goto end
+				}
 			}
+		} else {
+			found = true
 		}
+	end:
 		if found {
 			continue
 		}
 		removePosition = append(removePosition, i)
 	}
 
-	// TODO: can parallel
 	// remove row and column from global stiffiner
 	(*matrix).RemoveRowAndColumn(removePosition...)
 	// remove column from axes

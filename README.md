@@ -77,16 +77,16 @@ Tasks:
 	- [x] support
 		- [x] truss finite element
 			- [x] node load
-				- [ ] Linear deformation
+				- [x] Linear deformation
 					- [x] Create load vector
 					- [x] Create global stiffiner matrix
 					- [x] Solve system of linear equation
 					- [x] Calculate global deformation
 					- [x] Calculate internal deformation
 					- [x] Calculate internal force
-					- [ ] Reactions in support
-				- [ ] Nolinear deformation
+					- [x] Reactions in support
 				- [ ] Natural frequency
+				- [ ] Nolinear deformation
 				- [ ] Linear buckling
 				- [ ] Nolinear buckling
 				- [ ] Riks method for buckling
