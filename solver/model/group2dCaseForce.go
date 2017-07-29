@@ -1,6 +1,10 @@
 package model
 
 import (
+	"fmt"
+
+	"github.com/Konstantin8105/GoFea/input/element"
+	"github.com/Konstantin8105/GoFea/input/point"
 	"github.com/Konstantin8105/GoFea/output/displacement"
 	"github.com/Konstantin8105/GoFea/output/forceLocal"
 	"github.com/Konstantin8105/GoFea/output/reaction"
@@ -41,6 +45,36 @@ const (
 	naturalFrequency
 	bucklingFactors
 )
+
+// GetGlobalDisplacement - return global displacement
+func (f *forceCase2d) GetGlobalDisplacement(pointIndex point.Index) (d displacement.Dim2, err error) {
+	for _, g := range f.globalDisplacements {
+		if g.Index == pointIndex {
+			return g.Dim2, nil
+		}
+	}
+	return d, fmt.Errorf("Cannot found point")
+}
+
+// GetLocalForce - return local force of beam
+func (f *forceCase2d) GetLocalForce(beamIndex element.Index) (begin, end forceLocal.Dim2, err error) {
+	for _, l := range f.localForces {
+		if l.Index == beamIndex {
+			return l.Begin, l.End, nil
+		}
+	}
+	return begin, end, fmt.Errorf("Cannot found beam")
+}
+
+// GetReaction - return reaction of support
+func (f *forceCase2d) GetReaction(pointIndex point.Index) (r reaction.Dim2, err error) {
+	for _, g := range f.reactions {
+		if g.Index == pointIndex {
+			return g, nil
+		}
+	}
+	return r, fmt.Errorf("Cannot found point")
+}
 
 /*
 func zeroCopy(f forceCase2d) (result forceCase2d) {

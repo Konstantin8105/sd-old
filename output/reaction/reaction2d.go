@@ -7,5 +7,5 @@ import "github.com/Konstantin8105/GoFea/input/point"
 type Dim2 struct {
 	Fx, Fy float64
 	M      float64
-	Index  point.Dim2
+	Index  point.Index
 }

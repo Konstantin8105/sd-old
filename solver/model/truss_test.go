@@ -292,5 +292,16 @@ func TestTrussFrame(t *testing.T) {
 			t.Errorf("axial force for beam 7 is %v. Expected = %v", FxBegin, b.Fx)
 		}
 	}
+	{
+		// reaction by X in point 1
+		Rx := 28000.0
+		r, err := m.GetReaction(1, 1)
+		if err != nil {
+			t.Errorf("Cannot found reaction in point 1. Error = %v", err)
+		}
+		if math.Abs((r.Fx-Rx)/Rx) > 0.01 {
+			t.Errorf("reaction for point 1 by axe X is %v. Expected = %v", r.Fx, Rx)
+		}
+	}
 
 }

@@ -6,6 +6,6 @@ import (
 )
 
 type materialLinearGroup struct {
-	material    material.Linear
-	beamIndexes []element.Index
+	material     material.Linear
+	elementIndex element.Index
 }

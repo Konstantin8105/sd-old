@@ -6,6 +6,6 @@ import (
 )
 
 type supportGroup2d struct {
-	support      support.Dim2
-	pointIndexes []point.Index
+	support    support.Dim2
+	pointIndex point.Index
 }

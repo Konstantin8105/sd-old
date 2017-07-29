@@ -6,74 +6,114 @@
 
 FEA for steel structural engineer on golang
 
-*Step 0.1 - Calculate truss model in 2D*
+Minimal build configuration. Best way is Go native code.
 
-- [x] 2d point
-- [x] 2d support
-- [x] 2d truss finite element
-- [x] 2d node load
-- [x] Create global stiffiner matrix
-- [x] Create load vector
-- [x] Solve system of linear equation
-- [x] Calculate global deformation
-- [x] Calculate internal deformation
-- [x] Calculate internal force
-- [x] Refactoring
-- [x] Testing
-- [x] Benchmark tests
-- [x] Add git tag
+### Procedures of workflow
+1. Create new git branch
+2. **WORKING**
+3. Refactoring
+4. Testing, min 90 %
+5. Create pull request
+6. Release
+
+### Procedure of new calcutation type(buckling,...)
+1. Add property of calcuation type in model
+2. Add calculation type algorithm
+3. Testing for calculation type
+4. Create output of new calculation type
+Tasks:
+- Linear deformation
+	- Create load vector
+	- Create global stiffiner matrix
+	- Solve system of linear equation
+	- Calculate global deformation
+	- Calculate internal deformation
+	- Calculate internal force
+	- Reactions in support
+- Nolinear deformation
+- Natural frequency
+- Linear buckling
+- Nolinear buckling
+- Riks method for buckling
+
+### Procedure of new load type(gravity loads)
+1. Create load type in model
+2. Add calculation load type
+3. Testing of new load type
+4. Create output of new calculation type
+Tasks:
+- node load
+- gravity load (selfweight)
+- displacement load
+- uniform load. local axe
+- uniform load. global axe
+- trapezoidally uniform load
+- temperature load
+- redirection of load, cheching recursive
+
+### Procedure of new finite element
+1. Create finite element
+2. Testing finite element
+3. Create output of finite element
+Tasks:
+- 2d truss finite element
+- 2d beam finite element
+- 2d tension finite element
+- 2d compress finite element
+- 2d gap finite element
+- Pins for 2d beam finite element
+
+### Procedure of new dimension
+- 2d
+	- 2d point
+	- 2d support
+- 2d symmetric
+- 3d
+
+---------------------
+
+- [ ] 2d
+	- [x] point
+	- [x] support
+		- [x] truss finite element
+			- [x] node load
+				- [ ] Linear deformation
+					- [x] Create load vector
+					- [x] Create global stiffiner matrix
+					- [x] Solve system of linear equation
+					- [x] Calculate global deformation
+					- [x] Calculate internal deformation
+					- [x] Calculate internal force
+					- [ ] Reactions in support
+				- [ ] Nolinear deformation
+				- [ ] Natural frequency
+				- [ ] Linear buckling
+				- [ ] Nolinear buckling
+				- [ ] Riks method for buckling
+			- [ ] gravity load (selfweight)
+			- [ ] displacement load
+			- [ ] uniform load. local axe
+			- [ ] uniform load. global axe
+			- [ ] trapezoidally uniform load
+			- [ ] temperature load
+			- [ ] redirection of load, cheching recursive
+		- [ ] beam finite element
+		- [ ] tension finite element
+		- [ ] compress finite element
+		- [ ] gap finite element
+		- [ ] Pins for beam finite element
+- [ ] 2d symmetric
+- [ ] 3d
+- [ ] Create IO input  file format
+- [ ] Create IO output file format
+- [ ] HTML+CSS gui
 
 ---------------------
 
 **TODO`s**:
 
-
-*Step 0.2 - Calculate truss model in 2D*
-
-- [x] New git branch
-- [ ] Add property for nolinear deformation
-- [ ] Nolinear deformation
-- [ ] Reactions in support
-- [ ] Add natural frequency property
-- [ ] Calculate natural frequency
-- [ ] Add property for buckling analyze of case
-- [ ] Buckling
-- [ ] Refactoring
-- [ ] Testing
-- [ ] Benchmark tests
-- [ ] Merge pull request(PR)
-- [ ] Add git tag
-
-*Step*
-
-- [ ] 2d beam finite element
-- [ ] 2d gravity load
-- [ ] 2d displacement load
-- [ ] Selfweight load
-- [ ] Calculate global deformation
-- [ ] Calculate internal deformation
-- [ ] Calculate internal force
-- [ ] Calculate natural frequency
-- [ ] Buckling
-- [ ] Many loads for natural frequency calculation
-- [ ] Redirection loads and cheching recursive loading
-- [ ] New git branch
-- [ ] Modal mass of frame
-- [ ] Combine of truss and beams
-- [ ] Pins for 2d beam finite element
-- [ ] 2d uniform load
-- [ ] 2d trapezoidally uniform load
-- [ ] Calculate global deformation
-- [ ] Calculate internal deformation
-- [ ] Calculate internal force
-- [ ] Calculate natural frequency
-- [ ] Create IO input  file format
-- [ ] Create IO output file format
-- [ ] CALCULATION GRAPH
-- [ ] Minimal build configuration. Best way is Go native code.
+- [ ] Calculation graph
 - [ ] 3D, tables, graphs
-- [ ] HTML+CSS gui
-- [ ] Design of GUI for 2D elements
 
 threejs
 https://threejs.org/
@@ -83,37 +123,26 @@ https://github.com/mrdoob/three.js/tree/master/editor
 maybe - polymer from google
 
 - [ ] MERGE MODELS
-- [ ] STACK DESIGN, see https://github.com/Konstantin8105/Stack.FEA
+
+- [ ] Stack design, see https://github.com/Konstantin8105/Stack.FEA
+- [ ] Connection design
+
 - [ ] add checking - point cannot have same number
 - [ ] Create RPC client-server for fast calculation
 - [ ] working with geometry inside
 - [ ] triangulation of regions
 - [ ] Intersection between beams
 - [ ] Separate finite elements on small elements
-- [ ] Riks method for buckling
 - [ ] Parallel linear algebra
-- [ ] 3d node
-- [ ] 3d truss finite element
-- [ ] 3d node load
 - [ ] rotate of shape
-- [ ] axe-symmetrical finite elements + buckling. Typical case - compress load for shell
 - [ ] Database of shapes
 - [ ] Triangulation for user shape
-- [ ] Gap finite element
-- [ ] Temperature load
-- [ ] Connection design
-- [ ] Tension finite element
-- [ ] Compress finite element
 - [ ] Sparse matrix solver
-- [ ] Time dependence
 - [ ] Nonlinear property of material. Temperature, corrosion.
-- [ ] Load force in global system coordinate
 - [ ] Load force in local system coordinate - important for non-linear buckling. [Ko] * Zo + [Go] * Zo = Po and Po is dependence of local point rotation.
-- [ ] Tests for all parts
 - [ ] Test buckling on tension !!! Important
 - [ ] Code review
 - [ ] Code coverage
 - [ ] Add examples of calculation
 - [ ] Contribution rules
 - [ ] Automatic tool for truss frames
-- [ ] Where is money?

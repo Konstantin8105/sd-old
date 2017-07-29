@@ -6,6 +6,6 @@ import (
 )
 
 type nodeForce2d struct {
-	nodeForce    force.NodeDim2
-	pointIndexes []point.Index
+	nodeForce  force.NodeDim2
+	pointIndex point.Index
 }

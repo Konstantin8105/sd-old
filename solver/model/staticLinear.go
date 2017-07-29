@@ -6,6 +6,7 @@ import (
 	"github.com/Konstantin8105/GoFea/input/element"
 	"github.com/Konstantin8105/GoFea/output/displacement"
 	"github.com/Konstantin8105/GoFea/output/forceLocal"
+	"github.com/Konstantin8105/GoFea/output/reaction"
 	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoFea/solver/finiteElement"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
@@ -19,26 +20,24 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 
 	// Create load vector
 	loads := matrix.NewMatrix64bySize(len(m.degreeInGlobalMatrix), 1)
-	for _, node := range forceCase.nodeForces {
-		for _, inx := range node.pointIndexes {
-			d := m.degreeForPoint.GetDoF(inx)
-			if node.nodeForce.Fx != 0.0 {
-				h, err := m.indexsInGlobalMatrix.GetByAxe(d[0])
-				if err == nil {
-					loads.Set(h, 0, node.nodeForce.Fx)
-				}
+	for _, p := range forceCase.nodeForces {
+		d := m.degreeForPoint.GetDoF(p.pointIndex)
+		if p.nodeForce.Fx != 0.0 {
+			h, err := m.indexsInGlobalMatrix.GetByAxe(d[0])
+			if err == nil {
+				loads.Set(h, 0, p.nodeForce.Fx)
 			}
-			if node.nodeForce.Fy != 0.0 {
-				h, err := m.indexsInGlobalMatrix.GetByAxe(d[1])
-				if err == nil {
-					loads.Set(h, 0, node.nodeForce.Fy)
-				}
+		}
+		if p.nodeForce.Fy != 0.0 {
+			h, err := m.indexsInGlobalMatrix.GetByAxe(d[1])
+			if err == nil {
+				loads.Set(h, 0, p.nodeForce.Fy)
 			}
-			if node.nodeForce.M != 0.0 {
-				h, err := m.indexsInGlobalMatrix.GetByAxe(d[2])
-				if err == nil {
-					loads.Set(h, 0, node.nodeForce.M)
-				}
+		}
+		if p.nodeForce.M != 0.0 {
+			h, err := m.indexsInGlobalMatrix.GetByAxe(d[2])
+			if err == nil {
+				loads.Set(h, 0, p.nodeForce.M)
 			}
 		}
 	}
@@ -46,38 +45,36 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 	// Create array degree for support
 	// and modify the global stiffiner matrix
 	// and load vector
-	for _, sup := range m.supports {
-		for _, inx := range sup.pointIndexes {
-			d := m.degreeForPoint.GetDoF(inx)
-			var result []dof.AxeNumber
-			if sup.support.Dx {
-				result = append(result, d[0])
+	for _, s := range m.supports {
+		d := m.degreeForPoint.GetDoF(s.pointIndex)
+		var result []dof.AxeNumber
+		if s.support.Dx {
+			result = append(result, d[0])
+		}
+		if s.support.Dy {
+			result = append(result, d[1])
+		}
+		if s.support.M {
+			result = append(result, d[2])
+		}
+		// modify stiffiner matrix for correct
+		// adding support
+		for i := 0; i < len(result); i++ {
+			g, err := m.indexsInGlobalMatrix.GetByAxe(result[i])
+			if err != nil {
+				continue
 			}
-			if sup.support.Dy {
-				result = append(result, d[1])
-			}
-			if sup.support.M {
-				result = append(result, d[2])
-			}
-			// modify stiffiner matrix for correct
-			// adding support
-			for i := 0; i < len(result); i++ {
-				g, err := m.indexsInGlobalMatrix.GetByAxe(result[i])
+			for j := 0; j < len(m.degreeInGlobalMatrix); j++ {
+				h, err := m.indexsInGlobalMatrix.GetByAxe(m.degreeInGlobalMatrix[j])
 				if err != nil {
 					continue
 				}
-				for j := 0; j < len(m.degreeInGlobalMatrix); j++ {
-					h, err := m.indexsInGlobalMatrix.GetByAxe(m.degreeInGlobalMatrix[j])
-					if err != nil {
-						continue
-					}
-					stiffinerKGlobal.Set(g, h, 0.0)
-					stiffinerKGlobal.Set(h, g, 0.0)
-				}
-				stiffinerKGlobal.Set(g, g, 1.0)
-				// modify load vector on support
-				loads.Set(g, 0, 0.0)
+				stiffinerKGlobal.Set(g, h, 0.0)
+				stiffinerKGlobal.Set(h, g, 0.0)
 			}
+			stiffinerKGlobal.Set(g, g, 1.0)
+			// modify load vector on support
+			loads.Set(g, 0, 0.0)
 		}
 	}
 
@@ -199,6 +196,61 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 		default:
 			panic("")
 		}
+	}
+
+	// reactions
+	for _, r := range m.supports {
+		var reac reaction.Dim2
+		reac.Index = r.pointIndex
+		for _, e := range m.elements {
+			switch e.(type) {
+			case element.Beam:
+				beam := e.(element.Beam)
+				if beam.GetPointIndex()[0] != r.pointIndex && beam.GetPointIndex()[1] != r.pointIndex {
+					continue
+				}
+				// KG get matrix stiffiner for beam in global system
+				fe := m.getBeamFiniteElement(beam.GetIndex())
+				k, _ := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.FullInformation)
+				// D get vector displacement in global system
+				d := matrix.NewMatrix64bySize(6, 1)
+				{
+					g, err := forceCase.GetGlobalDisplacement(beam.GetPointIndex()[0])
+					if err != nil {
+						return err
+					}
+					d.Set(0, 0, g.Dx)
+					d.Set(1, 0, g.Dy)
+					d.Set(2, 0, g.Dm)
+				}
+				{
+					g, err := forceCase.GetGlobalDisplacement(beam.GetPointIndex()[1])
+					if err != nil {
+						return err
+					}
+					d.Set(3, 0, g.Dx)
+					d.Set(4, 0, g.Dy)
+					d.Set(5, 0, g.Dm)
+				}
+				// L = KG*D, L - loads in global system
+				L := k.Times(&d)
+				if beam.GetPointIndex()[0] == r.pointIndex {
+					// sum in reaction
+					reac.Fx += L.Get(0, 0)
+					reac.Fy += L.Get(1, 0)
+					reac.M += L.Get(2, 0)
+				}
+				if beam.GetPointIndex()[1] == r.pointIndex {
+					// sum in reaction
+					reac.Fx += L.Get(3, 0)
+					reac.Fy += L.Get(4, 0)
+					reac.M += L.Get(5, 0)
+				}
+			default:
+				panic("please add finite element in reactions")
+			}
+		}
+		forceCase.reactions = append(forceCase.reactions, reac)
 	}
 
 	return nil

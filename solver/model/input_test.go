@@ -456,3 +456,104 @@ func TestErrorCannotCalculate(t *testing.T) {
 		t.Errorf("Haven`t checking for wrong calculation (try bend the truss element).\nmodel=%#v", m)
 	}
 }
+
+func TestErrorGlobalDisplacementForceReaction(t *testing.T) {
+	var m model.Dim2
+
+	m.AddPoint(point.Dim2{
+		Index: 1,
+		X:     0.,
+		Y:     0.,
+	})
+
+	m.AddPoint(point.Dim2{
+		Index: 2,
+		X:     -0.8660254,
+		Y:     0.,
+	})
+
+	m.AddPoint(point.Dim2{
+		Index: 3,
+		X:     0.8660254,
+		Y:     0.,
+	})
+
+	m.AddPoint(point.Dim2{
+		Index: 4,
+		X:     0.,
+		Y:     -1.5,
+	})
+
+	// add empty point
+	m.AddPoint(point.Dim2{
+		Index: 40,
+		X:     10.,
+		Y:     0.0,
+	})
+
+	m.AddElement([]element.Elementer{
+		element.NewBeam(7, 4, 2),
+		element.NewBeam(8, 4, 1),
+		element.NewBeam(9, 4, 3),
+	}...)
+
+	// Truss
+	m.AddTrussProperty(7, 8, 9)
+
+	// Supports
+	m.AddSupport(support.FixedDim2(), 1)
+	m.AddSupport(support.FixedDim2(), 2)
+	m.AddSupport(support.FixedDim2(), 3)
+
+	// Shapes
+	m.AddShape(shape.Shape{
+		A: 300e-6,
+	}, []element.Index{7, 9}...)
+
+	m.AddShape(shape.Shape{
+		A: 300e-6,
+	}, []element.Index{8}...)
+
+	// Materials
+	m.AddMaterial(material.Linear{
+		E:  2e11,
+		Ro: 78500,
+	}, []element.Index{7, 8, 9}...)
+
+	// Node force
+	m.AddNodeForce(1, force.NodeDim2{
+		Fy: -80000.0,
+	}, []point.Index{4}...)
+
+	err := m.Solve()
+	if err != nil {
+		t.Errorf("Cannot solving. error = %v", err)
+	}
+	// results
+	_, err = m.GetGlobalDisplacement(1, point.Index(100))
+	if err == nil {
+		t.Errorf("Found global displacement with wrong point index")
+	}
+	_, err = m.GetGlobalDisplacement(10, point.Index(1))
+	if err == nil {
+		t.Errorf("Found global displacement with wrong force case")
+	}
+
+	_, _, err = m.GetLocalForce(1, 100)
+	if err == nil {
+		t.Errorf("Found local force with wrong beam index")
+	}
+	_, _, err = m.GetLocalForce(100, 4)
+	if err == nil {
+		t.Errorf("Found local force with wrong force case")
+	}
+
+	_, err = m.GetReaction(1, 100)
+	if err == nil {
+		t.Errorf("Found reaction with wrong point index")
+	}
+	_, err = m.GetReaction(100, 1)
+	if err == nil {
+		t.Errorf("Found global displacement with wrong force case")
+	}
+}
