@@ -2,7 +2,7 @@ package point
 
 import "math"
 
-// Dim2 - position of point in 2d (dimentions)
+// Dim2 - position of point in 2d (dimensions)
 // Base unit for coordinates - meter
 type Dim2 struct {
 	X, Y  float64

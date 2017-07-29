@@ -88,7 +88,7 @@ func (f *TrussDim2) GetDoF(degrees *dof.DoF) (axes []dof.AxeNumber) {
 	Axe[1] = degrees.GetDoF(f.Points[1].Index)
 
 	inx := 0
-	axes = make([]dof.AxeNumber, 6, 6)
+	axes = make([]dof.AxeNumber, 6)
 	for i := 0; i < 2; i++ {
 		for j := 0; j < 3; j++ {
 			axes[inx] = Axe[i][j]

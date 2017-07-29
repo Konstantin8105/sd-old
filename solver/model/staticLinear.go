@@ -50,13 +50,13 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 		for _, inx := range sup.pointIndexes {
 			d := m.degreeForPoint.GetDoF(inx)
 			var result []dof.AxeNumber
-			if sup.support.Dx == true {
+			if sup.support.Dx {
 				result = append(result, d[0])
 			}
-			if sup.support.Dy == true {
+			if sup.support.Dy {
 				result = append(result, d[1])
 			}
-			if sup.support.M == true {
+			if sup.support.M {
 				result = append(result, d[2])
 			}
 			// modify stiffiner matrix for correct

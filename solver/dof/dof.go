@@ -28,7 +28,7 @@ type DoF struct {
 
 // GetDoF - get degree of freedom for point index
 func (d *DoF) GetDoF(index point.Index) []AxeNumber {
-	axes := make([]AxeNumber, int(d.Dimension), int(d.Dimension))
+	axes := make([]AxeNumber, int(d.Dimension))
 	number := d.found(index)
 	for i := 0; i < int(d.Dimension); i++ {
 		axes[i] = AxeNumber(i + number*int(d.Dimension))
@@ -53,7 +53,7 @@ func RemoveIndexes(a *[]AxeNumber, indexes ...int) {
 	if len(indexes) == 0 {
 		return
 	}
-	// sorting indexes for optimization of algoritm
+	// sorting indexes for optimization of algorithm
 	utils.UniqueInt(&indexes)
 	UniqueAxeNumber(a)
 
@@ -78,7 +78,7 @@ func RemoveIndexes(a *[]AxeNumber, indexes ...int) {
 
 // UniqueAxeNumber - create unique axes in array
 func UniqueAxeNumber(axes *[]AxeNumber) {
-	ints := make([]int, len(*axes), len(*axes))
+	ints := make([]int, len(*axes))
 	for i := 0; i < len(*axes); i++ {
 		ints[i] = int((*axes)[i])
 	}

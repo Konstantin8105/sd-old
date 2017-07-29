@@ -42,7 +42,7 @@ func TestRemoveIndexes(t *testing.T) {
 		t.Run(fmt.Sprintf("Remove-%v", index), func(t *testing.T) {
 			dof.RemoveIndexes(&test.array, test.removed...)
 			if len(test.array) != len(test.expected) {
-				t.Errorf("Wrong lenght of array.\nResult = %#v\nExpected = %#v", test.array, test.expected)
+				t.Errorf("Wrong length of array.\nResult = %#v\nExpected = %#v", test.array, test.expected)
 			}
 			for i := range test.array {
 				if test.array[i] != test.expected[i] {
