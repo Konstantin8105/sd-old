@@ -19,26 +19,24 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 
 	// Create load vector
 	loads := matrix.NewMatrix64bySize(len(m.degreeInGlobalMatrix), 1)
-	for _, node := range forceCase.nodeForces {
-		for _, inx := range node.pointIndexes {
-			d := m.degreeForPoint.GetDoF(inx)
-			if node.nodeForce.Fx != 0.0 {
-				h, err := m.indexsInGlobalMatrix.GetByAxe(d[0])
-				if err == nil {
-					loads.Set(h, 0, node.nodeForce.Fx)
-				}
+	for _, p := range forceCase.nodeForces {
+		d := m.degreeForPoint.GetDoF(p.pointIndex)
+		if p.nodeForce.Fx != 0.0 {
+			h, err := m.indexsInGlobalMatrix.GetByAxe(d[0])
+			if err == nil {
+				loads.Set(h, 0, p.nodeForce.Fx)
 			}
-			if node.nodeForce.Fy != 0.0 {
-				h, err := m.indexsInGlobalMatrix.GetByAxe(d[1])
-				if err == nil {
-					loads.Set(h, 0, node.nodeForce.Fy)
-				}
+		}
+		if p.nodeForce.Fy != 0.0 {
+			h, err := m.indexsInGlobalMatrix.GetByAxe(d[1])
+			if err == nil {
+				loads.Set(h, 0, p.nodeForce.Fy)
 			}
-			if node.nodeForce.M != 0.0 {
-				h, err := m.indexsInGlobalMatrix.GetByAxe(d[2])
-				if err == nil {
-					loads.Set(h, 0, node.nodeForce.M)
-				}
+		}
+		if p.nodeForce.M != 0.0 {
+			h, err := m.indexsInGlobalMatrix.GetByAxe(d[2])
+			if err == nil {
+				loads.Set(h, 0, p.nodeForce.M)
 			}
 		}
 	}
@@ -46,38 +44,36 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 	// Create array degree for support
 	// and modify the global stiffiner matrix
 	// and load vector
-	for _, sup := range m.supports {
-		for _, inx := range sup.pointIndexes {
-			d := m.degreeForPoint.GetDoF(inx)
-			var result []dof.AxeNumber
-			if sup.support.Dx {
-				result = append(result, d[0])
+	for _, s := range m.supports {
+		d := m.degreeForPoint.GetDoF(s.pointIndex)
+		var result []dof.AxeNumber
+		if s.support.Dx {
+			result = append(result, d[0])
+		}
+		if s.support.Dy {
+			result = append(result, d[1])
+		}
+		if s.support.M {
+			result = append(result, d[2])
+		}
+		// modify stiffiner matrix for correct
+		// adding support
+		for i := 0; i < len(result); i++ {
+			g, err := m.indexsInGlobalMatrix.GetByAxe(result[i])
+			if err != nil {
+				continue
 			}
-			if sup.support.Dy {
-				result = append(result, d[1])
-			}
-			if sup.support.M {
-				result = append(result, d[2])
-			}
-			// modify stiffiner matrix for correct
-			// adding support
-			for i := 0; i < len(result); i++ {
-				g, err := m.indexsInGlobalMatrix.GetByAxe(result[i])
+			for j := 0; j < len(m.degreeInGlobalMatrix); j++ {
+				h, err := m.indexsInGlobalMatrix.GetByAxe(m.degreeInGlobalMatrix[j])
 				if err != nil {
 					continue
 				}
-				for j := 0; j < len(m.degreeInGlobalMatrix); j++ {
-					h, err := m.indexsInGlobalMatrix.GetByAxe(m.degreeInGlobalMatrix[j])
-					if err != nil {
-						continue
-					}
-					stiffinerKGlobal.Set(g, h, 0.0)
-					stiffinerKGlobal.Set(h, g, 0.0)
-				}
-				stiffinerKGlobal.Set(g, g, 1.0)
-				// modify load vector on support
-				loads.Set(g, 0, 0.0)
+				stiffinerKGlobal.Set(g, h, 0.0)
+				stiffinerKGlobal.Set(h, g, 0.0)
 			}
+			stiffinerKGlobal.Set(g, g, 1.0)
+			// modify load vector on support
+			loads.Set(g, 0, 0.0)
 		}
 	}
 
@@ -200,6 +196,8 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 			panic("")
 		}
 	}
+
+	// reactions
 
 	return nil
 }

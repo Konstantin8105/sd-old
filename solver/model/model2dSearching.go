@@ -11,11 +11,9 @@ import (
 
 // getShape - searching shape for beam
 func (m *Dim2) getShape(index element.Index) (s shape.Shape, err error) {
-	for _, shapes := range m.shapes {
-		for _, inx := range shapes.beamIndexes {
-			if inx == index {
-				return shapes.shape, nil
-			}
+	for _, sh := range m.shapes {
+		if sh.elementIndexes == index {
+			return sh.shape, nil
 		}
 	}
 	return s, fmt.Errorf("Cannot found shape for beam #%v", index)
@@ -23,13 +21,9 @@ func (m *Dim2) getShape(index element.Index) (s shape.Shape, err error) {
 
 // getMaterial - searching material for beam
 func (m *Dim2) getMaterial(index element.Index) (mat material.Linear, err error) {
-	for _, material := range m.materials {
-		for _, inx := range material.beamIndexes {
-			if index == inx {
-				mat = material.material
-				err = nil
-				return
-			}
+	for _, m := range m.materials {
+		if m.elementIndex == index {
+			return m.material, nil
 		}
 	}
 	return mat, fmt.Errorf("Cannot found material for beam #%v", index)
@@ -80,11 +74,9 @@ end:
 
 // isTruss - return true if beam is truss
 func (m *Dim2) isTruss(index element.Index) bool {
-	for _, group := range m.truss {
-		for _, inx := range group.beamIndexes {
-			if inx == index {
-				return true
-			}
+	for _, t := range m.truss {
+		if t.elementIndex == index {
+			return true
 		}
 	}
 	return false

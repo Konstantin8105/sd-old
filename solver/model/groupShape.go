@@ -6,6 +6,6 @@ import (
 )
 
 type shapeGroup struct {
-	shape       shape.Shape
-	beamIndexes []element.Index
+	shape          shape.Shape
+	elementIndexes element.Index
 }

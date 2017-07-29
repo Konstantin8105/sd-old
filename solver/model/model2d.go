@@ -11,6 +11,7 @@ import (
 	"github.com/Konstantin8105/GoFea/input/support"
 	"github.com/Konstantin8105/GoFea/output/displacement"
 	"github.com/Konstantin8105/GoFea/output/forceLocal"
+	"github.com/Konstantin8105/GoFea/output/reaction"
 	"github.com/Konstantin8105/GoFea/solver/dof"
 )
 
@@ -46,55 +47,66 @@ func (m *Dim2) AddElement(elements ...element.Elementer) {
 
 // AddTrussProperty - add truss property for beam
 func (m *Dim2) AddTrussProperty(beamIndexes ...element.Index) {
-	m.truss = append(m.truss, trussGroup{beamIndexes: beamIndexes})
+	for _, t := range beamIndexes {
+		m.truss = append(m.truss, trussGroup{elementIndex: t})
+	}
 }
 
 // AddSupport - add support for points
 func (m *Dim2) AddSupport(support support.Dim2, pointIndexes ...point.Index) {
-	m.supports = append(m.supports, supportGroup2d{
-		support:      support,
-		pointIndexes: pointIndexes,
-	})
+	for _, p := range pointIndexes {
+		m.supports = append(m.supports, supportGroup2d{
+			support:    support,
+			pointIndex: p,
+		})
+	}
 }
 
 // AddShape - add shape property for beam
-func (m *Dim2) AddShape(shape shape.Shape, beamIndexes ...element.Index) {
-	m.shapes = append(m.shapes, shapeGroup{
-		shape:       shape,
-		beamIndexes: beamIndexes,
-	})
+func (m *Dim2) AddShape(shape shape.Shape, elements ...element.Index) {
+	for _, e := range elements {
+		m.shapes = append(m.shapes, shapeGroup{
+			shape:          shape,
+			elementIndexes: e,
+		})
+	}
 }
 
 // AddMaterial - add material for beam
-func (m *Dim2) AddMaterial(material material.Linear, beamIndexes ...element.Index) {
-	m.materials = append(m.materials, materialLinearGroup{
-		material:    material,
-		beamIndexes: beamIndexes,
-	})
+func (m *Dim2) AddMaterial(material material.Linear, elements ...element.Index) {
+	for _, e := range elements {
+		m.materials = append(m.materials, materialLinearGroup{
+			material:     material,
+			elementIndex: e,
+		})
+	}
 }
 
 // AddNodeForce - add node force in force case
 func (m *Dim2) AddNodeForce(caseNumber int, nodeForce force.NodeDim2, pointIndexes ...point.Index) {
 	for i := range m.forceCases {
 		if m.forceCases[i].indexCase == caseNumber {
-			m.forceCases[i].nodeForces = append(m.forceCases[i].nodeForces, nodeForce2d{
-				nodeForce:    nodeForce,
-				pointIndexes: pointIndexes,
-			})
+			for _, p := range pointIndexes {
+				m.forceCases[i].nodeForces = append(m.forceCases[i].nodeForces, nodeForce2d{
+					nodeForce:  nodeForce,
+					pointIndex: p,
+				})
+			}
 			return
 		}
 	}
 
-	nf := nodeForce2d{
-		nodeForce:    nodeForce,
-		pointIndexes: pointIndexes,
+	for _, p := range pointIndexes {
+		nf := nodeForce2d{
+			nodeForce:  nodeForce,
+			pointIndex: p,
+		}
+		var fc forceCase2d
+		fc.indexCase = caseNumber
+		fc.nodeForces = append(fc.nodeForces, nf)
+		m.forceCases = append(m.forceCases, fc)
 	}
 
-	var fc forceCase2d
-	fc.indexCase = caseNumber
-	fc.nodeForces = append(fc.nodeForces, nf)
-
-	m.forceCases = append(m.forceCases, fc)
 }
 
 /*
@@ -151,4 +163,19 @@ func (m *Dim2) GetLocalForce(caseNumber int, beamIndex element.Index) (begin, en
 		}
 	}
 	return begin, end, fmt.Errorf("Cannot found case by number")
+}
+
+// GetReaction - return reaction of support
+func (m *Dim2) GetReaction(caseNumber int, pointIndex point.Index) (r reaction.Dim2, err error) {
+	for _, f := range m.forceCases {
+		if f.indexCase == caseNumber {
+			for _, g := range f.reactions {
+				if g.Index == pointIndex {
+					return g, nil
+				}
+			}
+			return r, fmt.Errorf("Cannot found point")
+		}
+	}
+	return r, fmt.Errorf("Cannot found case by number")
 }
