@@ -20,19 +20,19 @@ FEA for steel structural engineer on golang
 3. Testing for calculation type
 4. Create output of new calculation type
 Tasks:
-- [ ] 2d Linear deformation
-	- [x] Create load vector
-	- [x] Create global stiffiner matrix
-	- [x] Solve system of linear equation
-	- [x] Calculate global deformation
-	- [x] Calculate internal deformation
-	- [x] Calculate internal force
-	- [ ] Reactions in support
-- [ ] 2d Nolinear deformation
-- [ ] 2d Natural frequency
-- [ ] 2d Linear buckling
-- [ ] 2d Nolinear buckling
-- [ ] 2d Riks method for buckling
+- Linear deformation
+	- Create load vector
+	- Create global stiffiner matrix
+	- Solve system of linear equation
+	- Calculate global deformation
+	- Calculate internal deformation
+	- Calculate internal force
+	- Reactions in support
+- Nolinear deformation
+- Natural frequency
+- Linear buckling
+- Nolinear buckling
+- Riks method for buckling
 
 ### Procedure of new load type(gravity loads)
 1. Create load type in model
@@ -40,41 +40,73 @@ Tasks:
 3. Testing of new load type
 4. Create output of new calculation type
 Tasks:
-- [x] 2d node load
-- [ ] 2d gravity load (selfweight)
-- [ ] 2d displacement load
-- [ ] 2d uniform load
-- [ ] 2d trapezoidally uniform load
-- [ ] 2d temperature load
-- [ ] 2d redirection of load
+- node load
+- gravity load (selfweight)
+- displacement load
+- uniform load. local axe
+- uniform load. global axe
+- trapezoidally uniform load
+- temperature load
+- redirection of load, cheching recursive
 
 ### Procedure of new finite element
 1. Create finite element
 2. Testing finite element
 3. Create output of finite element
 Tasks:
-- [x] 2d truss finite element
-- [ ] 2d beam finite element
-- [ ] 2d tension finite element
-- [ ] 2d compress finite element
-- [ ] 2d gap finite element
-- [ ] Pins for 2d beam finite element
+- 2d truss finite element
+- 2d beam finite element
+- 2d tension finite element
+- 2d compress finite element
+- 2d gap finite element
+- Pins for 2d beam finite element
 
 ### Procedure of new dimension
+- 2d
+	- 2d point
+	- 2d support
+- 2d symmetric
+- 3d
+
+---------------------
+
 - [ ] 2d
-	- [x] 2d point
-	- [x] 2d support
+	- [x] point
+	- [x] support
+		- [x] truss finite element
+			- [x] node load
+				- [ ] Linear deformation
+					- [x] Create load vector
+					- [x] Create global stiffiner matrix
+					- [x] Solve system of linear equation
+					- [x] Calculate global deformation
+					- [x] Calculate internal deformation
+					- [x] Calculate internal force
+					- [ ] Reactions in support
+				- [ ] Nolinear deformation
+				- [ ] Natural frequency
+				- [ ] Linear buckling
+				- [ ] Nolinear buckling
+				- [ ] Riks method for buckling
+			- [ ] gravity load (selfweight)
+			- [ ] displacement load
+			- [ ] uniform load. local axe
+			- [ ] uniform load. global axe
+			- [ ] trapezoidally uniform load
+			- [ ] temperature load
+			- [ ] redirection of load, cheching recursive
+		- [ ] beam finite element
+		- [ ] tension finite element
+		- [ ] compress finite element
+		- [ ] gap finite element
+		- [ ] Pins for beam finite element
+- [ ] 2d symmetric
 - [ ] 3d
 
 ---------------------
 
 **TODO`s**:
 
-
-*Step 0.2 - Calculate truss model in 2D*
-
-- [ ] Many loads for natural frequency calculation
-- [ ] Redirection loads and cheching recursive loading
 - [ ] Create IO input  file format
 - [ ] Create IO output file format
 - [ ] CALCULATION GRAPH
