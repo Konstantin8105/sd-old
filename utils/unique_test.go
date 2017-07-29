@@ -106,13 +106,13 @@ func Compare(t *testing.T, a, b []int) {
 
 func Benchmark1000(b *testing.B) {
 	size := 1000
-	array := make([]int, size, size)
+	array := make([]int, size)
 	for i := 0; i < size; i++ {
 		array[i] = rand.Intn(size)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		c := make([]int, size, size)
+		c := make([]int, size)
 		copy(c, array)
 		b.StartTimer()
 		utils.UniqueInt(&c)
