@@ -6,58 +6,41 @@
 
 FEA for steel structural engineer on golang
 
-Procedures of workflow:
-```
-+-----------------------+
-| Create new git branch |
-+-----------------------+
-     |
-	 V
-+-----------+
-|+---------+|
-|| WORKING ||
-|+---------+|
-+-----------+
-     |
-	 V
-+-------------+
-| Refactoring |
-+-------------+
-     |
-	 V
-+-------------------+
-| Testing, min 90 % |
-+-------------------+
-     |
-	 V
-+---------------------+
-| Create pull request |
-+---------------------+
-     |
-	 V
-+---------+
-| Release |
-+---------+
-```
+### Procedures of workflow
+1. Create new git branch
+2. **WORKING**
+3. Refactoring
+4. Testing, min 90 %
+5. Create pull request
+6. Release
 
-#### Procedure of new calcutation type(buckling,...)
+### Procedure of new calcutation type(buckling,...)
 1. Add property of calcuation type in model
 2. Add calculation type algorithm
 3. Testing for calculation type
 4. Create output of new calculation type
 Tasks:
-- [ ] Nolinear deformation
-- [ ] Natural frequency
-- [ ] Linear buckling
-- [ ] Nolinear buckling
-- [ ] Riks method for buckling
+- [ ] 2d Linear deformation
+	- [x] Create load vector
+	- [x] Create global stiffiner matrix
+	- [x] Solve system of linear equation
+	- [x] Calculate global deformation
+	- [x] Calculate internal deformation
+	- [x] Calculate internal force
+	- [ ] Reactions in support
+- [ ] 2d Nolinear deformation
+- [ ] 2d Natural frequency
+- [ ] 2d Linear buckling
+- [ ] 2d Nolinear buckling
+- [ ] 2d Riks method for buckling
 
-#### Procedure of new load type(gravity loads)
+### Procedure of new load type(gravity loads)
 1. Create load type in model
 2. Add calculation load type
 3. Testing of new load type
 4. Create output of new calculation type
 Tasks:
+- [x] 2d node load
 - [ ] 2d gravity load (selfweight)
 - [ ] 2d displacement load
 - [ ] 2d uniform load
@@ -65,31 +48,23 @@ Tasks:
 - [ ] 2d temperature load
 - [ ] 2d redirection of load
 
-#### Procedure of new finite element
+### Procedure of new finite element
 1. Create finite element
 2. Testing finite element
 3. Create output of finite element
 Tasks:
+- [x] 2d truss finite element
 - [ ] 2d beam finite element
 - [ ] 2d tension finite element
 - [ ] 2d compress finite element
 - [ ] 2d gap finite element
 - [ ] Pins for 2d beam finite element
 
-
-
-*Step 0.1 - Calculate truss model in 2D*
-
-- [x] 2d point
-- [x] 2d support
-- [x] 2d truss finite element
-- [x] 2d node load
-- [x] Create global stiffiner matrix
-- [x] Create load vector
-- [x] Solve system of linear equation
-- [x] Calculate global deformation
-- [x] Calculate internal deformation
-- [x] Calculate internal force
+### Procedure of new dimension
+- [ ] 2d
+	- [x] 2d point
+	- [x] 2d support
+- [ ] 3d
 
 ---------------------
 
@@ -98,7 +73,6 @@ Tasks:
 
 *Step 0.2 - Calculate truss model in 2D*
 
-- [ ] Reactions in support
 - [ ] Many loads for natural frequency calculation
 - [ ] Redirection loads and cheching recursive loading
 - [ ] Create IO input  file format
