@@ -50,12 +50,13 @@ func (m *Dim2) getCoordinate(index element.Index) (c []point.Dim2, err error) {
 				inx = append(inx, beam.GetPointIndex()[i])
 			}
 			found = true
-			break
+			goto end
 
 		default:
 			panic("")
 		}
 	}
+end:
 	if !found {
 		return c, fmt.Errorf("Cannot found beam with index #%v", index)
 	}
