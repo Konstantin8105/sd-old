@@ -6,6 +6,7 @@ import (
 	"github.com/Konstantin8105/GoFea/input/element"
 	"github.com/Konstantin8105/GoFea/output/displacement"
 	"github.com/Konstantin8105/GoFea/output/forceLocal"
+	"github.com/Konstantin8105/GoFea/output/reaction"
 	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoFea/solver/finiteElement"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
@@ -198,6 +199,59 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 	}
 
 	// reactions
+	for _, r := range m.supports {
+		var reac reaction.Dim2
+		reac.Index = r.pointIndex
+		for _, e := range m.elements {
+			switch e.(type) {
+			case element.Beam:
+				beam := e.(element.Beam)
+				if beam.GetPointIndex()[0] != r.pointIndex && beam.GetPointIndex()[1] != r.pointIndex {
+					continue
+				}
+				// KG get matrix stiffiner for beam in global system
+				fe := m.getBeamFiniteElement(beam.GetIndex())
+				k, _ := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.FullInformation)
+				// D get vector displacement in global system
+				d := matrix.NewMatrix64bySize(6, 1)
+				{
+					g, err := forceCase.GetGlobalDisplacement(beam.GetPointIndex()[0])
+					if err != nil {
+						return err
+					}
+					d.Set(0, 0, g.Dx)
+					d.Set(1, 0, g.Dy)
+					d.Set(2, 0, g.Dm)
+				}
+				{
+					g, err := forceCase.GetGlobalDisplacement(beam.GetPointIndex()[1])
+					if err != nil {
+						return err
+					}
+					d.Set(3, 0, g.Dx)
+					d.Set(4, 0, g.Dy)
+					d.Set(5, 0, g.Dm)
+				}
+				// L = KG*D, L - loads in global system
+				L := k.Times(&d)
+				if beam.GetPointIndex()[0] == r.pointIndex {
+					// sum in reaction
+					reac.Fx += L.Get(0, 0)
+					reac.Fy += L.Get(1, 0)
+					reac.M += L.Get(2, 0)
+				}
+				if beam.GetPointIndex()[1] == r.pointIndex {
+					// sum in reaction
+					reac.Fx += L.Get(3, 0)
+					reac.Fy += L.Get(4, 0)
+					reac.M += L.Get(5, 0)
+				}
+			default:
+				panic("please add finite element in reactions")
+			}
+		}
+		forceCase.reactions = append(forceCase.reactions, reac)
+	}
 
 	return nil
 }

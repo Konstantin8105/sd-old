@@ -54,5 +54,11 @@ func (m *Dim2) checkInputData() error {
 		return fmt.Errorf("Finite element %s have length equal zero", list)
 	}
 
+	//TODO compress reactions
+
+	//TODO sorting for quick search
+
+	//TODO only 2 points in beam
+
 	return nil
 }

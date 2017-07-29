@@ -139,12 +139,7 @@ func (m *Dim2) AddGravityForce(caseNumber int, gravityForce force.GravityDim2, b
 func (m *Dim2) GetGlobalDisplacement(caseNumber int, pointIndex point.Index) (d displacement.Dim2, err error) {
 	for _, f := range m.forceCases {
 		if f.indexCase == caseNumber {
-			for _, g := range f.globalDisplacements {
-				if g.Index == pointIndex {
-					return g.Dim2, nil
-				}
-			}
-			return d, fmt.Errorf("Cannot found point")
+			return f.GetGlobalDisplacement(pointIndex)
 		}
 	}
 	return d, fmt.Errorf("Cannot found case by number")
@@ -154,12 +149,7 @@ func (m *Dim2) GetGlobalDisplacement(caseNumber int, pointIndex point.Index) (d 
 func (m *Dim2) GetLocalForce(caseNumber int, beamIndex element.Index) (begin, end forceLocal.Dim2, err error) {
 	for _, f := range m.forceCases {
 		if f.indexCase == caseNumber {
-			for _, l := range f.localForces {
-				if l.Index == beamIndex {
-					return l.Begin, l.End, nil
-				}
-			}
-			return begin, end, fmt.Errorf("Cannot found beam")
+			return f.GetLocalForce(beamIndex)
 		}
 	}
 	return begin, end, fmt.Errorf("Cannot found case by number")
@@ -169,12 +159,7 @@ func (m *Dim2) GetLocalForce(caseNumber int, beamIndex element.Index) (begin, en
 func (m *Dim2) GetReaction(caseNumber int, pointIndex point.Index) (r reaction.Dim2, err error) {
 	for _, f := range m.forceCases {
 		if f.indexCase == caseNumber {
-			for _, g := range f.reactions {
-				if g.Index == pointIndex {
-					return g, nil
-				}
-			}
-			return r, fmt.Errorf("Cannot found point")
+			return f.GetReaction(pointIndex)
 		}
 	}
 	return r, fmt.Errorf("Cannot found case by number")
