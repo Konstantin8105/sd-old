@@ -6,6 +6,8 @@
 
 FEA for steel structural engineer on golang
 
+Minimal build configuration. Best way is Go native code.
+
 ### Procedures of workflow
 1. Create new git branch
 2. **WORKING**
@@ -102,18 +104,16 @@ Tasks:
 		- [ ] Pins for beam finite element
 - [ ] 2d symmetric
 - [ ] 3d
+- [ ] Create IO input  file format
+- [ ] Create IO output file format
+- [ ] HTML+CSS gui
 
 ---------------------
 
 **TODO`s**:
 
-- [ ] Create IO input  file format
-- [ ] Create IO output file format
-- [ ] CALCULATION GRAPH
-- [ ] Minimal build configuration. Best way is Go native code.
+- [ ] Calculation graph
 - [ ] 3D, tables, graphs
-- [ ] HTML+CSS gui
-- [ ] Design of GUI for 2D elements
 
 threejs
 https://threejs.org/
@@ -123,7 +123,10 @@ https://github.com/mrdoob/three.js/tree/master/editor
 maybe - polymer from google
 
 - [ ] MERGE MODELS
-- [ ] STACK DESIGN, see https://github.com/Konstantin8105/Stack.FEA
+
+- [ ] Stack design, see https://github.com/Konstantin8105/Stack.FEA
+- [ ] Connection design
+
 - [ ] add checking - point cannot have same number
 - [ ] Create RPC client-server for fast calculation
 - [ ] working with geometry inside
@@ -132,20 +135,14 @@ maybe - polymer from google
 - [ ] Separate finite elements on small elements
 - [ ] Parallel linear algebra
 - [ ] rotate of shape
-- [ ] axe-symmetrical finite elements + buckling. Typical case - compress load for shell
 - [ ] Database of shapes
 - [ ] Triangulation for user shape
-- [ ] Connection design
 - [ ] Sparse matrix solver
-- [ ] Time dependence
 - [ ] Nonlinear property of material. Temperature, corrosion.
-- [ ] Load force in global system coordinate
 - [ ] Load force in local system coordinate - important for non-linear buckling. [Ko] * Zo + [Go] * Zo = Po and Po is dependence of local point rotation.
-- [ ] Tests for all parts
 - [ ] Test buckling on tension !!! Important
 - [ ] Code review
 - [ ] Code coverage
 - [ ] Add examples of calculation
 - [ ] Contribution rules
 - [ ] Automatic tool for truss frames
-- [ ] Where is money?
