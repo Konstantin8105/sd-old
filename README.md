@@ -2,7 +2,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/Konstantin8105/GoFea/badge.svg?branch=master)](https://coveralls.io/github/Konstantin8105/GoFea?branch=master)
 [![Build Status](https://travis-ci.org/Konstantin8105/GoFea.svg?branch=master)](https://travis-ci.org/Konstantin8105/GoFea)
-
+[![Go Report Card](https://goreportcard.com/badge/github.com/Konstantin8105/GoFea)](https://goreportcard.com/report/github.com/Konstantin8105/GoFea)
 
 FEA for steel structural engineer on golang
 
