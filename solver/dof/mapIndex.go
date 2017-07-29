@@ -18,7 +18,7 @@ type MapIndex struct {
 // NewMapIndex - constructor for index map
 func NewMapIndex(a *[]AxeNumber) (m MapIndex) {
 	size := len(*a)
-	m.rows = make([]row, size, size)
+	m.rows = make([]row, size)
 	for i := 0; i < size; i++ {
 		m.rows[i] = row{
 			axe:      (*a)[i],

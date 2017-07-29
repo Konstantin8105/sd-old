@@ -12,7 +12,7 @@ func (m *Dim2) generateDof() {
 
 	// Generate degreeForPoint - degree of freedom in global system for each point of finite element
 	{
-		pointIndexes := make([]point.Index, len(m.points), len(m.points))
+		pointIndexes := make([]point.Index, len(m.points))
 		for i := range m.points {
 			pointIndexes = append(pointIndexes, m.points[i].Index)
 		}
@@ -42,5 +42,4 @@ func (m *Dim2) generateDof() {
 
 	// Create convertor axe number to position in global matrix
 	m.indexsInGlobalMatrix = dof.NewMapIndex(&m.degreeInGlobalMatrix)
-	return
 }

@@ -60,7 +60,7 @@ func (m *Dim2) getCoordinate(index element.Index) (c []point.Dim2, err error) {
 		return c, fmt.Errorf("Cannot found beam with index #%v", index)
 	}
 
-	coord := make([]point.Dim2, len(inx), len(inx))
+	coord := make([]point.Dim2, len(inx))
 	for i := 0; i < len(inx); i++ {
 		found = false
 		for _, c := range m.points {
