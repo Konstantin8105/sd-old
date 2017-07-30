@@ -1,6 +1,7 @@
 package model_test
 
 import (
+	"math"
 	"testing"
 
 	"github.com/Konstantin8105/GoFea/input/element"
@@ -9,6 +10,8 @@ import (
 	"github.com/Konstantin8105/GoFea/input/point"
 	"github.com/Konstantin8105/GoFea/input/shape"
 	"github.com/Konstantin8105/GoFea/input/support"
+	"github.com/Konstantin8105/GoFea/output/displacement"
+	"github.com/Konstantin8105/GoFea/output/forceLocal"
 	"github.com/Konstantin8105/GoFea/solver/model"
 )
 
@@ -555,5 +558,236 @@ func TestErrorGlobalDisplacementForceReaction(t *testing.T) {
 	_, err = m.GetReaction(100, 1)
 	if err == nil {
 		t.Errorf("Found global displacement with wrong force case")
+	}
+}
+
+func trussFrame() (m model.Dim2, err error) {
+	m.AddPoint([]point.Dim2{
+		{Index: 1, X: 0.0, Y: 0.0},
+		{Index: 2, X: 0.0, Y: 1.2},
+		{Index: 3, X: 0.4, Y: 0.0},
+		{Index: 4, X: 0.4, Y: 0.6},
+		{Index: 5, X: 0.8, Y: 0.0},
+	}...)
+
+	m.AddElement([]element.Elementer{
+		element.NewBeam(1, 1, 2),
+		element.NewBeam(2, 1, 3),
+		element.NewBeam(3, 1, 4),
+		element.NewBeam(4, 2, 4),
+		element.NewBeam(5, 3, 4),
+		element.NewBeam(6, 3, 5),
+		element.NewBeam(7, 4, 5),
+	}...)
+
+	m.AddTrussProperty(1, 2, 3, 4, 5, 6, 7)
+
+	m.AddSupport(support.Dim2{Dx: support.Fix, Dy: support.Fix}, 1)
+	m.AddSupport(support.Dim2{Dy: support.Fix}, 3)
+	m.AddSupport(support.Dim2{Dy: support.Fix}, 5)
+
+	m.AddShape(shape.Shape{A: 40e-4}, []element.Index{1, 5}...)
+	m.AddShape(shape.Shape{A: 64e-4}, []element.Index{2, 6}...)
+	m.AddShape(shape.Shape{A: 60e-4}, []element.Index{3, 4, 7}...)
+
+	m.AddMaterial(material.Linear{E: 2e11, Ro: 78500}, []element.Index{1, 2, 3, 4, 5, 6, 7}...)
+
+	m.AddNodeForce(1, force.NodeDim2{Fx: -70000.0}, []point.Index{2}...)
+	m.AddNodeForce(1, force.NodeDim2{Fx: 42000.0}, []point.Index{4}...)
+
+	err = m.Solve()
+	return m, err
+}
+
+func isSame(v1, v2 float64) bool {
+	if math.Abs(v1) > 1e-8 {
+		if math.Abs((v1-v2)/v1) > 0.01 {
+			return false
+		}
+	}
+	if math.Abs(v2) > 1e-8 {
+		if math.Abs((v1-v2)/v2) > 0.01 {
+			return false
+		}
+	}
+	return true
+}
+
+func isSameTrussFrames(actual, expected model.Dim2) bool {
+	for i := 0; i < 5; i++ {
+		var v1, v2 displacement.Dim2
+		v1, _ = actual.GetGlobalDisplacement(1, point.Index(i))
+		v2, _ = expected.GetGlobalDisplacement(1, point.Index(i))
+		if !isSame(v1.Dx, v2.Dx) {
+			return false
+		}
+		if !isSame(v1.Dy, v2.Dy) {
+			return false
+		}
+		if !isSame(v1.Dm, v2.Dm) {
+			return false
+		}
+	}
+	for i := 0; i < 7; i++ {
+		var v1, v2 forceLocal.Dim2
+		v1, _, _ = actual.GetLocalForce(1, element.Index(i))
+		v2, _, _ = expected.GetLocalForce(1, element.Index(i))
+		if !isSame(v1.Fx, v2.Fx) {
+			return false
+		}
+		if !isSame(v1.Fy, v2.Fy) {
+			return false
+		}
+		if !isSame(v1.M, v2.M) {
+			return false
+		}
+		_, v1, _ = actual.GetLocalForce(1, element.Index(i))
+		_, v2, _ = expected.GetLocalForce(1, element.Index(i))
+		if !isSame(v1.Fx, v2.Fx) {
+			return false
+		}
+		if !isSame(v1.Fy, v2.Fy) {
+			return false
+		}
+		if !isSame(v1.M, v2.M) {
+			return false
+		}
+	}
+	return true
+}
+
+func TestErrorDoubleMaterial(t *testing.T) {
+	var m model.Dim2
+
+	m.AddPoint([]point.Dim2{
+		{Index: 1, X: 0.0, Y: 0.0},
+		{Index: 2, X: 0.0, Y: 1.2},
+		{Index: 3, X: 0.4, Y: 0.0},
+		{Index: 4, X: 0.4, Y: 0.6},
+		{Index: 5, X: 0.8, Y: 0.0},
+	}...)
+
+	m.AddElement([]element.Elementer{
+		element.NewBeam(1, 1, 2),
+		element.NewBeam(2, 1, 3),
+		element.NewBeam(3, 1, 4),
+		element.NewBeam(4, 2, 4),
+		element.NewBeam(5, 3, 4),
+		element.NewBeam(6, 3, 5),
+		element.NewBeam(7, 4, 5),
+	}...)
+
+	m.AddTrussProperty(1, 2, 3, 4, 5, 6, 7)
+
+	m.AddSupport(support.Dim2{Dx: support.Fix, Dy: support.Fix}, 1)
+	m.AddSupport(support.Dim2{Dy: support.Fix}, 3)
+	m.AddSupport(support.Dim2{Dy: support.Fix}, 5)
+
+	m.AddShape(shape.Shape{A: 40e-4}, []element.Index{1, 5}...)
+	m.AddShape(shape.Shape{A: 64e-4}, []element.Index{2, 6}...)
+	m.AddShape(shape.Shape{A: 60e-4}, []element.Index{3, 4, 7}...)
+
+	m.AddMaterial(material.Linear{E: -1e1, Ro: -8500}, []element.Index{1, 2, 3, 4, 5, 6, 7}...)
+	m.AddMaterial(material.Linear{E: 2e11, Ro: 78500}, []element.Index{1, 2, 3, 4, 5, 6, 7}...)
+
+	m.AddNodeForce(1, force.NodeDim2{Fx: -70000.0}, []point.Index{2}...)
+	m.AddNodeForce(1, force.NodeDim2{Fx: 42000.0}, []point.Index{4}...)
+
+	err := m.Solve()
+	if err == nil {
+		t.Errorf("Not correct for double material. error = %v", err)
+	}
+}
+
+func TestErrorDoubleShape(t *testing.T) {
+	var m model.Dim2
+
+	m.AddPoint([]point.Dim2{
+		{Index: 1, X: 0.0, Y: 0.0},
+		{Index: 2, X: 0.0, Y: 1.2},
+		{Index: 3, X: 0.4, Y: 0.0},
+		{Index: 4, X: 0.4, Y: 0.6},
+		{Index: 5, X: 0.8, Y: 0.0},
+	}...)
+
+	m.AddElement([]element.Elementer{
+		element.NewBeam(1, 1, 2),
+		element.NewBeam(2, 1, 3),
+		element.NewBeam(3, 1, 4),
+		element.NewBeam(4, 2, 4),
+		element.NewBeam(5, 3, 4),
+		element.NewBeam(6, 3, 5),
+		element.NewBeam(7, 4, 5),
+	}...)
+
+	m.AddTrussProperty(1, 2, 3, 4, 5, 6, 7)
+
+	m.AddSupport(support.Dim2{Dx: support.Fix, Dy: support.Fix}, 1)
+	m.AddSupport(support.Dim2{Dy: support.Fix}, 3)
+	m.AddSupport(support.Dim2{Dy: support.Fix}, 5)
+
+	m.AddShape(shape.Shape{A: 40e-4}, []element.Index{1, 5}...)
+	m.AddShape(shape.Shape{A: -64e-4}, []element.Index{2, 6}...)
+	m.AddShape(shape.Shape{A: 64e-4}, []element.Index{2, 6}...)
+	m.AddShape(shape.Shape{A: 60e-4}, []element.Index{3, 4, 7}...)
+
+	m.AddMaterial(material.Linear{E: 2e11, Ro: 78500}, []element.Index{1, 2, 3, 4, 5, 6, 7}...)
+
+	m.AddNodeForce(1, force.NodeDim2{Fx: -70000.0}, []point.Index{2}...)
+	m.AddNodeForce(1, force.NodeDim2{Fx: 42000.0}, []point.Index{4}...)
+
+	err := m.Solve()
+	if err == nil {
+		t.Errorf("Not correct for double shape. error = %v", err)
+	}
+}
+
+func TestErrorDoubleTruss(t *testing.T) {
+	var m model.Dim2
+
+	m.AddPoint([]point.Dim2{
+		{Index: 1, X: 0.0, Y: 0.0},
+		{Index: 2, X: 0.0, Y: 1.2},
+		{Index: 3, X: 0.4, Y: 0.0},
+		{Index: 4, X: 0.4, Y: 0.6},
+		{Index: 5, X: 0.8, Y: 0.0},
+	}...)
+
+	m.AddElement([]element.Elementer{
+		element.NewBeam(1, 1, 2),
+		element.NewBeam(2, 1, 3),
+		element.NewBeam(3, 1, 4),
+		element.NewBeam(4, 2, 4),
+		element.NewBeam(5, 3, 4),
+		element.NewBeam(6, 3, 5),
+		element.NewBeam(7, 4, 5),
+	}...)
+
+	m.AddTrussProperty(1, 2, 3, 4, 5, 6, 7)
+	m.AddTrussProperty(1, 2, 3, 4, 5, 6, 7)
+
+	m.AddSupport(support.Dim2{Dx: support.Fix, Dy: support.Fix}, 1)
+	m.AddSupport(support.Dim2{Dy: support.Fix}, 3)
+	m.AddSupport(support.Dim2{Dy: support.Fix}, 5)
+
+	m.AddShape(shape.Shape{A: 40e-4}, []element.Index{1, 5}...)
+	m.AddShape(shape.Shape{A: 64e-4}, []element.Index{2, 6}...)
+	m.AddShape(shape.Shape{A: 60e-4}, []element.Index{3, 4, 7}...)
+
+	m.AddMaterial(material.Linear{E: 2e11, Ro: 78500}, []element.Index{1, 2, 3, 4, 5, 6, 7}...)
+
+	m.AddNodeForce(1, force.NodeDim2{Fx: -70000.0}, []point.Index{2}...)
+	m.AddNodeForce(1, force.NodeDim2{Fx: 42000.0}, []point.Index{4}...)
+
+	err := m.Solve()
+	if err != nil {
+		t.Errorf("Not correct for double truss. error = %v", err)
+	}
+	tr, err := trussFrame()
+	if err != nil {
+		t.Errorf("Not correct for double truss. error = %v", err)
+	}
+	if !isSameTrussFrames(tr, m) {
+		t.Errorf("Not correct fot double truss. Not same")
 	}
 }

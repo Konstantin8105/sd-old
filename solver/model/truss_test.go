@@ -303,5 +303,4 @@ func TestTrussFrame(t *testing.T) {
 			t.Errorf("reaction for point 1 by axe X is %v. Expected = %v", r.Fx, Rx)
 		}
 	}
-
 }
