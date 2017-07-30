@@ -12,7 +12,7 @@ import (
 // getShape - searching shape for beam
 func (m *Dim2) getShape(index element.Index) (s shape.Shape, err error) {
 	for _, sh := range m.shapes {
-		if sh.elementIndexes == index {
+		if sh.elementIndex == index {
 			return sh.shape, nil
 		}
 	}

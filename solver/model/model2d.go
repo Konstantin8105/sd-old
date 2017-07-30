@@ -66,8 +66,8 @@ func (m *Dim2) AddSupport(support support.Dim2, pointIndexes ...point.Index) {
 func (m *Dim2) AddShape(shape shape.Shape, elements ...element.Index) {
 	for _, e := range elements {
 		m.shapes = append(m.shapes, shapeGroup{
-			shape:          shape,
-			elementIndexes: e,
+			shape:        shape,
+			elementIndex: e,
 		})
 	}
 }
