@@ -34,23 +34,15 @@ func (m *Dim2) getCoordinate(index element.Index) (c []point.Dim2, err error) {
 	var inx []point.Index
 	var found bool
 	for _, e := range m.elements {
-		switch e.(type) {
-		case element.Beam:
-			beam := e.(element.Beam)
-			if beam.GetIndex() != index {
-				continue
-			}
-			for i := range beam.GetPointIndex() {
-				inx = append(inx, beam.GetPointIndex()[i])
-			}
-			found = true
-			goto end
-
-		default:
-			panic("")
+		if e.GetIndex() != index {
+			continue
 		}
+		for i := range e.GetPointIndex() {
+			inx = append(inx, e.GetPointIndex()[i])
+		}
+		found = true
+		break
 	}
-end:
 	if !found {
 		return c, fmt.Errorf("Cannot found beam with index #%v", index)
 	}
@@ -80,4 +72,13 @@ func (m *Dim2) isTruss(index element.Index) bool {
 		}
 	}
 	return false
+}
+
+func (m *Dim2) getElement(index element.Index) (element.Elementer, error) {
+	for _, t := range m.elements {
+		if t.GetIndex() == index {
+			return t, nil
+		}
+	}
+	return nil, fmt.Errorf("cannot found element %v", index)
 }

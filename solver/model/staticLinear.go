@@ -128,7 +128,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 		switch ele.(type) {
 		case element.Beam:
 			beam := ele.(element.Beam)
-			fe := m.getBeamFiniteElement(beam.GetIndex())
+			fe := m.getFiniteElement(beam.GetIndex())
 			_, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.FullInformation)
 			globalDisplacement := make([]float64, len(degreeLocal))
 			// if not found in global displacement, then it is a pinned
@@ -212,7 +212,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 					continue
 				}
 				// KG get matrix stiffiner for beam in global system
-				fe := m.getBeamFiniteElement(beam.GetIndex())
+				fe := m.getFiniteElement(beam.GetIndex())
 				k, _ := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.FullInformation)
 				// D get vector displacement in global system
 				// TODO : only for 2d

@@ -29,7 +29,7 @@ func (m *Dim2) generateDof() {
 			switch ele.(type) {
 			case element.Beam:
 				beam := ele.(element.Beam)
-				fe := m.getBeamFiniteElement(beam.GetIndex())
+				fe := m.getFiniteElement(beam.GetIndex())
 				_, localAxes := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.WithoutZeroStiffiner)
 				axes = append(axes, localAxes...)
 			default:
