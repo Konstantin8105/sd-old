@@ -67,7 +67,7 @@ func (m *Dim2) getCoordinate(index element.Index) (c []point.Dim2, err error) {
 // isTruss - return true if beam is truss
 func (m *Dim2) isTruss(index element.Index) bool {
 	for _, t := range m.truss {
-		if t.elementIndex == index {
+		if t == index {
 			return true
 		}
 	}

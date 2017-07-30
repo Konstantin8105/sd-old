@@ -150,7 +150,7 @@ func (m *Dim2) checkInputData() error {
 		size := len(m.truss)
 		for i := 0; i < size; i++ {
 			for j := i + 1; j < size; j++ {
-				if m.truss[i].elementIndex == m.truss[j].elementIndex {
+				if m.truss[i] == m.truss[j] {
 					for k := j; k < size-1; k++ {
 						m.truss[k] = m.truss[k+1]
 					}
