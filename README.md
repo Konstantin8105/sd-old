@@ -8,7 +8,9 @@
 
 FEA for steel structural engineer on golang
 
-Minimal build configuration. Best way is Go native code.
+Some options:
+* Minimal build configuration
+* Best way is Go native code
 
 ### Procedures of workflow
 1. Create new git branch
