@@ -196,7 +196,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 				Index: beam.GetIndex(),
 			})
 		default:
-			panic("")
+			panic("add finite element")
 		}
 	}
 

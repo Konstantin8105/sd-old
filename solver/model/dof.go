@@ -1,7 +1,6 @@
 package model
 
 import (
-	"github.com/Konstantin8105/GoFea/input/element"
 	"github.com/Konstantin8105/GoFea/input/point"
 	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoFea/solver/finiteElement"
@@ -26,15 +25,9 @@ func (m *Dim2) generateDof() {
 	{
 		var axes []dof.AxeNumber
 		for _, ele := range m.elements {
-			switch ele.(type) {
-			case element.Beam:
-				beam := ele.(element.Beam)
-				fe := m.getFiniteElement(beam.GetIndex())
-				_, localAxes := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.WithoutZeroStiffiner)
-				axes = append(axes, localAxes...)
-			default:
-				panic("")
-			}
+			fe := m.getFiniteElement(ele.GetIndex())
+			_, localAxes := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.WithoutZeroStiffiner)
+			axes = append(axes, localAxes...)
 		}
 		dof.UniqueAxeNumber(&axes)
 		m.degreeInGlobalMatrix = axes

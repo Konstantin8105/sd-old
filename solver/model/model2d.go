@@ -20,7 +20,7 @@ type Dim2 struct {
 	// input data
 	points     []point.Dim2
 	elements   []element.Elementer
-	truss      []trussGroup
+	truss      []element.Index
 	supports   []supportGroup2d
 	shapes     []shapeGroup
 	materials  []materialLinearGroup
@@ -47,9 +47,7 @@ func (m *Dim2) AddElement(elements ...element.Elementer) {
 
 // AddTrussProperty - add truss property for beam
 func (m *Dim2) AddTrussProperty(beamIndexes ...element.Index) {
-	for _, t := range beamIndexes {
-		m.truss = append(m.truss, trussGroup{elementIndex: t})
-	}
+	m.truss = append(m.truss, beamIndexes...)
 }
 
 // AddSupport - add support for points
@@ -66,8 +64,8 @@ func (m *Dim2) AddSupport(support support.Dim2, pointIndexes ...point.Index) {
 func (m *Dim2) AddShape(shape shape.Shape, elements ...element.Index) {
 	for _, e := range elements {
 		m.shapes = append(m.shapes, shapeGroup{
-			shape:          shape,
-			elementIndexes: e,
+			shape:        shape,
+			elementIndex: e,
 		})
 	}
 }
