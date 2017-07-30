@@ -106,7 +106,22 @@ func (m *Dim2) checkInputData() error {
 		}
 	}
 
-	//TODO compress support
+	// compress support
+	{
+	beginSupport:
+		size := len(m.supports)
+		for i := 0; i < size; i++ {
+			for j := i + 1; j < size; j++ {
+				if m.supports[i].pointIndex == m.supports[j].pointIndex {
+					for k := j; k < size-1; k++ {
+						m.supports[k] = m.supports[k+1]
+					}
+					m.supports = m.supports[0 : len(m.supports)-1]
+					goto beginSupport
+				}
+			}
+		}
+	}
 
 	// compress shape
 	{
