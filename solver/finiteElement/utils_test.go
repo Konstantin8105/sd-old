@@ -34,3 +34,29 @@ func TestRemovePanic(t *testing.T) {
 		})
 	}
 }
+
+func TestNoDiagonal(t *testing.T) {
+	m := matrix.NewMatrix64bySize(2, 2)
+	m.Set(0, 0, 0.0)
+	m.Set(1, 0, 1.0)
+	m.Set(0, 1, 1.0)
+	m.Set(1, 1, 0.0)
+	a := []dof.AxeNumber{1, 2}
+	finiteElement.RemoveZeros(&m, &a)
+	if len(a) != 2 {
+		t.Errorf("Cannot work for diagonal")
+	}
+}
+
+func TestDiagonal(t *testing.T) {
+	m := matrix.NewMatrix64bySize(2, 2)
+	m.Set(0, 0, 1.0)
+	m.Set(1, 0, 0.0)
+	m.Set(0, 1, 0.0)
+	m.Set(1, 1, 1.0)
+	a := []dof.AxeNumber{1, 2}
+	finiteElement.RemoveZeros(&m, &a)
+	if len(a) != 2 {
+		t.Errorf("Cannot work for diagonal")
+	}
+}
