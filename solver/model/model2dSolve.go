@@ -57,7 +57,7 @@ func (m *Dim2) Solve() (err error) {
 	return fmt.Errorf("%#v", summaryResult)
 }
 
-func (m *Dim2) getBeamFiniteElement(inx element.Index) (fe finiteElement.FiniteElementer) {
+func (m *Dim2) getFiniteElement(inx element.Index) (fe finiteElement.FiniteElementer) {
 	material, err := m.getMaterial(inx)
 	if err != nil {
 		panic(fmt.Errorf("Cannot found material for beam #%v. Error = %v", inx, err))
@@ -70,59 +70,60 @@ func (m *Dim2) getBeamFiniteElement(inx element.Index) (fe finiteElement.FiniteE
 	if err != nil {
 		panic(fmt.Errorf("Cannot calculate length for beam #%v. Error = %v", inx, err))
 	}
-	if m.isTruss(inx) {
-		if len(coord) != 2 {
-			panic("")
-		}
-		var c [2]point.Dim2
-		for i := 0; i < len(coord); i++ {
-			c[i] = coord[i]
-		}
-		f := finiteElement.TrussDim2{
-			Material: material,
-			Shape:    shape,
-			Points:   c,
-		}
-		return &f
-	} /* else {
-		fe := finiteElement.BeamDim2{
-			Material: material,
-			Shape:    shape,
-			Points:   coord,
-		}
-		err = fe.GetStiffinerK(&buffer)
-		if err != nil {
-			return err
-		}
-	}*/
-	//return nil
+	el, err := m.getElement(inx)
+	if err != nil {
+		panic(fmt.Errorf("Cannot found element %v. Error = %v", inx, err))
+	}
+
+	switch el.(type) {
+	case element.Beam:
+		if m.isTruss(inx) {
+			if len(coord) != 2 {
+				panic("")
+			}
+			var c [2]point.Dim2
+			for i := 0; i < len(coord); i++ {
+				c[i] = coord[i]
+			}
+			f := finiteElement.TrussDim2{
+				Material: material,
+				Shape:    shape,
+				Points:   c,
+			}
+			return &f
+		} /* else {
+			fe := finiteElement.BeamDim2{
+				Material: material,
+				Shape:    shape,
+				Points:   coord,
+			}
+			err = fe.GetStiffinerK(&buffer)
+			if err != nil {
+				return err
+			}
+		}*/
+	}
 	panic("Please add finite element")
 }
 
 func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dofSystem *dof.DoF, mapIndex *dof.MapIndex, f func(finiteElement.FiniteElementer, *dof.DoF, finiteElement.Information) (matrix.T64, []dof.AxeNumber)) matrix.T64 {
 	globalResult := matrix.NewMatrix64bySize(len(*degreeGlobal), len(*degreeGlobal))
 	for _, ele := range m.elements {
-		switch ele.(type) {
-		case element.Beam:
-			beam := ele.(element.Beam)
-			fe := m.getBeamFiniteElement(beam.GetIndex())
-			klocal, degreeLocal := f(fe, dofSystem, finiteElement.WithoutZeroStiffiner)
-			// Add local stiffiner matrix to global matrix
-			for i := 0; i < len(degreeLocal); i++ {
-				g, err := mapIndex.GetByAxe(degreeLocal[i])
+		fe := m.getFiniteElement(ele.GetIndex())
+		klocal, degreeLocal := f(fe, dofSystem, finiteElement.WithoutZeroStiffiner)
+		// Add local stiffiner matrix to global matrix
+		for i := 0; i < len(degreeLocal); i++ {
+			g, err := mapIndex.GetByAxe(degreeLocal[i])
+			if err != nil {
+				continue
+			}
+			for j := 0; j < len(degreeLocal); j++ {
+				h, err := mapIndex.GetByAxe(degreeLocal[j])
 				if err != nil {
 					continue
 				}
-				for j := 0; j < len(degreeLocal); j++ {
-					h, err := mapIndex.GetByAxe(degreeLocal[j])
-					if err != nil {
-						continue
-					}
-					globalResult.Set(g, h, globalResult.Get(g, h)+klocal.Get(i, j))
-				}
+				globalResult.Set(g, h, globalResult.Get(g, h)+klocal.Get(i, j))
 			}
-		default:
-			panic("")
 		}
 	}
 	return globalResult

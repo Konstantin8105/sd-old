@@ -3,10 +3,14 @@
 [![Coverage Status](https://coveralls.io/repos/github/Konstantin8105/GoFea/badge.svg?branch=master)](https://coveralls.io/github/Konstantin8105/GoFea?branch=master)
 [![Build Status](https://travis-ci.org/Konstantin8105/GoFea.svg?branch=master)](https://travis-ci.org/Konstantin8105/GoFea)
 [![Go Report Card](https://goreportcard.com/badge/github.com/Konstantin8105/GoFea)](https://goreportcard.com/report/github.com/Konstantin8105/GoFea)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)]
+[![Go project version](https://badge.fury.io/go/github.com%2FKonstantin8105%2FGoFea.svg)](https://badge.fury.io/go/github.com%2FKonstantin8105%2FGoFea)
 
 FEA for steel structural engineer on golang
 
-Minimal build configuration. Best way is Go native code.
+Some options:
+* Minimal build configuration
+* Best way is Go native code
 
 ### Procedures of workflow
 1. Create new git branch
@@ -77,16 +81,16 @@ Tasks:
 	- [x] support
 		- [x] truss finite element
 			- [x] node load
-				- [ ] Linear deformation
+				- [x] Linear deformation
 					- [x] Create load vector
 					- [x] Create global stiffiner matrix
 					- [x] Solve system of linear equation
 					- [x] Calculate global deformation
 					- [x] Calculate internal deformation
 					- [x] Calculate internal force
-					- [ ] Reactions in support
-				- [ ] Nolinear deformation
+					- [x] Reactions in support
 				- [ ] Natural frequency
+				- [ ] Nolinear deformation
 				- [ ] Linear buckling
 				- [ ] Nolinear buckling
 				- [ ] Riks method for buckling

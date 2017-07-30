@@ -128,7 +128,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 		switch ele.(type) {
 		case element.Beam:
 			beam := ele.(element.Beam)
-			fe := m.getBeamFiniteElement(beam.GetIndex())
+			fe := m.getFiniteElement(beam.GetIndex())
 			_, degreeLocal := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.FullInformation)
 			globalDisplacement := make([]float64, len(degreeLocal))
 			// if not found in global displacement, then it is a pinned
@@ -155,6 +155,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 				}
 				localDisplacement = append(localDisplacement, sum)
 			}
+			// TODO : only for 2d
 			forceCase.localDisplacement = append(forceCase.localDisplacement, displacement.BeamDim2{
 				Begin: displacement.Dim2{
 					Dx: localDisplacement[0],
@@ -180,6 +181,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 				}
 				localForce = append(localForce, sum)
 			}
+			// TODO : only for 2d
 			forceCase.localForces = append(forceCase.localForces, forceLocal.BeamDim2{
 				Begin: forceLocal.Dim2{
 					Fx: localForce[0],
@@ -210,15 +212,17 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 					continue
 				}
 				// KG get matrix stiffiner for beam in global system
-				fe := m.getBeamFiniteElement(beam.GetIndex())
+				fe := m.getFiniteElement(beam.GetIndex())
 				k, _ := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.FullInformation)
 				// D get vector displacement in global system
+				// TODO : only for 2d
 				d := matrix.NewMatrix64bySize(6, 1)
 				{
 					g, err := forceCase.GetGlobalDisplacement(beam.GetPointIndex()[0])
 					if err != nil {
 						return err
 					}
+					// TODO : only for 2d
 					d.Set(0, 0, g.Dx)
 					d.Set(1, 0, g.Dy)
 					d.Set(2, 0, g.Dm)
@@ -228,6 +232,7 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 					if err != nil {
 						return err
 					}
+					// TODO : only for 2d
 					d.Set(3, 0, g.Dx)
 					d.Set(4, 0, g.Dy)
 					d.Set(5, 0, g.Dm)
@@ -236,12 +241,14 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 				L := k.Times(&d)
 				if beam.GetPointIndex()[0] == r.pointIndex {
 					// sum in reaction
+					// TODO : only for 2d
 					reac.Fx += L.Get(0, 0)
 					reac.Fy += L.Get(1, 0)
 					reac.M += L.Get(2, 0)
 				}
 				if beam.GetPointIndex()[1] == r.pointIndex {
 					// sum in reaction
+					// TODO : only for 2d
 					reac.Fx += L.Get(3, 0)
 					reac.Fy += L.Get(4, 0)
 					reac.M += L.Get(5, 0)
