@@ -4,7 +4,6 @@
 [![Build Status](https://travis-ci.org/Konstantin8105/GoFea.svg?branch=master)](https://travis-ci.org/Konstantin8105/GoFea)
 [![Go Report Card](https://goreportcard.com/badge/github.com/Konstantin8105/GoFea)](https://goreportcard.com/report/github.com/Konstantin8105/GoFea)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Konstantin8105/GoFea/blob/master/LICENSE)
-[![Go project version](https://badge.fury.io/go/github.com%2FKonstantin8105%2FGoFea.svg)](https://badge.fury.io/go/github.com%2FKonstantin8105%2FGoFea)
 
 FEA for steel structural engineer on golang
 
