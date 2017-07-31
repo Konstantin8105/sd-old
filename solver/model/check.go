@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/Konstantin8105/GoFea/input/element"
 	"github.com/Konstantin8105/GoFea/input/point"
@@ -108,6 +109,13 @@ func (m *Dim2) checkInputData() error {
 
 	//TODO  Example of use : sort.Sort(materialByElement(slise))
 	//TODO sorting for quick search - quick checking
+
+	sort.Sort(shapeByElement(m.shapes))
+	sort.Sort(pointsByPoints(m.points))
+	sort.Sort(elementsByElements(m.truss))
+	sort.Sort(elementsByGetIndex(m.elements))
+	sort.Sort(materialByElement(m.materials))
+	sort.Sort(supportByPoint(m.supports))
 
 	return nil
 }
