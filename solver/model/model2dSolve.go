@@ -19,7 +19,10 @@ func (m *Dim2) Solve() (err error) {
 	}
 
 	// generate degrees of freedom
-	m.generateDof()
+	err = m.generateDof()
+	if err != nil {
+		return err
+	}
 
 	// TODO : check everything
 	// TODO : sort  everything
@@ -57,30 +60,28 @@ func (m *Dim2) Solve() (err error) {
 	return fmt.Errorf("%#v", summaryResult)
 }
 
-func (m *Dim2) getFiniteElement(inx element.Index) (fe finiteElement.FiniteElementer) {
+func (m *Dim2) getFiniteElement(inx element.Index) (fe finiteElement.FiniteElementer, err error) {
 	material, err := m.getMaterial(inx)
 	if err != nil {
-		panic(fmt.Errorf("Cannot found material for beam #%v. Error = %v", inx, err))
+		return fe, fmt.Errorf("Cannot found material for beam #%v. Error = %v", inx, err)
 	}
 	shape, err := m.getShape(inx)
 	if err != nil {
-		panic(fmt.Errorf("Cannot found shape for beam #%v. Error = %v", inx, err))
-	}
-	coord, err := m.getCoordinate(inx)
-	if err != nil {
-		panic(fmt.Errorf("Cannot calculate length for beam #%v. Error = %v", inx, err))
+		return fe, fmt.Errorf("Cannot found shape for beam #%v. Error = %v", inx, err)
 	}
 	el, err := m.getElement(inx)
 	if err != nil {
-		panic(fmt.Errorf("Cannot found element %v. Error = %v", inx, err))
+		return fe, fmt.Errorf("Cannot found element %v. Error = %v", inx, err)
+	}
+	coord, err := m.getCoordinate(inx)
+	if err != nil {
+		return fe, fmt.Errorf("Cannot calculate length for beam #%v. Error = %v", inx, err)
 	}
 
 	switch el.(type) {
 	case element.Beam:
 		if m.isTruss(inx) {
-			if len(coord) != 2 {
-				panic("")
-			}
+			// No need to check on len(points) == 2
 			var c [2]point.Dim2
 			for i := 0; i < len(coord); i++ {
 				c[i] = coord[i]
@@ -90,7 +91,7 @@ func (m *Dim2) getFiniteElement(inx element.Index) (fe finiteElement.FiniteEleme
 				Shape:    shape,
 				Points:   c,
 			}
-			return &f
+			return &f, nil
 		} /* else {
 			fe := finiteElement.BeamDim2{
 				Material: material,
@@ -106,10 +107,13 @@ func (m *Dim2) getFiniteElement(inx element.Index) (fe finiteElement.FiniteEleme
 	panic("Please add finite element")
 }
 
-func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dofSystem *dof.DoF, mapIndex *dof.MapIndex, f func(finiteElement.FiniteElementer, *dof.DoF, finiteElement.Information) (matrix.T64, []dof.AxeNumber)) matrix.T64 {
+func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dofSystem *dof.DoF, mapIndex *dof.MapIndex, f func(finiteElement.FiniteElementer, *dof.DoF, finiteElement.Information) (matrix.T64, []dof.AxeNumber)) (y matrix.T64, err error) {
 	globalResult := matrix.NewMatrix64bySize(len(*degreeGlobal), len(*degreeGlobal))
 	for _, ele := range m.elements {
-		fe := m.getFiniteElement(ele.GetIndex())
+		fe, err := m.getFiniteElement(ele.GetIndex())
+		if err != nil {
+			return y, err
+		}
 		klocal, degreeLocal := f(fe, dofSystem, finiteElement.WithoutZeroStiffiner)
 		// Add local stiffiner matrix to global matrix
 		for i := 0; i < len(degreeLocal); i++ {
@@ -126,5 +130,5 @@ func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dof
 			}
 		}
 	}
-	return globalResult
+	return globalResult, nil
 }

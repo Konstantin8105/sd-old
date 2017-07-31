@@ -76,6 +76,14 @@ func (f *forceCase2d) GetReaction(pointIndex point.Index) (r reaction.Dim2, err 
 	return r, fmt.Errorf("Cannot found point")
 }
 
+func (f *forceCase2d) check() (err error) {
+	err = isUniqueIndexes(nodeForceByPoint(f.nodeForces))
+	if err != nil {
+		return fmt.Errorf("Errors in case %v in node forces:\n%v", f.indexCase, err)
+	}
+	return nil
+}
+
 /*
 func zeroCopy(f forceCase2d) (result forceCase2d) {
 	result.indexCase = f.indexCase

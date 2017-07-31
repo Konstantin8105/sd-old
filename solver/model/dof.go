@@ -7,7 +7,7 @@ import (
 )
 
 // generateDof - create degree's of freedom for model
-func (m *Dim2) generateDof() {
+func (m *Dim2) generateDof() error {
 
 	// Generate degreeForPoint - degree of freedom in global system for each point of finite element
 	{
@@ -25,7 +25,10 @@ func (m *Dim2) generateDof() {
 	{
 		var axes []dof.AxeNumber
 		for _, ele := range m.elements {
-			fe := m.getFiniteElement(ele.GetIndex())
+			fe, err := m.getFiniteElement(ele.GetIndex())
+			if err != nil {
+				return err
+			}
 			_, localAxes := finiteElement.GetStiffinerGlobalK(fe, &m.degreeForPoint, finiteElement.WithoutZeroStiffiner)
 			axes = append(axes, localAxes...)
 		}
@@ -35,4 +38,6 @@ func (m *Dim2) generateDof() {
 
 	// Create convertor axe number to position in global matrix
 	m.indexsInGlobalMatrix = dof.NewMapIndex(&m.degreeInGlobalMatrix)
+
+	return nil
 }
