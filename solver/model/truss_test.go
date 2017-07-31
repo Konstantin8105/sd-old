@@ -23,14 +23,14 @@ func TestTruss(t *testing.T) {
 	var m model.Dim2
 
 	m.AddPoint(point.Dim2{
-		Index: 1,
-		X:     0.,
+		Index: 2,
+		X:     -0.8660254,
 		Y:     0.,
 	})
 
 	m.AddPoint(point.Dim2{
-		Index: 2,
-		X:     -0.8660254,
+		Index: 1,
+		X:     0.,
 		Y:     0.,
 	})
 
@@ -54,18 +54,18 @@ func TestTruss(t *testing.T) {
 	})
 
 	m.AddElement([]element.Elementer{
-		element.NewBeam(7, 4, 2),
 		element.NewBeam(8, 4, 1),
 		element.NewBeam(9, 4, 3),
+		element.NewBeam(7, 4, 2),
 	}...)
 
 	// Truss
-	m.AddTrussProperty(7, 8, 9)
+	m.AddTrussProperty(9, 7, 8)
 
 	// Supports
 	m.AddSupport(support.FixedDim2(), 1)
-	m.AddSupport(support.FixedDim2(), 2)
 	m.AddSupport(support.FixedDim2(), 3)
+	m.AddSupport(support.FixedDim2(), 2)
 
 	// Shapes
 	m.AddShape(shape.Shape{
@@ -80,7 +80,7 @@ func TestTruss(t *testing.T) {
 	m.AddMaterial(material.Linear{
 		E:  2e11,
 		Ro: 78500,
-	}, []element.Index{7, 8, 9}...)
+	}, []element.Index{9, 8, 7}...)
 
 	// Node force
 	m.AddNodeForce(1, force.NodeDim2{
@@ -228,12 +228,12 @@ func TestTrussFrame(t *testing.T) {
 
 	// Node force
 	m.AddNodeForce(1, force.NodeDim2{
-		Fx: -70000.0,
-	}, []point.Index{2}...)
-
-	m.AddNodeForce(1, force.NodeDim2{
 		Fx: 42000.0,
 	}, []point.Index{4}...)
+
+	m.AddNodeForce(1, force.NodeDim2{
+		Fx: -70000.0,
+	}, []point.Index{2}...)
 
 	err := m.Solve()
 	if err != nil {
