@@ -62,5 +62,5 @@ func TestPanicFE1(t *testing.T) {
 			t.Errorf("The code did not panic")
 		}
 	}()
-	_ = m.getFiniteElement(2)
+	_, _ = m.getFiniteElement(2)
 }
