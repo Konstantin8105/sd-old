@@ -6,11 +6,10 @@ import (
 	"testing"
 )
 
-func TestMain(m *testing.M) {
+func TestMain(m *testing.T) {
 	var args []string
 	args = append(args, "-version")
 	os.Args = args
 	flag.Parse()
-	result := m.Run()
-	os.Exit(result)
+	main()
 }
