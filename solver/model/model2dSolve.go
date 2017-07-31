@@ -69,21 +69,19 @@ func (m *Dim2) getFiniteElement(inx element.Index) (fe finiteElement.FiniteEleme
 	if err != nil {
 		return fe, fmt.Errorf("Cannot found shape for beam #%v. Error = %v", inx, err)
 	}
-	coord, err := m.getCoordinate(inx)
-	if err != nil {
-		return fe, fmt.Errorf("Cannot calculate length for beam #%v. Error = %v", inx, err)
-	}
 	el, err := m.getElement(inx)
 	if err != nil {
 		return fe, fmt.Errorf("Cannot found element %v. Error = %v", inx, err)
+	}
+	coord, err := m.getCoordinate(inx)
+	if err != nil {
+		return fe, fmt.Errorf("Cannot calculate length for beam #%v. Error = %v", inx, err)
 	}
 
 	switch el.(type) {
 	case element.Beam:
 		if m.isTruss(inx) {
-			if len(coord) != 2 {
-				panic("")
-			}
+			// No need to check on len(points) == 2
 			var c [2]point.Dim2
 			for i := 0; i < len(coord); i++ {
 				c[i] = coord[i]

@@ -1083,3 +1083,49 @@ func TestErrorCoordinateSearch(t *testing.T) {
 		t.Errorf("Not correct for point not found . error = %v", err)
 	}
 }
+
+func TestErrorManyPoints(t *testing.T) {
+	var m model.Dim2
+
+	m.AddPoint([]point.Dim2{
+		{Index: 1, X: 0.0, Y: 0.0},
+		{Index: 2, X: 0.0, Y: 1.2},
+		{Index: 3, X: 0.4, Y: 0.0},
+		{Index: 4, X: 0.4, Y: 0.6},
+		{Index: 5, X: 0.8, Y: 0.0},
+		{Index: 6, X: 10.8, Y: 0.0},
+		{Index: 7, X: 0.8, Y: 10.0},
+		{Index: 8, X: 10.8, Y: 10.0},
+		{Index: 9, X: -0.8, Y: 0.0},
+	}...)
+
+	m.AddElement([]element.Elementer{
+		element.NewBeam(1, 1, 2),
+		element.NewBeam(2, 1, 3),
+		element.NewBeam(3, 1, 4),
+		element.NewBeam(4, 2, 4),
+		element.NewBeam(5, 3, 4),
+		element.NewBeam(6, 3, 5),
+		element.NewBeam(7, 4, 5),
+	}...)
+
+	m.AddTrussProperty(1, 2, 3, 4, 5, 6, 7)
+
+	m.AddSupport(support.Dim2{Dx: support.Fix, Dy: support.Fix}, 1)
+	m.AddSupport(support.Dim2{Dy: support.Fix}, 3)
+	m.AddSupport(support.Dim2{Dy: support.Fix}, 5)
+
+	m.AddShape(shape.Shape{A: 40e-4}, []element.Index{1, 5}...)
+	m.AddShape(shape.Shape{A: 64e-4}, []element.Index{2, 6}...)
+	m.AddShape(shape.Shape{A: 60e-4}, []element.Index{3, 4, 7}...)
+
+	m.AddMaterial(material.Linear{E: 2e11, Ro: 78500}, []element.Index{1, 3, 2, 4, 6, 5, 7}...)
+
+	m.AddNodeForce(1, force.NodeDim2{Fx: -70000.0}, []point.Index{2}...)
+	m.AddNodeForce(1, force.NodeDim2{Fx: 42000.0}, []point.Index{4}...)
+
+	err := m.Solve()
+	if err != nil {
+		t.Errorf("Not correct for many point . error = %v", err)
+	}
+}
