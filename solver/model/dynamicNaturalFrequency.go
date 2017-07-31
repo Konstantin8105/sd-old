@@ -1,7 +1,7 @@
 package model
 
+/*
 func (m *Dim2) solveNaturalFrequency(forceCase *forceCase2d) error {
-	/*
 		//TODO: can calculated in parallel local force
 
 		// Generate global mass matrix [Mo]
@@ -102,6 +102,6 @@ func (m *Dim2) solveNaturalFrequency(forceCase *forceCase2d) error {
 			_ = freq
 		}
 		// TODO: need add modal mass values for natural frquency calculation
-	*/
 	return nil
 }
+*/
