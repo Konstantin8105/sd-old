@@ -780,14 +780,7 @@ func TestErrorDoubleTruss(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{Fx: 42000.0}, []point.Index{4}...)
 
 	err := m.Solve()
-	if err != nil {
+	if err == nil {
 		t.Errorf("Not correct for double truss. error = %v", err)
-	}
-	tr, err := trussFrame()
-	if err != nil {
-		t.Errorf("Not correct for double truss. error = %v", err)
-	}
-	if !isSameTrussFrames(tr, m) {
-		t.Errorf("Not correct fot double truss. Not same")
 	}
 }
