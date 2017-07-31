@@ -1,6 +1,16 @@
 package model
 
-/*
+import (
+	"fmt"
+	"math"
+
+	"github.com/Konstantin8105/GoFea/solver/finiteElement"
+	"github.com/Konstantin8105/GoLinAlg/matrix"
+	"github.com/Konstantin8105/GoLinAlg/solver"
+)
+
+func (m *Dim2) solveNaturalFrequency(forceCase *forceCase2d) error {
+
 	//TODO: can calculated in parallel local force
 
 	// Generate global mass matrix [Mo]
@@ -102,4 +112,4 @@ package model
 	}
 	// TODO: need add modal mass values for natural frquency calculation
 
-*/
+}

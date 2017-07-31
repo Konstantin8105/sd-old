@@ -8,6 +8,8 @@ import (
 )
 
 func (m *Dim2) checkInputData() error {
+	// TODO add common error slise
+
 	errorText := "Not enought data for calculate. %s"
 	if len(m.points) < 2 {
 		return fmt.Errorf(errorText, "Please add points in model")
@@ -25,18 +27,12 @@ func (m *Dim2) checkInputData() error {
 		return fmt.Errorf(errorText, "Please add load case in model")
 	}
 
-	// only 2 points in beam
-	for _, e := range m.elements {
-		switch e.(type) {
-		case element.Beam:
-			beam := e.(element.Beam)
-			if len(beam.GetPointIndex()) != 2 {
-				return fmt.Errorf("Not correct amount of node for beam %#v", beam)
-			}
-		default:
-			panic("Add finite element")
-		}
-	}
+	// checking "amount of point in finite element" for example:
+	// - only 2 points in beam
+	// - ...
+	// no need
+
+	sorting for quick search - quick checking
 
 	// checking length of finite element beam
 	// for avoid divide by zero
@@ -74,6 +70,7 @@ func (m *Dim2) checkInputData() error {
 		for i := 0; i < size; i++ {
 			for j := i + 1; j < size; j++ {
 				if f.nodeForces[i].pointIndex == f.nodeForces[j].pointIndex {
+					another algorithm - single node for single point
 					f.nodeForces[i].nodeForce.Plus(f.nodeForces[j].nodeForce)
 					for k := j; k < size-1; k++ {
 						f.nodeForces[k] = f.nodeForces[k+1]
@@ -151,6 +148,7 @@ func (m *Dim2) checkInputData() error {
 		for i := 0; i < size; i++ {
 			for j := i + 1; j < size; j++ {
 				if m.truss[i] == m.truss[j] {
+					another algorithm - single truss for single element
 					for k := j; k < size-1; k++ {
 						m.truss[k] = m.truss[k+1]
 					}
@@ -161,7 +159,6 @@ func (m *Dim2) checkInputData() error {
 		}
 	}
 
-	//TODO sorting for quick search
 
 	return nil
 }
