@@ -94,17 +94,26 @@ func (m *Dim2) AddNodeForce(caseNumber int, nodeForce force.NodeDim2, pointIndex
 		}
 	}
 
-	for _, p := range pointIndexes {
-		nf := nodeForce2d{
-			nodeForce:  nodeForce,
-			pointIndex: p,
+	var fc forceCase2d
+	fc.indexCase = caseNumber
+	m.forceCases = append(m.forceCases, fc)
+	m.AddNodeForce(caseNumber, nodeForce, pointIndexes...)
+}
+
+// AddNaturalFrequency - add property for force case
+// to calculate the natural frequency
+func (m *Dim2) AddNaturalFrequency(caseNumber int) {
+	for i := range m.forceCases {
+		if m.forceCases[i].indexCase == caseNumber {
+			m.forceCases[i].dynamicType = naturalFrequency
+			return
 		}
-		var fc forceCase2d
-		fc.indexCase = caseNumber
-		fc.nodeForces = append(fc.nodeForces, nf)
-		m.forceCases = append(m.forceCases, fc)
 	}
 
+	var fc forceCase2d
+	fc.indexCase = caseNumber
+	m.forceCases = append(m.forceCases, fc)
+	m.AddNaturalFrequency(caseNumber)
 }
 
 /*

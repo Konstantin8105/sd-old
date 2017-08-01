@@ -43,6 +43,16 @@ func (m *Dim2) Solve() (err error) {
 			err:       err,
 			forceCase: m.forceCases[i].indexCase,
 		})
+		switch m.forceCases[i].dynamicType {
+		case naturalFrequency:
+			err := m.solveNaturalFrequency(&(m.forceCases[i]))
+			summaryResult = append(summaryResult, results{
+				err:       err,
+				forceCase: m.forceCases[i].indexCase,
+			})
+		case bucklingFactors:
+			panic("add buckling algorithm")
+		}
 	}
 
 	var haveError bool
