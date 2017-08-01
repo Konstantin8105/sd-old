@@ -111,6 +111,7 @@ Tasks:
 		- [ ] compress finite element
 		- [ ] gap finite element
 		- [ ] Pins for beam finite element
+		- [ ] triangle finite element
 - [ ] 2d symmetric
 - [ ] 3d
 - [ ] Create IO input  file format
