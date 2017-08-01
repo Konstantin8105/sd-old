@@ -88,11 +88,12 @@ Tasks:
 					- [x] Calculate internal deformation
 					- [x] Calculate internal force
 					- [x] Reactions in support
-				- [ ] Natural frequency
+				- [x] Natural frequency
 				- [ ] Nolinear deformation
 				- [ ] Linear buckling
 				- [ ] Nolinear buckling
 				- [ ] Riks method for buckling
+				- [ ] Natural frequency. Modal mass
 			- [ ] gravity load (selfweight)
 			- [ ] displacement load
 			- [ ] uniform load. local axe
