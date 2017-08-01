@@ -116,6 +116,22 @@ func (m *Dim2) AddNaturalFrequency(caseNumber int) {
 	m.AddNaturalFrequency(caseNumber)
 }
 
+// AddLinearBuckling - add property for force case
+// to calculate the natural frequency
+func (m *Dim2) AddLinearBuckling(caseNumber int) {
+	for i := range m.forceCases {
+		if m.forceCases[i].indexCase == caseNumber {
+			m.forceCases[i].dynamicType = linearBuckling
+			return
+		}
+	}
+
+	var fc forceCase2d
+	fc.indexCase = caseNumber
+	m.forceCases = append(m.forceCases, fc)
+	m.AddLinearBuckling(caseNumber)
+}
+
 /*
 // AddGravityForce - add gravity force in force case
 func (m *Dim2) AddGravityForce(caseNumber int, gravityForce force.GravityDim2, beamIndexes ...element.ElementIndex) {
@@ -180,4 +196,14 @@ func (m *Dim2) GetNaturalFrequency(caseNumber int) (hz []float64, err error) {
 		}
 	}
 	return hz, fmt.Errorf("Cannot found case by number")
+}
+
+// GetLinearBucklingFactor - return factors of linear buckling
+func (m *Dim2) GetLinearBucklingFactor(caseNumber int) (factors []float64, err error) {
+	for _, f := range m.forceCases {
+		if f.indexCase == caseNumber {
+			return f.GetLinearBucklingFactor()
+		}
+	}
+	return factors, fmt.Errorf("Cannot found case by number")
 }

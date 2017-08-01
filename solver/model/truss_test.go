@@ -1,7 +1,6 @@
 package model_test
 
 import (
-	"fmt"
 	"math"
 	"testing"
 
@@ -95,6 +94,12 @@ func TestTruss(t *testing.T) {
 		Fy: 10000.0,
 	}, []point.Index{4}...)
 
+	m.AddLinearBuckling(3)
+	m.AddNodeForce(3, force.NodeDim2{
+		Fx: 1000.0,
+		Fy: 1000.0,
+	}, []point.Index{4}...)
+
 	err := m.Solve()
 	if err != nil {
 		t.Errorf("Cannot solving. error = %v", err)
@@ -158,7 +163,6 @@ func TestTruss(t *testing.T) {
 		// natural frequency for case 2
 		hz1 := 20.74
 		hz2 := 47.79
-		fmt.Println("Add correct natural frequency")
 		actualHz, err := m.GetNaturalFrequency(2)
 		if err != nil {
 			t.Errorf("Cannot found natural frequency for case 2. Error = ", err)
@@ -187,7 +191,7 @@ func TestTruss(t *testing.T) {
 		}
 	}
 	{
-		_, err := m.GetNaturalFrequency(3)
+		_, err := m.GetNaturalFrequency(30)
 		if err == nil {
 			t.Errorf("Wrong: can take natural frequency for empty loads")
 		}
@@ -198,6 +202,26 @@ func TestTruss(t *testing.T) {
 			t.Errorf("Wrong: can take natural frequency for case without natural frequency property")
 		}
 	}
+	{
+		// linear buckling factor for case 1
+		factor1 := 26758.577
+		actualFactors, err := m.GetLinearBucklingFactor(3)
+		if err != nil {
+			t.Errorf("Cannot found linearBuckling factor for case 1. Error = ", err)
+		}
+		{
+			var found bool
+			for i := range actualFactors {
+				if math.Abs((factor1-actualFactors[i])/factor1) < 0.01 {
+					found = true
+				}
+			}
+			if !found {
+				t.Errorf("Linear buckling factors calculated not correct = %v. Expected = %v", actualFactors, factor1)
+			}
+		}
+	}
+
 }
 
 // test based on methodic
@@ -335,5 +359,4 @@ func TestTrussFrame(t *testing.T) {
 			t.Errorf("reaction for point 1 by axe X is %v. Expected = %v", r.Fx, Rx)
 		}
 	}
-
 }

@@ -85,6 +85,14 @@ func (f *forceCase2d) GetNaturalFrequency() (hz []float64, err error) {
 	return f.dynamicValue, nil
 }
 
+// GetLinearBucklingFactor - return factors of linear buckling
+func (f *forceCase2d) GetLinearBucklingFactor() (factors []float64, err error) {
+	if f.dynamicType != linearBuckling {
+		return factors, fmt.Errorf("Factors of linear buckling is not calculate for that case")
+	}
+	return f.dynamicValue, nil
+}
+
 func (f *forceCase2d) check() (err error) {
 	err = isUniqueIndexes(nodeForceByPoint(f.nodeForces))
 	if err != nil {

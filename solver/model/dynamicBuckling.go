@@ -153,17 +153,22 @@ func (m *Dim2) solveLinearBuckling(forceCase *forceCase2d) error {
 		HoPotential.RemoveRowAndColumn(removePosition...)
 	}
 	// Calculation of
+
+	// TODO add for tension beam - panic
+
 	eigenPotential := solver.NewEigen(HoPotential)
-	//fmt.Println("lambda       = ", eigenPotential.GetRealEigenvalues())
-	//fmt.Println("lambda Re    = ", eigenPotential.GetImagEigenvalues())
-	//fmt.Println("eigenvectors = ", eigenPotential.GetV())
-	//fmt.Println("getD = ", eigenPotential.GetD())
+	fmt.Println("lambda       = ", eigenPotential.GetRealEigenvalues())
+	fmt.Println("lambda Re    = ", eigenPotential.GetImagEigenvalues())
+	fmt.Println("eigenvectors = ", eigenPotential.GetV())
+	fmt.Println("getD = ", eigenPotential.GetD())
 
 	// TODO: Remove strange results
 	valueP := eigenPotential.GetRealEigenvalues()
 	fmt.Println("Linear buckling loads:")
 	for _, v := range valueP {
-		fmt.Printf("P = %.5v\n", 1.0/v)
+		//fmt.Printf("P = %.5v\n", 1.0/v)
+		// TODO sorting by absolute value
+		forceCase.dynamicValue = append(forceCase.dynamicValue, 1.0/v)
 	}
 
 	return nil
