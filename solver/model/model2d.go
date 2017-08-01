@@ -171,3 +171,13 @@ func (m *Dim2) GetReaction(caseNumber int, pointIndex point.Index) (r reaction.D
 	}
 	return r, fmt.Errorf("Cannot found case by number")
 }
+
+// GetNaturalFrequency - return natural frequency
+func (m *Dim2) GetNaturalFrequency(caseNumber int) (hz []float64, err error) {
+	for _, f := range m.forceCases {
+		if f.indexCase == caseNumber {
+			return f.GetNaturalFrequency()
+		}
+	}
+	return hz, fmt.Errorf("Cannot found case by number")
+}

@@ -1,6 +1,7 @@
 package model_test
 
 import (
+	"fmt"
 	"math"
 	"testing"
 
@@ -153,31 +154,11 @@ func TestTrussFrame(t *testing.T) {
 	var m model.Dim2
 
 	m.AddPoint([]point.Dim2{
-		{
-			Index: 1,
-			X:     0.0,
-			Y:     0.0,
-		},
-		{
-			Index: 2,
-			X:     0.0,
-			Y:     1.2,
-		},
-		{
-			Index: 3,
-			X:     0.4,
-			Y:     0.0,
-		},
-		{
-			Index: 4,
-			X:     0.4,
-			Y:     0.6,
-		},
-		{
-			Index: 5,
-			X:     0.8,
-			Y:     0.0,
-		},
+		{Index: 1, X: 0.0, Y: 0.0},
+		{Index: 2, X: 0.0, Y: 1.2},
+		{Index: 3, X: 0.4, Y: 0.0},
+		{Index: 4, X: 0.4, Y: 0.6},
+		{Index: 5, X: 0.8, Y: 0.0},
 	}...)
 
 	m.AddElement([]element.Elementer{
@@ -234,6 +215,13 @@ func TestTrussFrame(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fx: -70000.0,
 	}, []point.Index{2}...)
+
+	m.AddNodeForce(2, force.NodeDim2{
+		Fx: 42000.0,
+		Fy: 42000.0,
+	}, []point.Index{4}...)
+
+	m.AddNaturalFrequency(2)
 
 	err := m.Solve()
 	if err != nil {
@@ -301,6 +289,19 @@ func TestTrussFrame(t *testing.T) {
 		}
 		if math.Abs((r.Fx-Rx)/Rx) > 0.01 {
 			t.Errorf("reaction for point 1 by axe X is %v. Expected = %v", r.Fx, Rx)
+		}
+	}
+
+	{
+		// natural frequency for case 2
+		hz1 := -1.0
+		fmt.Println("Add correct natural frequency")
+		actualHz, err := m.GetNaturalFrequency(2)
+		if err != nil {
+			t.Errorf("Cannot found natural frequency for case 2. Error = ", err)
+		}
+		if math.Abs((hz1-actualHz[0])/hz1) > 0.01 {
+			t.Errorf("Natural frequency calculated not correct = %vHz. Expected = %vHz", actualHz[0], hz1)
 		}
 	}
 }

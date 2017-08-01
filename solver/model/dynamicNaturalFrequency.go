@@ -57,7 +57,7 @@ func (m *Dim2) solveNaturalFrequency(forceCase *forceCase2d) error {
 	//TODO: CHECKUING GRAVITY TO MATRIX MASS
 	for i := 0; i < massGlobal.GetRowSize(); i++ {
 		for j := 0; j < massGlobal.GetColumnSize(); j++ {
-			massGlobal.Set(i, j, massGlobal.Get(i, j)/9.806)
+			massGlobal.Set(i, j, massGlobal.Get(i, j)/9.806) //TODO add gravity const in utils
 		}
 	}
 	// TODO: ADD to mass WITH OR WITOUT SELFWEIGHT
@@ -116,7 +116,10 @@ func (m *Dim2) solveNaturalFrequency(forceCase *forceCase2d) error {
 		freq := math.Sqrt(1.0/v) / 2.0 / math.Pi
 		fmt.Printf("f = %.5v Hz\n", freq)
 		_ = freq
+		// TODO add sorting natural frequency
+		forceCase.dynamicValue = append(forceCase.dynamicValue, freq)
 	}
+
 	// TODO: need add modal mass values for natural frquency calculation
 	return nil
 }

@@ -76,6 +76,14 @@ func (f *forceCase2d) GetReaction(pointIndex point.Index) (r reaction.Dim2, err 
 	return r, fmt.Errorf("Cannot found point")
 }
 
+// GetNaturalFrequency - return natural frequency
+func (f *forceCase2d) GetNaturalFrequency() (hz []float64, err error) {
+	if f.dynamicType != naturalFrequency {
+		return hz, fmt.Errorf("Natural frequency is not calculate for that case")
+	}
+	return f.dynamicValue, nil
+}
+
 func (f *forceCase2d) check() (err error) {
 	err = isUniqueIndexes(nodeForceByPoint(f.nodeForces))
 	if err != nil {
