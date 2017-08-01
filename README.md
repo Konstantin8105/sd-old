@@ -90,10 +90,15 @@ Tasks:
 					- [x] Reactions in support
 				- [x] Natural frequency
 				- [ ] Nolinear deformation
+				- [ ] Nolinear deformation shapes
 				- [ ] Linear buckling
+				- [ ] Linear buckling shapes
 				- [ ] Nolinear buckling
+				- [ ] Nolinear buckling shapes
 				- [ ] Riks method for buckling
+				- [ ] Riks method for buckling shapes
 				- [ ] Natural frequency. Modal mass
+				- [ ] Natural frequency shapes
 			- [ ] gravity load (selfweight)
 			- [ ] displacement load
 			- [ ] uniform load. local axe
