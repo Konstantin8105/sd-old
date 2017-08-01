@@ -11,6 +11,7 @@ import (
 
 // getShape - searching shape for beam
 func (m *Dim2) getShape(index element.Index) (s shape.Shape, err error) {
+	//TODO change to binary search
 	for _, sh := range m.shapes {
 		if sh.elementIndex == index {
 			return sh.shape, nil
@@ -21,6 +22,7 @@ func (m *Dim2) getShape(index element.Index) (s shape.Shape, err error) {
 
 // getMaterial - searching material for beam
 func (m *Dim2) getMaterial(index element.Index) (mat material.Linear, err error) {
+	//TODO change to binary search
 	for _, m := range m.materials {
 		if m.elementIndex == index {
 			return m.material, nil
@@ -31,6 +33,7 @@ func (m *Dim2) getMaterial(index element.Index) (mat material.Linear, err error)
 
 // getCoordinate - return coordinate of beam
 func (m *Dim2) getCoordinate(index element.Index) (c []point.Dim2, err error) {
+	//TODO change to binary search
 	var inx []point.Index
 	var found bool
 	for _, e := range m.elements {
@@ -66,6 +69,7 @@ func (m *Dim2) getCoordinate(index element.Index) (c []point.Dim2, err error) {
 
 // isTruss - return true if beam is truss
 func (m *Dim2) isTruss(index element.Index) bool {
+	//TODO change to binary search
 	for _, t := range m.truss {
 		if t == index {
 			return true
@@ -75,6 +79,7 @@ func (m *Dim2) isTruss(index element.Index) bool {
 }
 
 func (m *Dim2) getElement(index element.Index) (element.Elementer, error) {
+	//TODO change to binary search
 	for _, t := range m.elements {
 		if t.GetIndex() == index {
 			return t, nil

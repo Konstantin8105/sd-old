@@ -1,6 +1,7 @@
 package model_test
 
 import (
+	"fmt"
 	"math"
 	"testing"
 
@@ -87,6 +88,13 @@ func TestTruss(t *testing.T) {
 		Fy: -80000.0,
 	}, []point.Index{4}...)
 
+	m.AddNaturalFrequency(2)
+
+	m.AddNodeForce(2, force.NodeDim2{
+		Fx: 10000.0,
+		Fy: 10000.0,
+	}, []point.Index{4}...)
+
 	err := m.Solve()
 	if err != nil {
 		t.Errorf("Cannot solving. error = %v", err)
@@ -146,6 +154,50 @@ func TestTruss(t *testing.T) {
 			t.Errorf("axial force for beam 9 is %v. Expected = %v", f9, b.Fx)
 		}
 	}
+	{
+		// natural frequency for case 2
+		hz1 := 20.74
+		hz2 := 47.79
+		fmt.Println("Add correct natural frequency")
+		actualHz, err := m.GetNaturalFrequency(2)
+		if err != nil {
+			t.Errorf("Cannot found natural frequency for case 2. Error = ", err)
+		}
+		{
+			var found bool
+			for i := range actualHz {
+				if math.Abs((hz1-actualHz[i])/hz1) < 0.01 {
+					found = true
+				}
+			}
+			if !found {
+				t.Errorf("Natural frequency calculated not correct = %vHz. Expected = %vHz", actualHz, hz1)
+			}
+		}
+		{
+			var found bool
+			for i := range actualHz {
+				if math.Abs((hz2-actualHz[i])/hz2) < 0.01 {
+					found = true
+				}
+			}
+			if !found {
+				t.Errorf("Natural frequency calculated not correct = %vHz. Expected = %vHz", actualHz, hz2)
+			}
+		}
+	}
+	{
+		_, err := m.GetNaturalFrequency(3)
+		if err == nil {
+			t.Errorf("Wrong: can take natural frequency for empty loads")
+		}
+	}
+	{
+		_, err := m.GetNaturalFrequency(1)
+		if err == nil {
+			t.Errorf("Wrong: can take natural frequency for case without natural frequency property")
+		}
+	}
 }
 
 // test based on methodic
@@ -153,31 +205,11 @@ func TestTrussFrame(t *testing.T) {
 	var m model.Dim2
 
 	m.AddPoint([]point.Dim2{
-		{
-			Index: 1,
-			X:     0.0,
-			Y:     0.0,
-		},
-		{
-			Index: 2,
-			X:     0.0,
-			Y:     1.2,
-		},
-		{
-			Index: 3,
-			X:     0.4,
-			Y:     0.0,
-		},
-		{
-			Index: 4,
-			X:     0.4,
-			Y:     0.6,
-		},
-		{
-			Index: 5,
-			X:     0.8,
-			Y:     0.0,
-		},
+		{Index: 1, X: 0.0, Y: 0.0},
+		{Index: 2, X: 0.0, Y: 1.2},
+		{Index: 3, X: 0.4, Y: 0.0},
+		{Index: 4, X: 0.4, Y: 0.6},
+		{Index: 5, X: 0.8, Y: 0.0},
 	}...)
 
 	m.AddElement([]element.Elementer{
@@ -303,4 +335,5 @@ func TestTrussFrame(t *testing.T) {
 			t.Errorf("reaction for point 1 by axe X is %v. Expected = %v", r.Fx, Rx)
 		}
 	}
+
 }

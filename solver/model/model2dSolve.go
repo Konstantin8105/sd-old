@@ -43,6 +43,16 @@ func (m *Dim2) Solve() (err error) {
 			err:       err,
 			forceCase: m.forceCases[i].indexCase,
 		})
+		switch m.forceCases[i].dynamicType {
+		case naturalFrequency:
+			err := m.solveNaturalFrequency(&(m.forceCases[i]))
+			summaryResult = append(summaryResult, results{
+				err:       err,
+				forceCase: m.forceCases[i].indexCase,
+			})
+		case bucklingFactors:
+			panic("add buckling algorithm")
+		}
 	}
 
 	var haveError bool
@@ -82,8 +92,10 @@ func (m *Dim2) getFiniteElement(inx element.Index) (fe finiteElement.FiniteEleme
 	case element.Beam:
 		if m.isTruss(inx) {
 			// No need to check on len(points) == 2
+			// magic number 2 is amount of beam points
+			// TODO change from array to slise
 			var c [2]point.Dim2
-			for i := 0; i < len(coord); i++ {
+			for i := 0; i < len(c); i++ {
 				c[i] = coord[i]
 			}
 			f := finiteElement.TrussDim2{
