@@ -88,12 +88,12 @@ func TestTruss(t *testing.T) {
 		Fy: -80000.0,
 	}, []point.Index{4}...)
 
+	m.AddNaturalFrequency(2)
+
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
 		Fy: 10000.0,
 	}, []point.Index{4}...)
-
-	m.AddNaturalFrequency(2)
 
 	err := m.Solve()
 	if err != nil {
@@ -184,6 +184,18 @@ func TestTruss(t *testing.T) {
 			if !found {
 				t.Errorf("Natural frequency calculated not correct = %vHz. Expected = %vHz", actualHz, hz2)
 			}
+		}
+	}
+	{
+		_, err := m.GetNaturalFrequency(3)
+		if err == nil {
+			t.Errorf("Wrong: can take natural frequency for empty loads")
+		}
+	}
+	{
+		_, err := m.GetNaturalFrequency(1)
+		if err == nil {
+			t.Errorf("Wrong: can take natural frequency for case without natural frequency property")
 		}
 	}
 }
