@@ -88,6 +88,13 @@ func TestTruss(t *testing.T) {
 		Fy: -80000.0,
 	}, []point.Index{4}...)
 
+	m.AddNodeForce(2, force.NodeDim2{
+		Fx: 10000.0,
+		Fy: 10000.0,
+	}, []point.Index{4}...)
+
+	m.AddNaturalFrequency(2)
+
 	err := m.Solve()
 	if err != nil {
 		t.Errorf("Cannot solving. error = %v", err)
@@ -145,6 +152,38 @@ func TestTruss(t *testing.T) {
 		}
 		if math.Abs((f9-b.Fx)/f9) > 0.01 {
 			t.Errorf("axial force for beam 9 is %v. Expected = %v", f9, b.Fx)
+		}
+	}
+	{
+		// natural frequency for case 2
+		hz1 := 20.74
+		hz2 := 47.79
+		fmt.Println("Add correct natural frequency")
+		actualHz, err := m.GetNaturalFrequency(2)
+		if err != nil {
+			t.Errorf("Cannot found natural frequency for case 2. Error = ", err)
+		}
+		{
+			var found bool
+			for i := range actualHz {
+				if math.Abs((hz1-actualHz[i])/hz1) < 0.01 {
+					found = true
+				}
+			}
+			if !found {
+				t.Errorf("Natural frequency calculated not correct = %vHz. Expected = %vHz", actualHz, hz1)
+			}
+		}
+		{
+			var found bool
+			for i := range actualHz {
+				if math.Abs((hz2-actualHz[i])/hz2) < 0.01 {
+					found = true
+				}
+			}
+			if !found {
+				t.Errorf("Natural frequency calculated not correct = %vHz. Expected = %vHz", actualHz, hz2)
+			}
 		}
 	}
 }
@@ -216,13 +255,6 @@ func TestTrussFrame(t *testing.T) {
 		Fx: -70000.0,
 	}, []point.Index{2}...)
 
-	m.AddNodeForce(2, force.NodeDim2{
-		Fx: 42000.0,
-		Fy: 42000.0,
-	}, []point.Index{4}...)
-
-	m.AddNaturalFrequency(2)
-
 	err := m.Solve()
 	if err != nil {
 		t.Errorf("Cannot solving. error = %v", err)
@@ -292,16 +324,4 @@ func TestTrussFrame(t *testing.T) {
 		}
 	}
 
-	{
-		// natural frequency for case 2
-		hz1 := -1.0
-		fmt.Println("Add correct natural frequency")
-		actualHz, err := m.GetNaturalFrequency(2)
-		if err != nil {
-			t.Errorf("Cannot found natural frequency for case 2. Error = ", err)
-		}
-		if math.Abs((hz1-actualHz[0])/hz1) > 0.01 {
-			t.Errorf("Natural frequency calculated not correct = %vHz. Expected = %vHz", actualHz[0], hz1)
-		}
-	}
 }

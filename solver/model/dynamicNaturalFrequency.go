@@ -117,6 +117,7 @@ func (m *Dim2) solveNaturalFrequency(forceCase *forceCase2d) error {
 		fmt.Printf("f = %.5v Hz\n", freq)
 		_ = freq
 		// TODO add sorting natural frequency
+		// TODO remove not adequat frequency
 		forceCase.dynamicValue = append(forceCase.dynamicValue, freq)
 	}
 
