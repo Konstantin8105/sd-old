@@ -50,8 +50,14 @@ func (m *Dim2) Solve() (err error) {
 				err:       err,
 				forceCase: m.forceCases[i].indexCase,
 			})
-		case bucklingFactors:
-			panic("add buckling algorithm")
+		case linearBuckling:
+			err := m.solveLinearBuckling(&(m.forceCases[i]))
+			summaryResult = append(summaryResult, results{
+				err:       err,
+				forceCase: m.forceCases[i].indexCase,
+			})
+		case nolinearBuckling:
+			panic("Add nolinear buckling")
 		}
 	}
 

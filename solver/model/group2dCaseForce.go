@@ -43,7 +43,8 @@ type dynamicTypes int
 const (
 	none dynamicTypes = iota
 	naturalFrequency
-	bucklingFactors
+	linearBuckling
+	nolinearBuckling
 )
 
 // GetGlobalDisplacement - return global displacement

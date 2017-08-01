@@ -62,10 +62,9 @@ func (f *TrussDim2) GetMassMr(mr *matrix.T64) {
 	mr.Set(3, 3, mul3)
 }
 
-/*
 // GetPotentialGr - matrix potential loads for linear buckling
 func (f *TrussDim2) GetPotentialGr(gr *matrix.T64, localAxialForce float64) {
-	length := point.LenghtDim2(f.Points)
+	length := point.LengthDim2(f.Points)
 
 	NL := localAxialForce / length
 	// TODO check somewhere length cannot by zero
@@ -76,7 +75,6 @@ func (f *TrussDim2) GetPotentialGr(gr *matrix.T64, localAxialForce float64) {
 	gr.Set(4, 1, -NL)
 	gr.Set(4, 4, NL)
 }
-*/
 
 // GetDoF - return numbers for degree of freedom in global system
 // coordinate
