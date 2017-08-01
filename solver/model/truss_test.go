@@ -1,6 +1,7 @@
 package model_test
 
 import (
+	"fmt"
 	"math"
 	"testing"
 
@@ -92,12 +93,6 @@ func TestTruss(t *testing.T) {
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
 		Fy: 10000.0,
-	}, []point.Index{4}...)
-
-	m.AddLinearBuckling(3)
-	m.AddNodeForce(3, force.NodeDim2{
-		Fx: 1000.0,
-		Fy: 1000.0,
 	}, []point.Index{4}...)
 
 	err := m.Solve()
@@ -202,26 +197,6 @@ func TestTruss(t *testing.T) {
 			t.Errorf("Wrong: can take natural frequency for case without natural frequency property")
 		}
 	}
-	{
-		// linear buckling factor for case 1
-		factor1 := 26758.577
-		actualFactors, err := m.GetLinearBucklingFactor(3)
-		if err != nil {
-			t.Errorf("Cannot found linearBuckling factor for case 1. Error = ", err)
-		}
-		{
-			var found bool
-			for i := range actualFactors {
-				if math.Abs((factor1-actualFactors[i])/factor1) < 0.01 {
-					found = true
-				}
-			}
-			if !found {
-				t.Errorf("Linear buckling factors calculated not correct = %v. Expected = %v", actualFactors, factor1)
-			}
-		}
-	}
-
 }
 
 // test based on methodic
@@ -360,3 +335,63 @@ func TestTrussFrame(t *testing.T) {
 		}
 	}
 }
+
+// test based on methodic
+func TestTwoTruss(t *testing.T) {
+	var m model.Dim2
+
+	m.AddPoint([]point.Dim2{
+		{Index: 1, X: +0.0, Y: 0.3},
+		{Index: 2, X: -3.0, Y: 0.0},
+		{Index: 3, X: +3.0, Y: 0.0},
+	}...)
+
+	m.AddElement([]element.Elementer{
+		element.NewBeam(1, 1, 2),
+		element.NewBeam(2, 1, 3),
+	}...)
+
+	// Truss
+	m.AddTrussProperty(1, 2)
+
+	// Supports
+	m.AddSupport(support.Dim2{
+		Dx: support.Fix,
+		Dy: support.Fix,
+	}, 2)
+
+	m.AddSupport(support.Dim2{
+		Dx: support.Fix,
+		Dy: support.Fix,
+	}, 3)
+
+	m.AddShape(shape.Shape{
+		A: math.Pi / 4.0 * (10.0*10.0 - 9.3*9.3) * 1e-6,
+	}, []element.Index{1, 2}...)
+
+	m.AddMaterial(material.Linear{
+		E:  2e11,
+		Ro: 78500,
+	}, []element.Index{1, 2}...)
+
+	// Node force
+	m.AddNodeForce(1, force.NodeDim2{
+		Fy: -4000.0,
+	}, []point.Index{1}...)
+
+	err := m.Solve()
+	if err != nil {
+		t.Errorf("Cannot solving. error = %v", err)
+	}
+
+	d, err := m.GetGlobalDisplacement(1, 1)
+
+	// TODO check
+	fmt.Println("1:", d)
+	fmt.Println("Must be:")
+	fmt.Println("P =  -4000 N ; D = -0.10 meter")
+	fmt.Println("P =  -8000 N ; D = -0.20 meter")
+	fmt.Println("P = -10000 N ; D = -0.55 meter")
+}
+
+//TODO axial force of pinned column
