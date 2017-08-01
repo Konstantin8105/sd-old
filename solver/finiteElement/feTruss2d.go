@@ -65,9 +65,7 @@ func (f *TrussDim2) GetMassMr(mr *matrix.T64) {
 // GetPotentialGr - matrix potential loads for linear buckling
 func (f *TrussDim2) GetPotentialGr(gr *matrix.T64, localAxialForce float64) {
 	length := point.LengthDim2(f.Points)
-
 	NL := localAxialForce / length
-	// TODO check somewhere length cannot by zero
 
 	gr.SetNewSize(6, 6)
 	gr.Set(1, 1, NL)

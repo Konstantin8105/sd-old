@@ -114,7 +114,7 @@ func (m *Dim2) solveLinearBuckling(forceCase *forceCase2d) error {
 		}
 	}
 
-	//fmt.Println("PotentialGlobal = ", potentialGlobal)
+	fmt.Println("PotentialGlobal = ", potentialGlobal)
 	HoPotential := matrix.NewMatrix64bySize(n, n)
 	bufferPotential := matrix.NewMatrix64bySize(n, 1)
 	//fmt.Printf("lu = %#v\n", lu)
