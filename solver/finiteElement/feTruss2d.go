@@ -48,11 +48,10 @@ func (f *TrussDim2) GetStiffinerK(kr *matrix.T64) {
 	kr.Set(3, 3, EFL)
 }
 
-/*
 // GetMassMr - matrix mass of finite element
 func (f *TrussDim2) GetMassMr(mr *matrix.T64) {
 	mu := f.Shape.A * f.Material.Ro
-	length := point.LenghtDim2(f.Points)
+	length := point.LengthDim2(f.Points)
 	mul3 := length / 3.0 * mu
 	mul6 := length / 6.0 * mu
 
@@ -62,7 +61,6 @@ func (f *TrussDim2) GetMassMr(mr *matrix.T64) {
 	mr.Set(3, 0, mul6)
 	mr.Set(3, 3, mul3)
 }
-*/
 
 /*
 // GetPotentialGr - matrix potential loads for linear buckling

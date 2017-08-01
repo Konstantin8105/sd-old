@@ -13,36 +13,12 @@ import (
 	"github.com/Konstantin8105/GoLinAlg/solver"
 )
 
-func (m *Dim2) solveCase(forceCase *forceCase2d) error {
-
+func (m *Dim2) getLUStiffinerKGlobal() (lu solver.LU64, err error) {
+	// TODO
 	// Generate global stiffiner matrix [Ko]
 	stiffinerKGlobal, err := m.convertFromLocalToGlobalSystem(&m.degreeInGlobalMatrix, &m.degreeForPoint, &m.indexsInGlobalMatrix, finiteElement.GetStiffinerGlobalK)
 	if err != nil {
-		return err
-	}
-
-	// Create load vector
-	loads := matrix.NewMatrix64bySize(len(m.degreeInGlobalMatrix), 1)
-	for _, p := range forceCase.nodeForces {
-		d := m.degreeForPoint.GetDoF(p.pointIndex)
-		if p.nodeForce.Fx != 0.0 {
-			h, err := m.indexsInGlobalMatrix.GetByAxe(d[0])
-			if err == nil {
-				loads.Set(h, 0, p.nodeForce.Fx)
-			}
-		}
-		if p.nodeForce.Fy != 0.0 {
-			h, err := m.indexsInGlobalMatrix.GetByAxe(d[1])
-			if err == nil {
-				loads.Set(h, 0, p.nodeForce.Fy)
-			}
-		}
-		if p.nodeForce.M != 0.0 {
-			h, err := m.indexsInGlobalMatrix.GetByAxe(d[2])
-			if err == nil {
-				loads.Set(h, 0, p.nodeForce.M)
-			}
-		}
+		return lu, err
 	}
 
 	// Create array degree for support
@@ -77,6 +53,66 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 			}
 			stiffinerKGlobal.Set(g, g, 1.0)
 			// modify load vector on support
+			//loads.Set(g, 0, 0.0)
+		}
+	}
+
+	lu = solver.NewLUsolver(stiffinerKGlobal)
+	return lu, err
+}
+
+func (m *Dim2) solveCase(forceCase *forceCase2d) error {
+
+	// Solving system of linear equations for finding
+	// the displacement in points in global system
+	// TODO: one global stiffiner matrix for all cases
+	lu, err := m.getLUStiffinerKGlobal()
+	if err != nil {
+		return err
+	}
+
+	// Create load vector
+	loads := matrix.NewMatrix64bySize(len(m.degreeInGlobalMatrix), 1)
+	for _, p := range forceCase.nodeForces {
+		d := m.degreeForPoint.GetDoF(p.pointIndex)
+		if p.nodeForce.Fx != 0.0 {
+			h, err := m.indexsInGlobalMatrix.GetByAxe(d[0])
+			if err == nil {
+				loads.Set(h, 0, p.nodeForce.Fx)
+			}
+		}
+		if p.nodeForce.Fy != 0.0 {
+			h, err := m.indexsInGlobalMatrix.GetByAxe(d[1])
+			if err == nil {
+				loads.Set(h, 0, p.nodeForce.Fy)
+			}
+		}
+		if p.nodeForce.M != 0.0 {
+			h, err := m.indexsInGlobalMatrix.GetByAxe(d[2])
+			if err == nil {
+				loads.Set(h, 0, p.nodeForce.M)
+			}
+		}
+	}
+
+	for _, s := range m.supports {
+		d := m.degreeForPoint.GetDoF(s.pointIndex)
+		var result []dof.AxeNumber
+		if s.support.Dx {
+			result = append(result, d[0])
+		}
+		if s.support.Dy {
+			result = append(result, d[1])
+		}
+		if s.support.M {
+			result = append(result, d[2])
+		}
+		for i := 0; i < len(result); i++ {
+			g, err := m.indexsInGlobalMatrix.GetByAxe(result[i])
+			if err != nil {
+				continue
+			}
+			// modify load vector on support
 			loads.Set(g, 0, 0.0)
 		}
 	}
@@ -97,10 +133,6 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 		}
 	}
 
-	// Solving system of linear equations for finding
-	// the displacement in points in global system
-	// TODO: one global stiffiner matrix for all cases
-	lu := solver.NewLUsolver(stiffinerKGlobal)
 	globalDisp := lu.Solve(loads)
 
 	// global displacement for points

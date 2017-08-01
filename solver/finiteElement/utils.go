@@ -26,7 +26,6 @@ func GetStiffinerGlobalK(f FiniteElementer, degree *dof.DoF, info Information) (
 	return kor, axes
 }
 
-/*
 // GetGlobalMass - global matrix of mass
 func GetGlobalMass(f FiniteElementer, degree *dof.DoF, info Information) (matrix.T64, []dof.AxeNumber) {
 	mlocal := matrix.NewMatrix64bySize(4, 4)
@@ -45,7 +44,6 @@ func GetGlobalMass(f FiniteElementer, degree *dof.DoF, info Information) (matrix
 
 	return mor, axes
 }
-*/
 
 /*
 // GetGlobalPotential - global matrix of mass
