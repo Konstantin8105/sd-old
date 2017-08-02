@@ -4,6 +4,13 @@
 
 package main
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"path/filepath"
+)
+
 /*
 * find tempate of test [*.gotmpl]
 * find all variables in test
@@ -15,28 +22,49 @@ package main
 * write into file [*_test.go]
 */
 
+type lines []string
+
 type template struct {
-	begin string
-	test  testFunc
+	begin lines
+	tests []test
 }
 
-type testFunc struct {
+type test struct {
 	header        headerBlock
 	blocks        []block
-	footerSuccess string
-	footerFail    string
+	footerSuccess lines
+	footerFail    lines
 }
 
 type headerBlock struct {
 	testName string
-	body     string
+	body     lines
 }
 
 type block struct {
 	name string
-	body []string
+	body []lines
 }
 
 func main() {
+	files, _ := filepath.Glob("*.gotmpl")
+	for _, fileName := range files {
+		file, err := os.Open(fileName)
+		if err != nil {
+			fmt.Errorf("Cannot open file : %v", fileName)
+			return
+		}
+		defer file.Close()
 
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			line := scanner.Text()
+			fmt.Println(line)
+		}
+
+		if err := scanner.Err(); err != nil {
+			fmt.Errorf("err = %v", err)
+			return
+		}
+	}
 }
