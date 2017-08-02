@@ -23,36 +23,13 @@ import (
 func TestTruss(t *testing.T) {
 	var m model.Dim2
 
-	m.AddPoint(point.Dim2{
-		Index: 2,
-		X:     -0.8660254,
-		Y:     0.,
-	})
-
-	m.AddPoint(point.Dim2{
-		Index: 1,
-		X:     0.,
-		Y:     0.,
-	})
-
-	m.AddPoint(point.Dim2{
-		Index: 3,
-		X:     0.8660254,
-		Y:     0.,
-	})
-
-	m.AddPoint(point.Dim2{
-		Index: 4,
-		X:     0.,
-		Y:     -1.5,
-	})
+	m.AddPoint(point.Dim2{Index: 2, X: -0.8660254, Y: 0.})
+	m.AddPoint(point.Dim2{Index: 1, X: 0., Y: 0.})
+	m.AddPoint(point.Dim2{Index: 3, X: 0.8660254, Y: 0.})
+	m.AddPoint(point.Dim2{Index: 4, X: 0., Y: -1.5})
 
 	// add empty point
-	m.AddPoint(point.Dim2{
-		Index: 40,
-		X:     10.,
-		Y:     0.0,
-	})
+	m.AddPoint(point.Dim2{Index: 40, X: 10., Y: 0.0})
 
 	m.AddElement([]element.Elementer{
 		element.NewBeam(8, 4, 1),
@@ -100,11 +77,6 @@ func TestTruss(t *testing.T) {
 		t.Errorf("Cannot solving. error = %v", err)
 	}
 
-	// results
-
-	// displacement : 0.870 mm
-	// F7 = F9 = 26098 N
-	// F8 = 34797 N
 	{
 		d, err := m.GetGlobalDisplacement(1, point.Index(4))
 		if err != nil {
@@ -158,7 +130,6 @@ func TestTruss(t *testing.T) {
 		// natural frequency for case 2
 		hz1 := 20.74
 		hz2 := 47.79
-		fmt.Println("Add correct natural frequency")
 		actualHz, err := m.GetNaturalFrequency(2)
 		if err != nil {
 			t.Errorf("Cannot found natural frequency for case 2. Error = ", err)
@@ -187,7 +158,7 @@ func TestTruss(t *testing.T) {
 		}
 	}
 	{
-		_, err := m.GetNaturalFrequency(3)
+		_, err := m.GetNaturalFrequency(30)
 		if err == nil {
 			t.Errorf("Wrong: can take natural frequency for empty loads")
 		}
@@ -335,5 +306,64 @@ func TestTrussFrame(t *testing.T) {
 			t.Errorf("reaction for point 1 by axe X is %v. Expected = %v", r.Fx, Rx)
 		}
 	}
-
 }
+
+// test based on methodic
+func TestTwoTruss(t *testing.T) {
+	var m model.Dim2
+
+	m.AddPoint([]point.Dim2{
+		{Index: 1, X: +0.0, Y: 0.3},
+		{Index: 2, X: -3.0, Y: 0.0},
+		{Index: 3, X: +3.0, Y: 0.0},
+	}...)
+
+	m.AddElement([]element.Elementer{
+		element.NewBeam(1, 1, 2),
+		element.NewBeam(2, 1, 3),
+	}...)
+
+	// Truss
+	m.AddTrussProperty(1, 2)
+
+	// Supports
+	m.AddSupport(support.Dim2{
+		Dx: support.Fix,
+		Dy: support.Fix,
+	}, 2)
+
+	m.AddSupport(support.Dim2{
+		Dx: support.Fix,
+		Dy: support.Fix,
+	}, 3)
+
+	m.AddShape(shape.Shape{
+		A: math.Pi / 4.0 * (10.0*10.0 - 9.3*9.3) * 1e-6,
+	}, []element.Index{1, 2}...)
+
+	m.AddMaterial(material.Linear{
+		E:  2e11,
+		Ro: 78500,
+	}, []element.Index{1, 2}...)
+
+	// Node force
+	m.AddNodeForce(1, force.NodeDim2{
+		Fy: -4000.0,
+	}, []point.Index{1}...)
+
+	err := m.Solve()
+	if err != nil {
+		t.Errorf("Cannot solving. error = %v", err)
+	}
+
+	d, err := m.GetGlobalDisplacement(1, 1)
+
+	// TODO check
+	fmt.Println("1:", d)
+	fmt.Println("Must be:")
+	fmt.Println("P =  -4000 N ; D = -0.10 meter")
+	fmt.Println("P =  -8000 N ; D = -0.20 meter")
+	fmt.Println("P = -10000 N ; D = -0.55 meter")
+}
+
+//TODO axial force of pinned column

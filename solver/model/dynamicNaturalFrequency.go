@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/Konstantin8105/GoFea/solver/finiteElement"
@@ -114,7 +113,7 @@ func (m *Dim2) solveNaturalFrequency(forceCase *forceCase2d) error {
 	value := eigen.GetRealEigenvalues()
 	for _, v := range value {
 		freq := math.Sqrt(1.0/v) / 2.0 / math.Pi
-		fmt.Printf("f = %.5v Hz\n", freq)
+		//fmt.Printf("f = %.5v Hz\n", freq)
 		_ = freq
 		// TODO add sorting natural frequency
 		// TODO remove not adequat frequency

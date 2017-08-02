@@ -107,6 +107,20 @@ func (m *Dim2) checkInputData() error {
 		return fmt.Errorf("Errors in truss:\n%v", err)
 	}
 
+	for _, f := range m.forceCases {
+		for _, n := range f.nodeForces {
+			var found bool
+			for _, p := range m.points {
+				if p.Index == n.pointIndex {
+					found = true
+				}
+			}
+			if !found {
+				return fmt.Errorf("Cannot found point %v in node force %v in force case %v in list of points: %v", n.pointIndex, n, f.indexCase, m.points)
+			}
+		}
+	}
+
 	//TODO  Example of use : sort.Sort(materialByElement(slise))
 	//TODO sorting for quick search - quick checking
 

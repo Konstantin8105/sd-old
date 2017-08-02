@@ -88,11 +88,17 @@ Tasks:
 					- [x] Calculate internal deformation
 					- [x] Calculate internal force
 					- [x] Reactions in support
-				- [ ] Natural frequency
+				- [x] Natural frequency
 				- [ ] Nolinear deformation
+				- [ ] Nolinear deformation shapes
 				- [ ] Linear buckling
+				- [ ] Linear buckling shapes
 				- [ ] Nolinear buckling
+				- [ ] Nolinear buckling shapes
 				- [ ] Riks method for buckling
+				- [ ] Riks method for buckling shapes
+				- [ ] Natural frequency. Modal mass
+				- [ ] Natural frequency shapes
 			- [ ] gravity load (selfweight)
 			- [ ] displacement load
 			- [ ] uniform load. local axe
@@ -105,6 +111,7 @@ Tasks:
 		- [ ] compress finite element
 		- [ ] gap finite element
 		- [ ] Pins for beam finite element
+		- [ ] triangle finite element
 - [ ] 2d symmetric
 - [ ] 3d
 - [ ] Create IO input  file format
@@ -115,6 +122,9 @@ Tasks:
 
 **TODO`s**:
 
+- [ ] Fuzzer for good model with different loads(positive, negative)
+- [ ] Fuzzer for change position of part code for good model
+- [ ] Generate testing
 - [ ] Calculation graph
 - [ ] 3D, tables, graphs
 

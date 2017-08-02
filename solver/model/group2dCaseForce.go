@@ -43,7 +43,8 @@ type dynamicTypes int
 const (
 	none dynamicTypes = iota
 	naturalFrequency
-	bucklingFactors
+	linearBuckling
+	nolinearBuckling
 )
 
 // GetGlobalDisplacement - return global displacement
@@ -80,6 +81,14 @@ func (f *forceCase2d) GetReaction(pointIndex point.Index) (r reaction.Dim2, err 
 func (f *forceCase2d) GetNaturalFrequency() (hz []float64, err error) {
 	if f.dynamicType != naturalFrequency {
 		return hz, fmt.Errorf("Natural frequency is not calculate for that case")
+	}
+	return f.dynamicValue, nil
+}
+
+// GetLinearBucklingFactor - return factors of linear buckling
+func (f *forceCase2d) GetLinearBucklingFactor() (factors []float64, err error) {
+	if f.dynamicType != linearBuckling {
+		return factors, fmt.Errorf("Factors of linear buckling is not calculate for that case")
 	}
 	return f.dynamicValue, nil
 }
