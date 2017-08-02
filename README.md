@@ -124,6 +124,7 @@ Tasks:
 
 - [ ] Fuzzer for good model with different loads(positive, negative)
 - [ ] Fuzzer for change position of part code for good model
+- [ ] Generate testing
 - [ ] Calculation graph
 - [ ] 3D, tables, graphs
 

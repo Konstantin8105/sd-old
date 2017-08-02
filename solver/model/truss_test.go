@@ -23,36 +23,13 @@ import (
 func TestTruss(t *testing.T) {
 	var m model.Dim2
 
-	m.AddPoint(point.Dim2{
-		Index: 2,
-		X:     -0.8660254,
-		Y:     0.,
-	})
-
-	m.AddPoint(point.Dim2{
-		Index: 1,
-		X:     0.,
-		Y:     0.,
-	})
-
-	m.AddPoint(point.Dim2{
-		Index: 3,
-		X:     0.8660254,
-		Y:     0.,
-	})
-
-	m.AddPoint(point.Dim2{
-		Index: 4,
-		X:     0.,
-		Y:     -1.5,
-	})
+	m.AddPoint(point.Dim2{Index: 2, X: -0.8660254, Y: 0.})
+	m.AddPoint(point.Dim2{Index: 1, X: 0., Y: 0.})
+	m.AddPoint(point.Dim2{Index: 3, X: 0.8660254, Y: 0.})
+	m.AddPoint(point.Dim2{Index: 4, X: 0., Y: -1.5})
 
 	// add empty point
-	m.AddPoint(point.Dim2{
-		Index: 40,
-		X:     10.,
-		Y:     0.0,
-	})
+	m.AddPoint(point.Dim2{Index: 40, X: 10., Y: 0.0})
 
 	m.AddElement([]element.Elementer{
 		element.NewBeam(8, 4, 1),
@@ -100,11 +77,6 @@ func TestTruss(t *testing.T) {
 		t.Errorf("Cannot solving. error = %v", err)
 	}
 
-	// results
-
-	// displacement : 0.870 mm
-	// F7 = F9 = 26098 N
-	// F8 = 34797 N
 	{
 		d, err := m.GetGlobalDisplacement(1, point.Index(4))
 		if err != nil {
