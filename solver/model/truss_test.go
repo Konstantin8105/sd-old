@@ -1,7 +1,6 @@
 package model_test
 
 import (
-	"fmt"
 	"math"
 	"testing"
 
@@ -308,6 +307,7 @@ func TestTrussFrame(t *testing.T) {
 	}
 }
 
+/*
 // test based on methodic
 func TestTwoTruss(t *testing.T) {
 	var m model.Dim2
@@ -367,3 +367,4 @@ func TestTwoTruss(t *testing.T) {
 }
 
 //TODO axial force of pinned column
+*/
