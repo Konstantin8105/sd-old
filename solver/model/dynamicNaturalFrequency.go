@@ -74,7 +74,10 @@ func (m *Dim2) solveNaturalFrequency(forceCase *forceCase2d) error {
 			buffer.Set(j, 0, massGlobal.Get(j, i))
 		}
 		// Calculation
-		result := lu.Solve(buffer)
+		result, err := lu.Solve(buffer)
+		if err != nil {
+			return err
+		}
 		// Add vector to [Ho]
 		for j := 0; j < n; j++ {
 			Ho.Set(j, i, result.Get(j, 0))

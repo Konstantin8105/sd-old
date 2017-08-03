@@ -133,7 +133,10 @@ func (m *Dim2) solveCase(forceCase *forceCase2d) error {
 		}
 	}
 
-	globalDisp := lu.Solve(loads)
+	globalDisp, err := lu.Solve(loads)
+	if err != nil {
+		return err
+	}
 
 	// global displacement for points
 	for _, p := range m.points {

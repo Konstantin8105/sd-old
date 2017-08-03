@@ -119,10 +119,10 @@ func (m *Dim2) getFiniteElement(inx element.Index) (fe finiteElement.FiniteEleme
 			err = fe.GetStiffinerK(&buffer)
 			if err != nil {
 				return err
-			}
+		 	}
 		}*/
 	}
-	panic("Please add finite element")
+	return fe, fmt.Errorf("Cannot create finite element for element %v", inx)
 }
 
 func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dofSystem *dof.DoF, mapIndex *dof.MapIndex, f func(finiteElement.FiniteElementer, *dof.DoF, finiteElement.Information) (matrix.T64, []dof.AxeNumber)) (y matrix.T64, err error) {

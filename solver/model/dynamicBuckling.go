@@ -124,7 +124,10 @@ func (m *Dim2) solveLinearBuckling(forceCase *forceCase2d) error {
 			bufferPotential.Set(j, 0, potentialGlobal.Get(j, i))
 		}
 		// Calculation
-		result := lu.Solve(bufferPotential)
+		result, err := lu.Solve(bufferPotential)
+		if err != nil {
+			return err
+		}
 		// Add vector to [Ho]
 		for j := 0; j < n; j++ {
 			HoPotential.Set(j, i, result.Get(j, 0))
