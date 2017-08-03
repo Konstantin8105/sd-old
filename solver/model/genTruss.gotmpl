@@ -28,7 +28,7 @@ import (
 
 <<Test>>
 <<Header>>
-func Test{{TestName}}(t *testing.T) {
+func TestGenTruss{{TestName}}(t *testing.T) {
 	var m model.Dim2
 <<Header>>
 
@@ -138,7 +138,7 @@ func Test{{TestName}}(t *testing.T) {
 	err := m.Solve()
 	if err == nil {
 		f7 := -26098.
-		b, e, err := m.GetLocalForce(1, element.Index(7))
+		b, _, err := m.GetLocalForce(1, element.Index(7))
 		if err != nil {
 			return
 		}
