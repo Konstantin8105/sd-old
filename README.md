@@ -122,7 +122,7 @@ Tasks:
 
 Tests for finite elements:
 |       | Linear deformation | Nolinear deformation | Natural frequency |Linear buckling | Nolinear buckling |
-|---|---|---|
+| ----- | ------------------ |--------------------- | ----------------- | ---------------| ----------------- |
 | Truss | [x]                |                      | [x]               |                |                   |
 | Beam  |                    |                      |                   |                |                   |
 
