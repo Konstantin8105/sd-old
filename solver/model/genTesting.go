@@ -229,6 +229,7 @@ func generateTest(tmpl template, file *os.File) {
 	generateSuccessInvert(tmpl, file)
 	generateWithoutOneForFail(tmpl, file)
 	generateWithoutOneExpectForFail(tmpl, file)
+	generateDublicateForFail(tmpl, file)
 }
 
 func generateSuccess(tmpl template, file *os.File) {
@@ -291,6 +292,28 @@ func generateWithoutOneExpectForFail(tmpl template, file *os.File) {
 		for j, t := range tmpl.t.blocks {
 			if i != j {
 				continue
+			}
+			for _, tt := range []string(t.body) {
+				fmt.Fprintln(file, tt)
+			}
+		}
+		for _, t := range []string(tmpl.t.footerFail) {
+			fmt.Fprintln(file, t)
+		}
+	}
+}
+
+func generateDublicateForFail(tmpl template, file *os.File) {
+	for i := range tmpl.t.blocks {
+		h := tmpl.t.header.getBody(fmt.Sprintf("DublicateForFail%v", i))
+		for _, t := range []string(h) {
+			fmt.Fprintln(file, t)
+		}
+		for j, t := range tmpl.t.blocks {
+			if i == j {
+				for _, tt := range []string(t.body) {
+					fmt.Fprintln(file, tt)
+				}
 			}
 			for _, tt := range []string(t.body) {
 				fmt.Fprintln(file, tt)
