@@ -228,6 +228,7 @@ func generateTest(tmpl template, file *os.File) {
 	generateSuccess(tmpl, file)
 	generateSuccessInvert(tmpl, file)
 	generateWithoutOneForFail(tmpl, file)
+	generateWithoutOneExpectForFail(tmpl, file)
 }
 
 func generateSuccess(tmpl template, file *os.File) {
@@ -263,12 +264,32 @@ func generateSuccessInvert(tmpl template, file *os.File) {
 
 func generateWithoutOneForFail(tmpl template, file *os.File) {
 	for i := range tmpl.t.blocks {
-		h := tmpl.t.header.getBody(fmt.Sprintf("WothoutOneForFail%v", i))
+		h := tmpl.t.header.getBody(fmt.Sprintf("WithoutOneForFail%v", i))
 		for _, t := range []string(h) {
 			fmt.Fprintln(file, t)
 		}
 		for j, t := range tmpl.t.blocks {
 			if i == j {
+				continue
+			}
+			for _, tt := range []string(t.body) {
+				fmt.Fprintln(file, tt)
+			}
+		}
+		for _, t := range []string(tmpl.t.footerFail) {
+			fmt.Fprintln(file, t)
+		}
+	}
+}
+
+func generateWithoutOneExpectForFail(tmpl template, file *os.File) {
+	for i := range tmpl.t.blocks {
+		h := tmpl.t.header.getBody(fmt.Sprintf("WithoutOneExpectForFail%v", i))
+		for _, t := range []string(h) {
+			fmt.Fprintln(file, t)
+		}
+		for j, t := range tmpl.t.blocks {
+			if i != j {
 				continue
 			}
 			for _, tt := range []string(t.body) {
