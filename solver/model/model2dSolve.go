@@ -96,31 +96,27 @@ func (m *Dim2) getFiniteElement(inx element.Index) (fe finiteElement.FiniteEleme
 
 	switch el.(type) {
 	case element.Beam:
+		// No need to check on len(points) == 2
+		// magic number 2 is amount of beam points
+		// TODO change from array to slise
+		var c [2]point.Dim2
+		for i := 0; i < len(c); i++ {
+			c[i] = coord[i]
+		}
 		if m.isTruss(inx) {
-			// No need to check on len(points) == 2
-			// magic number 2 is amount of beam points
-			// TODO change from array to slise
-			var c [2]point.Dim2
-			for i := 0; i < len(c); i++ {
-				c[i] = coord[i]
-			}
 			f := finiteElement.TrussDim2{
 				Material: material,
 				Shape:    shape,
 				Points:   c,
 			}
 			return &f, nil
-		} /* else {
-			fe := finiteElement.BeamDim2{
-				Material: material,
-				Shape:    shape,
-				Points:   coord,
-			}
-			err = fe.GetStiffinerK(&buffer)
-			if err != nil {
-				return err
-		 	}
-		}*/
+		}
+		f := finiteElement.BeamDim2{
+			Material: material,
+			Shape:    shape,
+			Points:   c,
+		}
+		return &f, nil
 	}
 	return fe, fmt.Errorf("Cannot create finite element for element %v", inx)
 }

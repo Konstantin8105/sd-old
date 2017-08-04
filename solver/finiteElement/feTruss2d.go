@@ -33,7 +33,6 @@ func (f *TrussDim2) GetCoordinateTransformation(tr *matrix.T64) {
 	tr.Set(4, 3, -lambdaXY)
 	tr.Set(4, 4, lambdaXX)
 	tr.Set(5, 5, 1.0)
-
 }
 
 // GetStiffinerK - matrix of stiffiner

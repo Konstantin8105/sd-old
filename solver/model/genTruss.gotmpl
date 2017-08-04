@@ -56,12 +56,6 @@ func TestGenTruss{{TestName}}(t *testing.T) {
 	}...)
 <<Block2>>
 
-<<Block3>>
-	m.AddTrussProperty( 7)
-<<Block3>>
-<<Block3>>
-	m.AddTrussProperty(9,  8)
-<<Block3>>
 
 <<Block4>>
 	m.AddSupport(support.FixedDim2(), 1)
@@ -102,6 +96,8 @@ func TestGenTruss{{TestName}}(t *testing.T) {
 <<Block7>>
 
 <<FooterSuccess>>
+	m.AddTrussProperty( 7)
+	m.AddTrussProperty(9,  8)
 	m.AddNaturalFrequency(2)
 
 	m.AddNodeForce(2, force.NodeDim2{
@@ -130,6 +126,8 @@ func TestGenTruss{{TestName}}(t *testing.T) {
 }
 <<FooterSuccess>>
 <<FooterFail>>
+	m.AddTrussProperty( 7)
+	m.AddTrussProperty(9,  8)
 	m.AddNaturalFrequency(2)
 
 	m.AddNodeForce(2, force.NodeDim2{

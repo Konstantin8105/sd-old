@@ -34,8 +34,6 @@ func TestGenTrussSuccessFull(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -56,6 +54,8 @@ func TestGenTrussSuccessFull(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -101,8 +101,6 @@ func TestGenTrussSuccessInvertFull(t *testing.T) {
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
 	m.AddSupport(support.FixedDim2(), 1)
-	m.AddTrussProperty(9, 8)
-	m.AddTrussProperty(7)
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
@@ -115,6 +113,8 @@ func TestGenTrussSuccessInvertFull(t *testing.T) {
 	m.AddPoint(point.Dim2{Index: 40, X: 10., Y: 0.0})
 	m.AddPoint(point.Dim2{Index: 1, X: 0., Y: 0.})
 	m.AddPoint(point.Dim2{Index: 2, X: -0.8660254, Y: 0.})
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -151,8 +151,6 @@ func TestGenTrussWithoutOneForFail0(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -173,6 +171,8 @@ func TestGenTrussWithoutOneForFail0(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -205,8 +205,6 @@ func TestGenTrussWithoutOneForFail1(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -227,6 +225,8 @@ func TestGenTrussWithoutOneForFail1(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -257,8 +257,6 @@ func TestGenTrussWithoutOneForFail2(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -279,6 +277,8 @@ func TestGenTrussWithoutOneForFail2(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -308,8 +308,6 @@ func TestGenTrussWithoutOneForFail3(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -330,6 +328,8 @@ func TestGenTrussWithoutOneForFail3(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -360,8 +360,6 @@ func TestGenTrussWithoutOneForFail4(t *testing.T) {
 		element.NewBeam(8, 4, 1),
 		element.NewBeam(9, 4, 3),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -382,6 +380,8 @@ func TestGenTrussWithoutOneForFail4(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -415,8 +415,6 @@ func TestGenTrussWithoutOneForFail5(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(9, 8)
-	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
 	m.AddShape(shape.Shape{
@@ -436,6 +434,8 @@ func TestGenTrussWithoutOneForFail5(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -469,10 +469,7 @@ func TestGenTrussWithoutOneForFail6(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
 	m.AddSupport(support.FixedDim2(), 1)
-	m.AddSupport(support.FixedDim2(), 3)
-	m.AddSupport(support.FixedDim2(), 2)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
 	}, []element.Index{7, 9}...)
@@ -490,6 +487,8 @@ func TestGenTrussWithoutOneForFail6(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -523,13 +522,9 @@ func TestGenTrussWithoutOneForFail7(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
+	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{7, 9}...)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
 	}, []element.Index{8}...)
@@ -544,6 +539,8 @@ func TestGenTrussWithoutOneForFail7(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -577,15 +574,12 @@ func TestGenTrussWithoutOneForFail8(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
+	m.AddSupport(support.FixedDim2(), 3)
+	m.AddSupport(support.FixedDim2(), 2)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
 	}, []element.Index{7, 9}...)
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{8}...)
 	m.AddMaterial(material.Linear{
 		E:  2e11,
 		Ro: 78500,
@@ -597,6 +591,8 @@ func TestGenTrussWithoutOneForFail8(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -630,18 +626,15 @@ func TestGenTrussWithoutOneForFail9(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
+	}, []element.Index{7, 9}...)
+	m.AddShape(shape.Shape{
+		A: 300e-6,
 	}, []element.Index{8}...)
-	m.AddMaterial(material.Linear{
-		E:  2e11,
-		Ro: 78500,
-	}, []element.Index{9, 7}...)
 	m.AddMaterial(material.Linear{
 		E:  2e11,
 		Ro: 78500,
@@ -649,6 +642,8 @@ func TestGenTrussWithoutOneForFail9(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -682,25 +677,24 @@ func TestGenTrussWithoutOneForFail10(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
 	}, []element.Index{7, 9}...)
+	m.AddShape(shape.Shape{
+		A: 300e-6,
+	}, []element.Index{8}...)
 	m.AddMaterial(material.Linear{
 		E:  2e11,
 		Ro: 78500,
 	}, []element.Index{9, 7}...)
-	m.AddMaterial(material.Linear{
-		E:  2e11,
-		Ro: 78500,
-	}, []element.Index{8}...)
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -734,110 +728,6 @@ func TestGenTrussWithoutOneForFail11(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
-	m.AddSupport(support.FixedDim2(), 1)
-	m.AddSupport(support.FixedDim2(), 3)
-	m.AddSupport(support.FixedDim2(), 2)
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{7, 9}...)
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{8}...)
-	m.AddMaterial(material.Linear{
-		E:  2e11,
-		Ro: 78500,
-	}, []element.Index{8}...)
-	m.AddNodeForce(1, force.NodeDim2{
-		Fy: -80000.0,
-	}, []point.Index{4}...)
-	m.AddNaturalFrequency(2)
-	m.AddNodeForce(2, force.NodeDim2{
-		Fx: 10000.0,
-		Fy: 10000.0,
-	}, []point.Index{4}...)
-	err := m.Solve()
-	if err == nil {
-		f7 := -26098.
-		b, _, err := m.GetLocalForce(1, element.Index(7))
-		if err != nil {
-			return
-		}
-		if math.Abs((f7-b.Fx)/f7) > 0.01 {
-			return
-		} else {
-			t.Errorf("axial force for beam 7 is %v cannot be equal without some data. Expected = %v", f7, b.Fx)
-		}
-	}
-}
-func TestGenTrussWithoutOneForFail12(t *testing.T) {
-	var m model.Dim2
-	m.AddPoint(point.Dim2{Index: 2, X: -0.8660254, Y: 0.})
-	m.AddPoint(point.Dim2{Index: 1, X: 0., Y: 0.})
-	m.AddPoint(point.Dim2{Index: 3, X: 0.8660254, Y: 0.})
-	m.AddPoint(point.Dim2{Index: 4, X: 0., Y: -1.5})
-	m.AddPoint(point.Dim2{Index: 40, X: 10., Y: 0.0})
-	m.AddElement([]element.Elementer{
-		element.NewBeam(8, 4, 1),
-		element.NewBeam(9, 4, 3),
-	}...)
-	m.AddElement([]element.Elementer{
-		element.NewBeam(7, 4, 2),
-	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
-	m.AddSupport(support.FixedDim2(), 1)
-	m.AddSupport(support.FixedDim2(), 3)
-	m.AddSupport(support.FixedDim2(), 2)
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{7, 9}...)
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{8}...)
-	m.AddMaterial(material.Linear{
-		E:  2e11,
-		Ro: 78500,
-	}, []element.Index{9, 7}...)
-	m.AddNodeForce(1, force.NodeDim2{
-		Fy: -80000.0,
-	}, []point.Index{4}...)
-	m.AddNaturalFrequency(2)
-	m.AddNodeForce(2, force.NodeDim2{
-		Fx: 10000.0,
-		Fy: 10000.0,
-	}, []point.Index{4}...)
-	err := m.Solve()
-	if err == nil {
-		f7 := -26098.
-		b, _, err := m.GetLocalForce(1, element.Index(7))
-		if err != nil {
-			return
-		}
-		if math.Abs((f7-b.Fx)/f7) > 0.01 {
-			return
-		} else {
-			t.Errorf("axial force for beam 7 is %v cannot be equal without some data. Expected = %v", f7, b.Fx)
-		}
-	}
-}
-func TestGenTrussWithoutOneForFail13(t *testing.T) {
-	var m model.Dim2
-	m.AddPoint(point.Dim2{Index: 2, X: -0.8660254, Y: 0.})
-	m.AddPoint(point.Dim2{Index: 1, X: 0., Y: 0.})
-	m.AddPoint(point.Dim2{Index: 3, X: 0.8660254, Y: 0.})
-	m.AddPoint(point.Dim2{Index: 4, X: 0., Y: -1.5})
-	m.AddPoint(point.Dim2{Index: 40, X: 10., Y: 0.0})
-	m.AddElement([]element.Elementer{
-		element.NewBeam(8, 4, 1),
-		element.NewBeam(9, 4, 3),
-	}...)
-	m.AddElement([]element.Elementer{
-		element.NewBeam(7, 4, 2),
-	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -855,6 +745,8 @@ func TestGenTrussWithoutOneForFail13(t *testing.T) {
 		E:  2e11,
 		Ro: 78500,
 	}, []element.Index{8}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -877,6 +769,8 @@ func TestGenTrussWithoutOneForFail13(t *testing.T) {
 func TestGenTrussWithoutOneExpectForFail0(t *testing.T) {
 	var m model.Dim2
 	m.AddPoint(point.Dim2{Index: 2, X: -0.8660254, Y: 0.})
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -899,6 +793,8 @@ func TestGenTrussWithoutOneExpectForFail0(t *testing.T) {
 func TestGenTrussWithoutOneExpectForFail1(t *testing.T) {
 	var m model.Dim2
 	m.AddPoint(point.Dim2{Index: 1, X: 0., Y: 0.})
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -923,6 +819,8 @@ func TestGenTrussWithoutOneExpectForFail2(t *testing.T) {
 	m.AddPoint(point.Dim2{Index: 3, X: 0.8660254, Y: 0.})
 	m.AddPoint(point.Dim2{Index: 4, X: 0., Y: -1.5})
 	m.AddPoint(point.Dim2{Index: 40, X: 10., Y: 0.0})
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -948,6 +846,8 @@ func TestGenTrussWithoutOneExpectForFail3(t *testing.T) {
 		element.NewBeam(8, 4, 1),
 		element.NewBeam(9, 4, 3),
 	}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -972,6 +872,8 @@ func TestGenTrussWithoutOneExpectForFail4(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -993,7 +895,9 @@ func TestGenTrussWithoutOneExpectForFail4(t *testing.T) {
 }
 func TestGenTrussWithoutOneExpectForFail5(t *testing.T) {
 	var m model.Dim2
+	m.AddSupport(support.FixedDim2(), 1)
 	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1015,6 +919,9 @@ func TestGenTrussWithoutOneExpectForFail5(t *testing.T) {
 }
 func TestGenTrussWithoutOneExpectForFail6(t *testing.T) {
 	var m model.Dim2
+	m.AddSupport(support.FixedDim2(), 3)
+	m.AddSupport(support.FixedDim2(), 2)
+	m.AddTrussProperty(7)
 	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
@@ -1037,7 +944,11 @@ func TestGenTrussWithoutOneExpectForFail6(t *testing.T) {
 }
 func TestGenTrussWithoutOneExpectForFail7(t *testing.T) {
 	var m model.Dim2
-	m.AddSupport(support.FixedDim2(), 1)
+	m.AddShape(shape.Shape{
+		A: 300e-6,
+	}, []element.Index{7, 9}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1059,8 +970,11 @@ func TestGenTrussWithoutOneExpectForFail7(t *testing.T) {
 }
 func TestGenTrussWithoutOneExpectForFail8(t *testing.T) {
 	var m model.Dim2
-	m.AddSupport(support.FixedDim2(), 3)
-	m.AddSupport(support.FixedDim2(), 2)
+	m.AddShape(shape.Shape{
+		A: 300e-6,
+	}, []element.Index{8}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1082,9 +996,12 @@ func TestGenTrussWithoutOneExpectForFail8(t *testing.T) {
 }
 func TestGenTrussWithoutOneExpectForFail9(t *testing.T) {
 	var m model.Dim2
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{7, 9}...)
+	m.AddMaterial(material.Linear{
+		E:  2e11,
+		Ro: 78500,
+	}, []element.Index{9, 7}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1106,9 +1023,12 @@ func TestGenTrussWithoutOneExpectForFail9(t *testing.T) {
 }
 func TestGenTrussWithoutOneExpectForFail10(t *testing.T) {
 	var m model.Dim2
-	m.AddShape(shape.Shape{
-		A: 300e-6,
+	m.AddMaterial(material.Linear{
+		E:  2e11,
+		Ro: 78500,
 	}, []element.Index{8}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1130,59 +1050,11 @@ func TestGenTrussWithoutOneExpectForFail10(t *testing.T) {
 }
 func TestGenTrussWithoutOneExpectForFail11(t *testing.T) {
 	var m model.Dim2
-	m.AddMaterial(material.Linear{
-		E:  2e11,
-		Ro: 78500,
-	}, []element.Index{9, 7}...)
-	m.AddNaturalFrequency(2)
-	m.AddNodeForce(2, force.NodeDim2{
-		Fx: 10000.0,
-		Fy: 10000.0,
-	}, []point.Index{4}...)
-	err := m.Solve()
-	if err == nil {
-		f7 := -26098.
-		b, _, err := m.GetLocalForce(1, element.Index(7))
-		if err != nil {
-			return
-		}
-		if math.Abs((f7-b.Fx)/f7) > 0.01 {
-			return
-		} else {
-			t.Errorf("axial force for beam 7 is %v cannot be equal without some data. Expected = %v", f7, b.Fx)
-		}
-	}
-}
-func TestGenTrussWithoutOneExpectForFail12(t *testing.T) {
-	var m model.Dim2
-	m.AddMaterial(material.Linear{
-		E:  2e11,
-		Ro: 78500,
-	}, []element.Index{8}...)
-	m.AddNaturalFrequency(2)
-	m.AddNodeForce(2, force.NodeDim2{
-		Fx: 10000.0,
-		Fy: 10000.0,
-	}, []point.Index{4}...)
-	err := m.Solve()
-	if err == nil {
-		f7 := -26098.
-		b, _, err := m.GetLocalForce(1, element.Index(7))
-		if err != nil {
-			return
-		}
-		if math.Abs((f7-b.Fx)/f7) > 0.01 {
-			return
-		} else {
-			t.Errorf("axial force for beam 7 is %v cannot be equal without some data. Expected = %v", f7, b.Fx)
-		}
-	}
-}
-func TestGenTrussWithoutOneExpectForFail13(t *testing.T) {
-	var m model.Dim2
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1217,8 +1089,6 @@ func TestGenTrussDublicateForFail0(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -1239,6 +1109,8 @@ func TestGenTrussDublicateForFail0(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1273,8 +1145,6 @@ func TestGenTrussDublicateForFail1(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -1295,6 +1165,8 @@ func TestGenTrussDublicateForFail1(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1331,8 +1203,6 @@ func TestGenTrussDublicateForFail2(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -1353,6 +1223,8 @@ func TestGenTrussDublicateForFail2(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1390,8 +1262,6 @@ func TestGenTrussDublicateForFail3(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -1412,6 +1282,8 @@ func TestGenTrussDublicateForFail3(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1448,8 +1320,6 @@ func TestGenTrussDublicateForFail4(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -1470,6 +1340,8 @@ func TestGenTrussDublicateForFail4(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1503,9 +1375,7 @@ func TestGenTrussDublicateForFail5(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
+	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -1526,6 +1396,8 @@ func TestGenTrussDublicateForFail5(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1559,10 +1431,9 @@ func TestGenTrussDublicateForFail6(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
+	m.AddSupport(support.FixedDim2(), 3)
+	m.AddSupport(support.FixedDim2(), 2)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
 	m.AddShape(shape.Shape{
@@ -1582,6 +1453,8 @@ func TestGenTrussDublicateForFail6(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1615,12 +1488,12 @@ func TestGenTrussDublicateForFail7(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
-	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
+	m.AddShape(shape.Shape{
+		A: 300e-6,
+	}, []element.Index{7, 9}...)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
 	}, []element.Index{7, 9}...)
@@ -1638,6 +1511,8 @@ func TestGenTrussDublicateForFail7(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1671,16 +1546,15 @@ func TestGenTrussDublicateForFail8(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
-	m.AddSupport(support.FixedDim2(), 3)
-	m.AddSupport(support.FixedDim2(), 2)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
 	}, []element.Index{7, 9}...)
+	m.AddShape(shape.Shape{
+		A: 300e-6,
+	}, []element.Index{8}...)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
 	}, []element.Index{8}...)
@@ -1695,6 +1569,8 @@ func TestGenTrussDublicateForFail8(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1728,14 +1604,9 @@ func TestGenTrussDublicateForFail9(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{7, 9}...)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
 	}, []element.Index{7, 9}...)
@@ -1749,10 +1620,16 @@ func TestGenTrussDublicateForFail9(t *testing.T) {
 	m.AddMaterial(material.Linear{
 		E:  2e11,
 		Ro: 78500,
+	}, []element.Index{9, 7}...)
+	m.AddMaterial(material.Linear{
+		E:  2e11,
+		Ro: 78500,
 	}, []element.Index{8}...)
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1786,17 +1663,12 @@ func TestGenTrussDublicateForFail10(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
 	}, []element.Index{7, 9}...)
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{8}...)
 	m.AddShape(shape.Shape{
 		A: 300e-6,
 	}, []element.Index{8}...)
@@ -1808,9 +1680,15 @@ func TestGenTrussDublicateForFail10(t *testing.T) {
 		E:  2e11,
 		Ro: 78500,
 	}, []element.Index{8}...)
+	m.AddMaterial(material.Linear{
+		E:  2e11,
+		Ro: 78500,
+	}, []element.Index{8}...)
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
@@ -1844,126 +1722,6 @@ func TestGenTrussDublicateForFail11(t *testing.T) {
 	m.AddElement([]element.Elementer{
 		element.NewBeam(7, 4, 2),
 	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
-	m.AddSupport(support.FixedDim2(), 1)
-	m.AddSupport(support.FixedDim2(), 3)
-	m.AddSupport(support.FixedDim2(), 2)
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{7, 9}...)
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{8}...)
-	m.AddMaterial(material.Linear{
-		E:  2e11,
-		Ro: 78500,
-	}, []element.Index{9, 7}...)
-	m.AddMaterial(material.Linear{
-		E:  2e11,
-		Ro: 78500,
-	}, []element.Index{9, 7}...)
-	m.AddMaterial(material.Linear{
-		E:  2e11,
-		Ro: 78500,
-	}, []element.Index{8}...)
-	m.AddNodeForce(1, force.NodeDim2{
-		Fy: -80000.0,
-	}, []point.Index{4}...)
-	m.AddNaturalFrequency(2)
-	m.AddNodeForce(2, force.NodeDim2{
-		Fx: 10000.0,
-		Fy: 10000.0,
-	}, []point.Index{4}...)
-	err := m.Solve()
-	if err == nil {
-		f7 := -26098.
-		b, _, err := m.GetLocalForce(1, element.Index(7))
-		if err != nil {
-			return
-		}
-		if math.Abs((f7-b.Fx)/f7) > 0.01 {
-			return
-		} else {
-			t.Errorf("axial force for beam 7 is %v cannot be equal without some data. Expected = %v", f7, b.Fx)
-		}
-	}
-}
-func TestGenTrussDublicateForFail12(t *testing.T) {
-	var m model.Dim2
-	m.AddPoint(point.Dim2{Index: 2, X: -0.8660254, Y: 0.})
-	m.AddPoint(point.Dim2{Index: 1, X: 0., Y: 0.})
-	m.AddPoint(point.Dim2{Index: 3, X: 0.8660254, Y: 0.})
-	m.AddPoint(point.Dim2{Index: 4, X: 0., Y: -1.5})
-	m.AddPoint(point.Dim2{Index: 40, X: 10., Y: 0.0})
-	m.AddElement([]element.Elementer{
-		element.NewBeam(8, 4, 1),
-		element.NewBeam(9, 4, 3),
-	}...)
-	m.AddElement([]element.Elementer{
-		element.NewBeam(7, 4, 2),
-	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
-	m.AddSupport(support.FixedDim2(), 1)
-	m.AddSupport(support.FixedDim2(), 3)
-	m.AddSupport(support.FixedDim2(), 2)
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{7, 9}...)
-	m.AddShape(shape.Shape{
-		A: 300e-6,
-	}, []element.Index{8}...)
-	m.AddMaterial(material.Linear{
-		E:  2e11,
-		Ro: 78500,
-	}, []element.Index{9, 7}...)
-	m.AddMaterial(material.Linear{
-		E:  2e11,
-		Ro: 78500,
-	}, []element.Index{8}...)
-	m.AddMaterial(material.Linear{
-		E:  2e11,
-		Ro: 78500,
-	}, []element.Index{8}...)
-	m.AddNodeForce(1, force.NodeDim2{
-		Fy: -80000.0,
-	}, []point.Index{4}...)
-	m.AddNaturalFrequency(2)
-	m.AddNodeForce(2, force.NodeDim2{
-		Fx: 10000.0,
-		Fy: 10000.0,
-	}, []point.Index{4}...)
-	err := m.Solve()
-	if err == nil {
-		f7 := -26098.
-		b, _, err := m.GetLocalForce(1, element.Index(7))
-		if err != nil {
-			return
-		}
-		if math.Abs((f7-b.Fx)/f7) > 0.01 {
-			return
-		} else {
-			t.Errorf("axial force for beam 7 is %v cannot be equal without some data. Expected = %v", f7, b.Fx)
-		}
-	}
-}
-func TestGenTrussDublicateForFail13(t *testing.T) {
-	var m model.Dim2
-	m.AddPoint(point.Dim2{Index: 2, X: -0.8660254, Y: 0.})
-	m.AddPoint(point.Dim2{Index: 1, X: 0., Y: 0.})
-	m.AddPoint(point.Dim2{Index: 3, X: 0.8660254, Y: 0.})
-	m.AddPoint(point.Dim2{Index: 4, X: 0., Y: -1.5})
-	m.AddPoint(point.Dim2{Index: 40, X: 10., Y: 0.0})
-	m.AddElement([]element.Elementer{
-		element.NewBeam(8, 4, 1),
-		element.NewBeam(9, 4, 3),
-	}...)
-	m.AddElement([]element.Elementer{
-		element.NewBeam(7, 4, 2),
-	}...)
-	m.AddTrussProperty(7)
-	m.AddTrussProperty(9, 8)
 	m.AddSupport(support.FixedDim2(), 1)
 	m.AddSupport(support.FixedDim2(), 3)
 	m.AddSupport(support.FixedDim2(), 2)
@@ -1987,6 +1745,8 @@ func TestGenTrussDublicateForFail13(t *testing.T) {
 	m.AddNodeForce(1, force.NodeDim2{
 		Fy: -80000.0,
 	}, []point.Index{4}...)
+	m.AddTrussProperty(7)
+	m.AddTrussProperty(9, 8)
 	m.AddNaturalFrequency(2)
 	m.AddNodeForce(2, force.NodeDim2{
 		Fx: 10000.0,
