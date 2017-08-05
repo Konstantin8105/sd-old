@@ -124,7 +124,7 @@ Tests for finite elements:
 
 |       | Linear deformation | Nolinear deformation | Natural frequency |Linear buckling | Nolinear buckling |
 | ----- |:------------------:|:--------------------:|:-----------------:|:--------------:|:-----------------:|
-| Algorithm | Done           |                      | Done              |                |                   |
+| Algorithm | Done           |                      | Done              | Done           |                   |
 | Truss | Done               |                      | Done              |                |                   |
 | Beam  |                    |                      |                   |                |                   |
 

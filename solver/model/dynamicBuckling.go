@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 
+	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoFea/solver/finiteElement"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
 	"github.com/Konstantin8105/GoLinAlg/solver"
@@ -114,7 +115,41 @@ func (m *Dim2) solveLinearBuckling(forceCase *forceCase2d) error {
 		}
 	}
 
-	fmt.Println("PotentialGlobal = ", potentialGlobal)
+	// Create array degree for support
+	// and modify the global stiffiner matrix
+	// and load vector
+	for _, s := range m.supports {
+		d := m.degreeForPoint.GetDoF(s.pointIndex)
+		var result []dof.AxeNumber
+		if s.support.Dx {
+			result = append(result, d[0])
+		}
+		if s.support.Dy {
+			result = append(result, d[1])
+		}
+		if s.support.M {
+			result = append(result, d[2])
+		}
+		// modify stiffiner matrix for correct
+		// adding support
+		for i := 0; i < len(result); i++ {
+			g, err := m.indexsInGlobalMatrix.GetByAxe(result[i])
+			if err != nil {
+				continue
+			}
+			for j := 0; j < len(m.degreeInGlobalMatrix); j++ {
+				h, err := m.indexsInGlobalMatrix.GetByAxe(m.degreeInGlobalMatrix[j])
+				if err != nil {
+					continue
+				}
+				potentialGlobal.Set(g, h, 0.0)
+				potentialGlobal.Set(h, g, 0.0)
+			}
+			//potentialGlobal.Set(g, g, 1.0)
+		}
+	}
+
+	//fmt.Println("PotentialGlobal = ", potentialGlobal)
 	HoPotential := matrix.NewMatrix64bySize(n, n)
 	bufferPotential := matrix.NewMatrix64bySize(n, 1)
 	//fmt.Printf("lu = %#v\n", lu)
@@ -160,16 +195,16 @@ func (m *Dim2) solveLinearBuckling(forceCase *forceCase2d) error {
 	// TODO add for tension beam - panic
 
 	eigenPotential := solver.NewEigen(HoPotential)
-	fmt.Println("lambda       = ", eigenPotential.GetRealEigenvalues())
-	fmt.Println("lambda Re    = ", eigenPotential.GetImagEigenvalues())
-	fmt.Println("eigenvectors = ", eigenPotential.GetV())
-	fmt.Println("getD = ", eigenPotential.GetD())
+	//fmt.Println("lambda       = ", eigenPotential.GetRealEigenvalues())
+	//fmt.Println("lambda Re    = ", eigenPotential.GetImagEigenvalues())
+	//fmt.Println("eigenvectors = ", eigenPotential.GetV())
+	//fmt.Println("getD = ", eigenPotential.GetD())
 
 	// TODO: Remove strange results
 	valueP := eigenPotential.GetRealEigenvalues()
 	fmt.Println("Linear buckling loads:")
 	for _, v := range valueP {
-		//fmt.Printf("P = %.5v\n", 1.0/v)
+		fmt.Printf("v = %.5v\t\tP = %.5v\n", v, 1.0/v)
 		// TODO sorting by absolute value
 		forceCase.dynamicValue = append(forceCase.dynamicValue, 1.0/v)
 	}

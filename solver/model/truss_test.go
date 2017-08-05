@@ -131,7 +131,7 @@ func TestTruss(t *testing.T) {
 		hz2 := 47.79
 		actualHz, err := m.GetNaturalFrequency(2)
 		if err != nil {
-			t.Errorf("Cannot found natural frequency for case 2. Error = ", err)
+			t.Errorf("Cannot found natural frequency for case 2. Error = %v", err)
 		}
 		{
 			var found bool
