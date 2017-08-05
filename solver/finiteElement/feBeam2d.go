@@ -72,23 +72,53 @@ func (f *BeamDim2) GetStiffinerK(kr *matrix.T64) {
 	EJL = 2 * EJL
 	kr.Set(2, 2, EJL)
 	kr.Set(5, 5, EJL)
+	/*
+		E := f.Material.E
+		A := f.Shape.A
+		L := length
+		J := f.Shape.Izz
+		array := [][]float64{
+			{E * A / L, 0.0, 0.0, -E * A / L, 0.0, 0.0},
+			{0.0, 12.0 * E * J / (L * L * L), 6. * E * J / L / L, 0.0, -12. * E * J / L / L / L, 6. * E * J / L / L},
+			{0.0, 6. * E * J / L / L, 4.0 * E * J / L, 0.0, -6. * E * J / L / L, 2. * E * J / L},
+			{-E * A / L, 0.0, 0.0, E * A / L, 0.0, 0.0},
+			{0.0, -12. * E * J / L / L / L, -6. * E * J / L / L, 0.0, 12. * E * J / L / L / L, -6. * E * J / L / L},
+			{0.0, 6 * E * J / L / L, 2.0 * E * J / L, 0.0, -6. * E * J / L / L, 4. * E * J / L},
+		}
+
+		for i := 0; i < 6; i++ {
+			for j := 0; j < 6; j++ {
+				if array[i][j] != array[j][i] {
+					fmt.Println("FATAL")
+				}
+			}
+		}
+		for i := 0; i < 6; i++ {
+			for j := 0; j < 6; j++ {
+				if array[i][j] != kr.Get(i, j) {
+					fmt.Println("FATAL2")
+				}
+			}
+		}
+	*/
 }
 
 // GetMassMr - matrix mass of finite element
 func (f *BeamDim2) GetMassMr(mr *matrix.T64) {
 	mu := f.Shape.A * f.Material.Ro
 	length := point.LengthDim2(f.Points)
-	mul3 := length / 3.0 * mu
-	mul6 := length / 6.0 * mu
 
 	mr.SetNewSize(6, 6)
+	mul3 := length / 3.0 * mu
 	mr.Set(0, 0, mul3)
-	mr.Set(0, 3, mul6)
-	mr.Set(3, 0, mul6)
 	mr.Set(3, 3, mul3)
 
+	mul6 := length / 6.0 * mu
+	mr.Set(0, 3, mul6)
+	mr.Set(3, 0, mul6)
+
 	{
-		v := mu * 13.0 * length / 35.
+		v := mu * 13.0 * length / 35.0
 		mr.Set(1, 1, v)
 		mr.Set(4, 4, v)
 	}
@@ -100,11 +130,8 @@ func (f *BeamDim2) GetMassMr(mr *matrix.T64) {
 		mr.Set(5, 4, -v)
 	}
 	{
-		v := mu * length * length / 105.
+		v := mu * math.Pow(length, 3.) / 105.
 		mr.Set(2, 2, v)
-	}
-	{
-		v := mu * math.Pow(length, 3.0)
 		mr.Set(5, 5, v)
 	}
 	{
@@ -124,6 +151,40 @@ func (f *BeamDim2) GetMassMr(mr *matrix.T64) {
 		mr.Set(1, 5, -v)
 		mr.Set(5, 1, -v)
 	}
+	/*
+		L := point.LengthDim2(f.Points)
+
+		array := [][]float64{
+			{140.0, 0.0, 0.0, 70.0, 0.0, 0.0},
+			{0.0, 156.0, 22.0 * L, 0.0, 54., -13.0 * L},
+			{0.0, 22.0 * L, 4.0 * L * L, 0.0, 13.0 * L, -3.0 * L * L},
+			{70.0, 0.0, 0.0, 140.0, 0.0, 0.0},
+			{0.0, 54.0, 13.0 * L, 0.0, 156.0, -22.0 * L},
+			{0.0, -13.0 * L, -3.0 * L * L, 0.0, -22.0 * L, 4.0 * L * L},
+		}
+		for i := 0; i < 6; i++ {
+			for j := 0; j < 6; j++ {
+				array[i][j] *= mu * L / 420.0
+			}
+		}
+		/*
+			mr.SetNewSize(6, 6)
+
+			for i := 0; i < 6; i++ {
+				for j := 0; j < 6; j++ {
+					mr.Set(i, j, array[i][j])
+				}
+			}
+	*/
+	/*
+		for i := 0; i < 6; i++ {
+			for j := 0; j < 6; j++ {
+				if mr.Get(i, j) != array[i][j] {
+					fmt.Println("<", i, ",", j, "> = [", mr.Get(i, j), "]->", array[i][j])
+				}
+			}
+		}
+	*/
 }
 
 // GetPotentialGr - matrix potential loads for linear buckling
@@ -155,7 +216,7 @@ func (f *BeamDim2) GetPotentialGr(gr *matrix.T64, localAxialForce float64) {
 	{
 		v := localAxialForce * 2.0 / 15. * length
 		gr.Set(2, 2, v)
-		gr.Set(5, 5, v)
+		gr.Set(5, 5, -v) // check twice
 	}
 	{
 		v := -localAxialForce * length / 30.0

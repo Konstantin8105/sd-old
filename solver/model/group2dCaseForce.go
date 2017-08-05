@@ -64,7 +64,7 @@ func (f *forceCase2d) GetLocalForce(beamIndex element.Index) (begin, end forceLo
 			return l.Begin, l.End, nil
 		}
 	}
-	return begin, end, fmt.Errorf("Cannot found beam")
+	return begin, end, fmt.Errorf("Cannot found beam %v", beamIndex)
 }
 
 // GetReaction - return reaction of support
