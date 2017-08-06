@@ -216,7 +216,7 @@ func (f *BeamDim2) GetPotentialGr(gr *matrix.T64, localAxialForce float64) {
 	{
 		v := localAxialForce * 2.0 / 15. * length
 		gr.Set(2, 2, v)
-		gr.Set(5, 5, -v) // check twice
+		gr.Set(5, 5, v)
 	}
 	{
 		v := -localAxialForce * length / 30.0
