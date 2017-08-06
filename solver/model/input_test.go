@@ -1188,3 +1188,54 @@ func TestTrussFailElement(t *testing.T) {
 		t.Errorf("Cannot solving. error = %v", err)
 	}
 }
+
+func TestTrussNotFoundPoint(t *testing.T) {
+	var m model.Dim2
+
+	m.AddPoint(point.Dim2{Index: 2, X: -0.8660254, Y: 0.})
+	m.AddPoint(point.Dim2{Index: 1, X: 0., Y: 0.})
+	m.AddPoint(point.Dim2{Index: 3, X: 0.8660254, Y: 0.})
+	m.AddPoint(point.Dim2{Index: 4, X: 0., Y: -1.5})
+
+	// add empty point
+	m.AddPoint(point.Dim2{Index: 40, X: 10., Y: 0.0})
+
+	m.AddElement([]element.Elementer{
+		element.NewBeam(8, 4, 1),
+		element.NewBeam(9, 4, 3),
+		element.NewBeam(7, 4, 2),
+	}...)
+
+	// Truss
+	m.AddTrussProperty(9, 7, 8)
+
+	// Supports
+	m.AddSupport(support.FixedDim2(), 1)
+	m.AddSupport(support.FixedDim2(), 3)
+	m.AddSupport(support.FixedDim2(), 2)
+
+	// Shapes
+	m.AddShape(shape.Shape{
+		A: 300e-6,
+	}, []element.Index{7, 9}...)
+
+	m.AddShape(shape.Shape{
+		A: 300e-6,
+	}, []element.Index{8}...)
+
+	// Materials
+	m.AddMaterial(material.Linear{
+		E:  2e11,
+		Ro: 78500,
+	}, []element.Index{9, 8, 7}...)
+
+	// Node force
+	m.AddNodeForce(1, force.NodeDim2{
+		Fy: -80000.0,
+	}, []point.Index{4, 1212}...)
+
+	err := m.Solve()
+	if err == nil {
+		t.Errorf("Can solving with wrong data. error = %v", err)
+	}
+}
