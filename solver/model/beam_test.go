@@ -399,3 +399,70 @@ func TestOsscilatorBend(t *testing.T) {
 	}
 
 }
+
+/*
+func TestSingleBeamLinearBuckling(t *testing.T) {
+	var m model.Dim2
+
+	E := 2e11
+	F := 20e-4
+	Q := 2500.0
+	L := 1.500
+	J := 60e-6
+
+	m.AddPoint(point.Dim2{Index: 1, X: 0.000, Y: 0.000})
+	m.AddPoint(point.Dim2{Index: 2, X: L * 1. / 8., Y: 0.000})
+	m.AddPoint(point.Dim2{Index: 3, X: L * 2. / 8., Y: 0.000})
+	m.AddPoint(point.Dim2{Index: 4, X: L * 3. / 8., Y: 0.000})
+	m.AddPoint(point.Dim2{Index: 5, X: L * 4. / 8., Y: 0.000})
+	m.AddPoint(point.Dim2{Index: 6, X: L * 5. / 8., Y: 0.000})
+	m.AddPoint(point.Dim2{Index: 7, X: L * 6. / 8., Y: 0.000})
+	m.AddPoint(point.Dim2{Index: 8, X: L * 7. / 8., Y: 0.000})
+	m.AddPoint(point.Dim2{Index: 9, X: L, Y: 0.000})
+
+	m.AddElement(element.NewBeam(1, 1, 2))
+	m.AddElement(element.NewBeam(2, 2, 3))
+	m.AddElement(element.NewBeam(3, 3, 4))
+	m.AddElement(element.NewBeam(4, 4, 5))
+	m.AddElement(element.NewBeam(5, 5, 6))
+	m.AddElement(element.NewBeam(6, 6, 7))
+	m.AddElement(element.NewBeam(7, 7, 8))
+	m.AddElement(element.NewBeam(8, 8, 9))
+
+	m.AddSupport(support.Dim2{Dx: support.Fix, Dy: support.Fix}, 1)
+	m.AddSupport(support.Dim2{Dy: support.Fix}, 9)
+
+	m.AddShape(shape.Shape{
+		A:   F,
+		Izz: J,
+	}, []element.Index{1, 2, 3, 4, 5, 6, 7, 8}...)
+
+	m.AddMaterial(material.Linear{
+		E:  E,
+		Ro: 78500,
+	}, []element.Index{1, 2, 3, 4, 5, 6, 7, 8}...)
+
+	m.AddNodeForce(1, force.NodeDim2{
+		Fx: -Q,
+		//Fy: 0.00001 * Q,
+	}, []point.Index{9}...)
+
+	m.AddLinearBuckling(1)
+
+	err := m.Solve()
+	if err != nil {
+		t.Errorf("Cannot solving. error = %v", err)
+	}
+
+	Pcr := math.Pi * math.Pi * E * J / L / L
+
+	factor := Pcr / Q
+
+	f, err := m.GetLinearBucklingFactor(1)
+	if err != nil {
+		t.Errorf("Cannot get linear factor buckling. err = %v", err)
+	}
+	fmt.Println("Factors  = ", f)
+	fmt.Println("expected = ", factor)
+}
+*/

@@ -11,6 +11,8 @@ import (
 
 func (m *Dim2) solveLinearBuckling(forceCase *forceCase2d) error {
 
+	_ = m.solveCase(forceCase)
+
 	lu, err := m.getLUStiffinerKGlobal()
 	if err != nil {
 		return err
@@ -114,6 +116,7 @@ func (m *Dim2) solveLinearBuckling(forceCase *forceCase2d) error {
 			}
 		}
 	}
+	//fmt.Println("PotentialGlobal = ", potentialGlobal)
 
 	// Create array degree for support
 	// and modify the global stiffiner matrix
@@ -169,6 +172,8 @@ func (m *Dim2) solveLinearBuckling(forceCase *forceCase2d) error {
 		}
 	}
 	//fmt.Println("[HoPotential] = ", HoPotential)
+	//fmt.Println("row1", HoPotential.GetRowSize())
+	//fmt.Println("col1", HoPotential.GetColumnSize())
 	{
 		// TODO: check
 		// Remove zero rows and columns
@@ -194,11 +199,13 @@ func (m *Dim2) solveLinearBuckling(forceCase *forceCase2d) error {
 
 	// TODO add for tension beam - panic
 
+	//fmt.Println("row2", HoPotential.GetRowSize())
+	//fmt.Println("col2", HoPotential.GetColumnSize())
 	eigenPotential := solver.NewEigen(HoPotential)
-	//fmt.Println("lambda       = ", eigenPotential.GetRealEigenvalues())
-	//fmt.Println("lambda Re    = ", eigenPotential.GetImagEigenvalues())
-	//fmt.Println("eigenvectors = ", eigenPotential.GetV())
-	//fmt.Println("getD = ", eigenPotential.GetD())
+	fmt.Println("lambda       = ", eigenPotential.GetRealEigenvalues())
+	fmt.Println("lambda Re    = ", eigenPotential.GetImagEigenvalues())
+	fmt.Println("eigenvectors = ", eigenPotential.GetV())
+	fmt.Println("getD = ", eigenPotential.GetD())
 
 	// TODO: Remove strange results
 	valueP := eigenPotential.GetRealEigenvalues()
