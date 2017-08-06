@@ -91,7 +91,7 @@ Tasks:
 				- [x] Natural frequency
 				- [ ] Nolinear deformation
 				- [ ] Nolinear deformation shapes
-				- [ ] Linear buckling
+				- [x] Linear buckling
 				- [ ] Linear buckling shapes
 				- [ ] Nolinear buckling
 				- [ ] Nolinear buckling shapes
