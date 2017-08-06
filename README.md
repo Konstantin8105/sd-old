@@ -126,7 +126,7 @@ Tests for finite elements:
 | ----- |:------------------:|:--------------------:|:-----------------:|:--------------:|:-----------------:|
 | Algorithm | Done           |                      | Done              | Done           |                   |
 | Truss | Done               |                      | Done              |                |                   |
-| Beam  | Done               |                      | Done              |                |                   |
+| Beam  | Done               |                      | Done              | Done           |                   |
 
 ---------------------
 

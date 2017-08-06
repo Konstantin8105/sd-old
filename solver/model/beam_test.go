@@ -400,7 +400,6 @@ func TestOsscilatorBend(t *testing.T) {
 
 }
 
-/*
 func TestSingleBeamLinearBuckling(t *testing.T) {
 	var m model.Dim2
 
@@ -462,7 +461,14 @@ func TestSingleBeamLinearBuckling(t *testing.T) {
 	if err != nil {
 		t.Errorf("Cannot get linear factor buckling. err = %v", err)
 	}
-	fmt.Println("Factors  = ", f)
-	fmt.Println("expected = ", factor)
+
+	var found bool
+	for i := range f {
+		if math.Abs((f[i]-factor)/factor) < 0.01 {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("Not correct result = %v. Expected = %v", f, factor)
+	}
 }
-*/

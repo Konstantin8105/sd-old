@@ -1,8 +1,6 @@
 package model
 
 import (
-	"fmt"
-
 	"github.com/Konstantin8105/GoFea/solver/dof"
 	"github.com/Konstantin8105/GoFea/solver/finiteElement"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
@@ -202,16 +200,16 @@ func (m *Dim2) solveLinearBuckling(forceCase *forceCase2d) error {
 	//fmt.Println("row2", HoPotential.GetRowSize())
 	//fmt.Println("col2", HoPotential.GetColumnSize())
 	eigenPotential := solver.NewEigen(HoPotential)
-	fmt.Println("lambda       = ", eigenPotential.GetRealEigenvalues())
-	fmt.Println("lambda Re    = ", eigenPotential.GetImagEigenvalues())
-	fmt.Println("eigenvectors = ", eigenPotential.GetV())
-	fmt.Println("getD = ", eigenPotential.GetD())
+	//fmt.Println("lambda       = ", eigenPotential.GetRealEigenvalues())
+	//fmt.Println("lambda Re    = ", eigenPotential.GetImagEigenvalues())
+	//fmt.Println("eigenvectors = ", eigenPotential.GetV())
+	//fmt.Println("getD = ", eigenPotential.GetD())
 
 	// TODO: Remove strange results
 	valueP := eigenPotential.GetRealEigenvalues()
-	fmt.Println("Linear buckling loads:")
+	// fmt.Println("Linear buckling loads:")
 	for _, v := range valueP {
-		fmt.Printf("v = %.5v\t\tP = %.5v\n", v, 1.0/v)
+		// fmt.Printf("v = %.5v\t\tP = %.5v\n", v, 1.0/v)
 		// TODO sorting by absolute value
 		forceCase.dynamicValue = append(forceCase.dynamicValue, 1.0/v)
 	}
