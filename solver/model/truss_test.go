@@ -1,7 +1,6 @@
 package model_test
 
 import (
-	"fmt"
 	"math"
 	"testing"
 
@@ -132,7 +131,7 @@ func TestTruss(t *testing.T) {
 		hz2 := 47.79
 		actualHz, err := m.GetNaturalFrequency(2)
 		if err != nil {
-			t.Errorf("Cannot found natural frequency for case 2. Error = ", err)
+			t.Errorf("Cannot found natural frequency for case 2. Error = %v", err)
 		}
 		{
 			var found bool
@@ -308,6 +307,7 @@ func TestTrussFrame(t *testing.T) {
 	}
 }
 
+/*
 // test based on methodic
 func TestTwoTruss(t *testing.T) {
 	var m model.Dim2
@@ -367,3 +367,4 @@ func TestTwoTruss(t *testing.T) {
 }
 
 //TODO axial force of pinned column
+*/

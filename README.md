@@ -120,6 +120,16 @@ Tasks:
 
 ---------------------
 
+Tests for finite elements:
+
+|       | Linear deformation | Nolinear deformation | Natural frequency |Linear buckling | Nolinear buckling |
+| ----- |:------------------:|:--------------------:|:-----------------:|:--------------:|:-----------------:|
+| Algorithm | Done           |                      | Done              | Done           |                   |
+| Truss | Done               |                      | Done              |                |                   |
+| Beam  | Done               |                      | Done              |                |                   |
+
+---------------------
+
 **TODO`s**:
 
 - [ ] Fuzzer for good model with different loads(positive, negative)

@@ -38,11 +38,6 @@ func (m *Dim2) Solve() (err error) {
 	var summaryResult []results
 
 	for i := range m.forceCases {
-		err := m.solveCase(&(m.forceCases[i]))
-		summaryResult = append(summaryResult, results{
-			err:       err,
-			forceCase: m.forceCases[i].indexCase,
-		})
 		switch m.forceCases[i].dynamicType {
 		case naturalFrequency:
 			err := m.solveNaturalFrequency(&(m.forceCases[i]))
@@ -57,7 +52,14 @@ func (m *Dim2) Solve() (err error) {
 				forceCase: m.forceCases[i].indexCase,
 			})
 		case nolinearBuckling:
-			panic("Add nolinear buckling")
+			panic("Add")
+		default:
+			// linear deformation
+			err := m.solveCase(&(m.forceCases[i]))
+			summaryResult = append(summaryResult, results{
+				err:       err,
+				forceCase: m.forceCases[i].indexCase,
+			})
 		}
 	}
 
@@ -73,7 +75,12 @@ func (m *Dim2) Solve() (err error) {
 	}
 
 	// TODO: more beautiful
-	return fmt.Errorf("%#v", summaryResult)
+	var s string
+	s += "\n"
+	for i := range summaryResult {
+		s += fmt.Sprintf("Case %v. Error = %#v\n", summaryResult[i].forceCase, summaryResult[i].err)
+	}
+	return fmt.Errorf(s)
 }
 
 func (m *Dim2) getFiniteElement(inx element.Index) (fe finiteElement.FiniteElementer, err error) {
@@ -96,33 +103,29 @@ func (m *Dim2) getFiniteElement(inx element.Index) (fe finiteElement.FiniteEleme
 
 	switch el.(type) {
 	case element.Beam:
+		// No need to check on len(points) == 2
+		// magic number 2 is amount of beam points
+		// TODO change from array to slise
+		var c [2]point.Dim2
+		for i := 0; i < len(c); i++ {
+			c[i] = coord[i]
+		}
 		if m.isTruss(inx) {
-			// No need to check on len(points) == 2
-			// magic number 2 is amount of beam points
-			// TODO change from array to slise
-			var c [2]point.Dim2
-			for i := 0; i < len(c); i++ {
-				c[i] = coord[i]
-			}
 			f := finiteElement.TrussDim2{
 				Material: material,
 				Shape:    shape,
 				Points:   c,
 			}
 			return &f, nil
-		} /* else {
-			fe := finiteElement.BeamDim2{
-				Material: material,
-				Shape:    shape,
-				Points:   coord,
-			}
-			err = fe.GetStiffinerK(&buffer)
-			if err != nil {
-				return err
-			}
-		}*/
+		}
+		f := finiteElement.BeamDim2{
+			Material: material,
+			Shape:    shape,
+			Points:   c,
+		}
+		return &f, nil
 	}
-	panic("Please add finite element")
+	return fe, fmt.Errorf("Cannot create finite element for element %v", inx)
 }
 
 func (m *Dim2) convertFromLocalToGlobalSystem(degreeGlobal *[]dof.AxeNumber, dofSystem *dof.DoF, mapIndex *dof.MapIndex, f func(finiteElement.FiniteElementer, *dof.DoF, finiteElement.Information) (matrix.T64, []dof.AxeNumber)) (y matrix.T64, err error) {

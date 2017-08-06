@@ -2,6 +2,7 @@ package model
 
 import (
 	"math"
+	"sort"
 
 	"github.com/Konstantin8105/GoFea/solver/finiteElement"
 	"github.com/Konstantin8105/GoLinAlg/matrix"
@@ -18,10 +19,17 @@ func (m *Dim2) solveNaturalFrequency(forceCase *forceCase2d) error {
 	// Generate global mass matrix [Mo]
 	//n := stiffinerKGlobal.GetRowSize()
 	n := len(m.degreeInGlobalMatrix)
+
+	// TODO this only if we want to add selfweight
+	// TODO for avoid - need to create empty matrix
+
 	massGlobal, err := m.convertFromLocalToGlobalSystem(&m.degreeInGlobalMatrix, &m.degreeForPoint, &m.indexsInGlobalMatrix, finiteElement.GetGlobalMass)
 	if err != nil {
 		return err
 	}
+
+	//massGlobal := matrix.NewMatrix64bySize(len(m.degreeInGlobalMatrix), len(m.degreeInGlobalMatrix))
+
 	// m.convertFromLocalToGlobalSystem(&degreeGlobal, &dofSystem, &mapIndex, finiteElement.GetGlobalMass)
 	//  linAlg.NewMatrix64bySize(n, n)
 
@@ -74,7 +82,10 @@ func (m *Dim2) solveNaturalFrequency(forceCase *forceCase2d) error {
 			buffer.Set(j, 0, massGlobal.Get(j, i))
 		}
 		// Calculation
-		result := lu.Solve(buffer)
+		result, err := lu.Solve(buffer)
+		if err != nil {
+			return err
+		}
 		// Add vector to [Ho]
 		for j := 0; j < n; j++ {
 			Ho.Set(j, i, result.Get(j, 0))
@@ -113,12 +124,16 @@ func (m *Dim2) solveNaturalFrequency(forceCase *forceCase2d) error {
 	value := eigen.GetRealEigenvalues()
 	for _, v := range value {
 		freq := math.Sqrt(1.0/v) / 2.0 / math.Pi
-		//fmt.Printf("f = %.5v Hz\n", freq)
+		//fmt.Printf("v = %.5v\t1/v = %.5v\tf = %.5v Hz\n", v, 1.0/v, freq)
+		//fmt.Println("w1 = ", math.Sqrt(1.0/v))
+
 		_ = freq
 		// TODO add sorting natural frequency
 		// TODO remove not adequat frequency
 		forceCase.dynamicValue = append(forceCase.dynamicValue, freq)
 	}
+
+	sort.Sort(sort.Float64Slice(forceCase.dynamicValue))
 
 	// TODO: need add modal mass values for natural frquency calculation
 	return nil

@@ -42,12 +42,10 @@ func TestPanicFE1(t *testing.T) {
 		newFake(1, 1, 2),
 		newFake(2, 2, 3),
 	}...)
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("The code did not panic")
-		}
-	}()
-	_, _ = m.getFiniteElement(2)
+	_, err := m.getFiniteElement(2)
+	if err == nil {
+		t.Errorf("The code did not panic")
+	}
 }
 
 func TestErrorCoordinate(t *testing.T) {
