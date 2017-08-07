@@ -139,11 +139,18 @@ Tests for finite elements:
 - [ ] 3D, tables, graphs
 
 threejs
+
 https://threejs.org/
+
 http://davidscottlyons.com/threejs/presentations/frontporch14/#slide-0
+
 https://threejs.org/editor/
+
 https://github.com/mrdoob/three.js/tree/master/editor
+
 maybe - polymer from google
+
+http://www.qooxdoo.org/
 
 - [ ] MERGE MODELS
 
