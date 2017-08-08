@@ -9,16 +9,18 @@ func UniqueInt(array *[]int) {
 	// sorting array of point index
 	sort.Sort(sort.IntSlice(*array))
 	// remove same point index
-	amount := 0
-	for i := range *array {
-		if i == 0 {
-			amount++
-			continue
+	/*
+		amount := 0
+		for i := range *array {
+			if i == 0 {
+				amount++
+				continue
+			}
+			if (*array)[i-1] != (*array)[i] {
+				amount++
+			}
 		}
-		if (*array)[i-1] != (*array)[i] {
-			amount++
-		}
-	}
+	*/
 	inx := 0
 	for i := range *array {
 		if i == 0 {
