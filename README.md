@@ -137,42 +137,39 @@ Tests for finite elements:
 - [ ] Generate testing
 - [ ] Calculation graph
 - [ ] 3D, tables, graphs
+- [ ] UI design https://github.com/Konstantin8105/GoFeaGUI
+* threejs https://threejs.org/
+* http://davidscottlyons.com/threejs/presentations/frontporch14/#slide-0
+* https://threejs.org/editor/
+* https://github.com/mrdoob/three.js/tree/master/editor
+* maybe - polymer from google
+* http://www.qooxdoo.org/
 
-threejs
-
-https://threejs.org/
-
-http://davidscottlyons.com/threejs/presentations/frontporch14/#slide-0
-
-https://threejs.org/editor/
-
-https://github.com/mrdoob/three.js/tree/master/editor
-
-maybe - polymer from google
-
-http://www.qooxdoo.org/
-
-- [ ] MERGE MODELS
-
+- [ ] Merge models
 - [ ] Stack design, see https://github.com/Konstantin8105/Stack.FEA
 - [ ] Connection design
 
-- [ ] add checking - point cannot have same number
+- [x] add checking - point cannot have same number
 - [ ] Create RPC client-server for fast calculation
 - [ ] working with geometry inside
-- [ ] triangulation of regions
-- [ ] Intersection between beams
-- [ ] Separate finite elements on small elements
 - [ ] Parallel linear algebra
-- [ ] rotate of shape
+- [ ] Geometry block for geometry operations:
+	- [ ] rotate of shape
+	- [ ] Intersection between beams
+	- [ ] triangulation of regions
+	- [ ] rotate the geometry
+	- [ ] add element, point, ...
+	- [ ] add forces...
+	- [ ] create combinations
+	- [ ] Separate finite elements on small elements
 - [ ] Database of shapes
 - [ ] Triangulation for user shape
 - [ ] Sparse matrix solver
+	- [ ] Benchmark tests
 - [ ] Nonlinear property of material. Temperature, corrosion.
 - [ ] Load force in local system coordinate - important for non-linear buckling. [Ko] * Zo + [Go] * Zo = Po and Po is dependence of local point rotation.
 - [ ] Test buckling on tension !!! Important
-- [ ] Code review
-- [ ] Code coverage
 - [ ] Add examples of calculation
 - [ ] Contribution rules
-- [ ] Automatic tool for truss frames
+- [ ] Parametric models
+	- [ ] Automatic tool for truss frames
