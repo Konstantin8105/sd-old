@@ -162,6 +162,7 @@ Tests for finite elements:
 	- [ ] add forces...
 	- [ ] create combinations
 	- [ ] Separate finite elements on small elements
+	- [ ] Perpendicular (point + line)
 - [ ] Database of shapes
 - [ ] Triangulation for user shape
 - [ ] Sparse matrix solver
