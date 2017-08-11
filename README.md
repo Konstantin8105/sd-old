@@ -163,6 +163,8 @@ Tests for finite elements:
 	- [ ] create combinations
 	- [ ] Separate finite elements on small elements
 	- [ ] Perpendicular (point + line)
+	- [ ] move the geometry
+	- [ ] copy geometry
 - [ ] Database of shapes
 - [ ] Triangulation for user shape
 - [ ] Sparse matrix solver
