@@ -165,6 +165,7 @@ Tests for finite elements:
 	- [ ] Perpendicular (point + line)
 	- [ ] move the geometry
 	- [ ] copy geometry
+	- [ ] parallel lines
 - [ ] Database of shapes
 - [ ] Triangulation for user shape
 - [ ] Sparse matrix solver
